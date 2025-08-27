@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import BuildingUseSelector from './components/BuildingUseSelector.vue';
 
 interface Floor {
   level: number;
@@ -9,9 +10,13 @@ interface Floor {
   isWindowless: boolean;
 }
 
+
 const groundFloorsInput = ref<number>(1);
 const basementFloorsInput = ref<number>(0);
 const floors = ref<Floor[]>([]);
+const buildingUse = ref<string | null>(null);
+const totalFloorAreaInput = ref<number | null>(null);
+const capacityInput = ref<number | null>(null);
 const hasNonFloorArea = ref(false);
 const nonFloorAreaValue = ref<number | null>(null);
 
@@ -77,7 +82,8 @@ const totalFloorArea = computed(() => {
     return total + (floor.floorArea || 0);
   }, 0);
   const extraArea = hasNonFloorArea.value ? (nonFloorAreaValue.value || 0) : 0;
-  return floorsArea + extraArea;
+  const totalArea = floorsArea + extraArea + (totalFloorAreaInput.value || 0);
+  return totalArea;
 });
 
 // 無窓階のリストを作成する算出プロパティ
@@ -104,6 +110,33 @@ generateFloors();
             <v-card class="mb-4">
               <v-card-title>建物情報を入力してください</v-card-title>
               <v-card-text>
+                <v-row>
+                  <v-col cols="12" sm="3">
+                    <BuildingUseSelector v-model="buildingUse" />
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <v-text-field
+                      label="延床面積"
+                      v-model.number="totalFloorAreaInput"
+                      type="number"
+                      min="0"
+                      suffix="㎡"
+                      dense
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <v-text-field
+                      label="全体の収容人員"
+                      v-model.number="capacityInput"
+                      type="number"
+                      min="0"
+                      suffix="人"
+                      dense
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
                 <v-row align="center">
                   <v-col cols="12" sm="3">
                     <v-text-field
@@ -140,6 +173,7 @@ generateFloors();
                       label="面積"
                       v-model.number="nonFloorAreaValue"
                       type="number"
+                      min="0"
                       placeholder="50"
                       suffix="㎡"
                       dense
@@ -174,6 +208,7 @@ generateFloors();
                             label="床面積"
                             v-model.number="floor.floorArea"
                             type="number"
+                            min="0"
                             placeholder="500"
                             suffix="㎡"
                             dense
@@ -182,9 +217,10 @@ generateFloors();
                         </v-col>
                         <v-col cols="12" sm>
                           <v-text-field
-                            label="収容人員"
+                            label="階の収容人員"
                             v-model.number="floor.capacity"
                             type="number"
+                            min="0"
                             placeholder="50"
                             suffix="人"
                             dense
