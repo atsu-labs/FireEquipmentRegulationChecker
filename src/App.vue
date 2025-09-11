@@ -4,6 +4,7 @@ import BuildingUseSelector from '@/components/BuildingUseSelector.vue';
 import { Article10Logic } from '@/composables/article10Logic';
 import type { Floor } from '@/types';
 import { useArticle11Logic } from '@/composables/article11Logic';
+import { useArticle12Logic } from '@/composables/article12Logic';
 import { buildingUses } from '@/data/buildingUses';
 
 const currentStep = ref(1);
@@ -24,6 +25,17 @@ const storesDesignatedCombustibles = ref(false);
 const isFlammableItemsAmountOver750 = ref(false);
 const structureType = ref<'A' | 'B' | 'C' | null>(null);
 const finishType = ref<'flammable' | 'other' | null>(null);
+
+// 令12条
+const isCareDependentOccupancy = ref(false);
+const hasStageArea = ref(false);
+const stageFloorLevel = ref<string | null>(null);
+const stageArea = ref<number | null>(null);
+const isRackWarehouse = ref(false);
+const ceilingHeight = ref<number | null>(null);
+const isCombustiblesAmountOver1000 = ref(false);
+const hasFireSuppressingStructure = ref(false);
+const hasBeds = ref(false);
 
 
 // hasNonFloorAreaがfalseになったら、面積をリセットする
@@ -157,6 +169,42 @@ const { regulationResult: judgementResult11 } = useArticle11Logic({
   isFlammableItemsAmountOver750,
   structureType,
   finishType,
+});
+
+const { regulationResult: judgementResult12 } = useArticle12Logic({
+  buildingUse,
+  groundFloors: groundFloorsInput,
+  totalArea: totalFloorAreaInput,
+  floors,
+  isCareDependentOccupancy,
+  hasStageArea,
+  stageFloorLevel,
+  stageArea,
+  isRackWarehouse,
+  ceilingHeight,
+  isCombustiblesAmountOver1000,
+  hasFireSuppressingStructure,
+  hasBeds,
+});
+
+const judgementResult12Type = computed(() => {
+  if (judgementResult12.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult12.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult12Title = computed(() => {
+  if (judgementResult12.value.required === true) {
+    return '【スプリンクラー設備】設置義務あり';
+  }
+  if (judgementResult12.value.required === 'warning') {
+    return '【スプリンクラー設備】要確認';
+  }
+  return '【スプリンクラー設備】設置義務なし';
 });
 
 
@@ -405,6 +453,79 @@ generateFloors();
                           </v-radio-group>
                         </v-col>
                       </v-row>
+                      <v-divider class="my-4"></v-divider>
+                      <p class="font-weight-bold mb-2">令第12条（スプリンクラー設備）関連</p>
+                      <v-checkbox
+                        v-model="hasFireSuppressingStructure"
+                        label="延焼抑制構造である（主要構造部が耐火構造＋開口部が防火設備など）"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="isCombustiblesAmountOver1000"
+                        label="指定可燃物を基準数量の1000倍以上貯蔵・取り扱いしている"
+                        hide-details
+                      ></v-checkbox>
+
+                      <div v-if="buildingUse && buildingUse.startsWith('item06')" class="mt-4">
+                        <p class="font-weight-bold">（6）項関連の追加情報</p>
+                        <v-checkbox
+                          v-model="isCareDependentOccupancy"
+                          label="介助がなければ避難できない者を主として入所させる施設"
+                          hide-details
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="hasBeds"
+                          label="診療所にベッドがある"
+                          hide-details
+                        ></v-checkbox>
+                      </div>
+
+                      <div v-if="buildingUse && buildingUse.startsWith('item01')" class="mt-4">
+                        <p class="font-weight-bold">（1）項関連の追加情報</p>
+                        <v-checkbox
+                          v-model="hasStageArea"
+                          label="舞台部がある"
+                          hide-details
+                        ></v-checkbox>
+                        <v-expand-transition>
+                          <div v-if="hasStageArea" class="ml-8">
+                            <v-radio-group v-model="stageFloorLevel" label="舞台部のある階">
+                              <v-radio label="地階, 無窓階, 4階以上" value="basement_windowless_4th_or_higher"></v-radio>
+                              <v-radio label="上記以外" value="other"></v-radio>
+                            </v-radio-group>
+                            <v-text-field
+                              label="舞台部の面積"
+                              v-model.number="stageArea"
+                              type="number"
+                              min="0"
+                              suffix="㎡"
+                              dense
+                            ></v-text-field>
+                          </div>
+                        </v-expand-transition>
+                      </div>
+
+                      <div v-if="buildingUse && buildingUse.startsWith('item14')" class="mt-4">
+                        <p class="font-weight-bold">（14）項関連の追加情報</p>
+                        <v-checkbox
+                          v-model="isRackWarehouse"
+                          label="ラック式倉庫である"
+                          hide-details
+                        ></v-checkbox>
+                         <v-expand-transition>
+                          <div v-if="isRackWarehouse" class="ml-8">
+                            <v-text-field
+                              label="天井の高さ"
+                              v-model.number="ceilingHeight"
+                              type="number"
+                              min="0"
+                              suffix="m"
+                              dense
+                            ></v-text-field>
+                          </div>
+                        </v-expand-transition>
+                      </div>
+
                     </v-card-text>
                   </v-card>
                 </v-stepper-window-item>
@@ -480,6 +601,7 @@ generateFloors();
                   :type="judgementResult11.required ? 'error' : 'success'"
                   variant="tonal"
                   prominent
+                  class="mb-4"
                 >
                   <div class="text-h6">
                     【屋内消火栓設備】{{ judgementResult11.required ? '設置義務あり' : '設置義務なし' }}
@@ -487,6 +609,19 @@ generateFloors();
                   <v-divider class="my-2"></v-divider>
                   <p><b>理由:</b> {{ judgementResult11.message }}</p>
                   <p><b>根拠:</b> {{ judgementResult11.basis }}</p>
+                </v-alert>
+
+                <v-alert
+                  :type="judgementResult12Type"
+                  variant="tonal"
+                  prominent
+                >
+                  <div class="text-h6">
+                    {{ judgementResult12Title }}
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <p><b>理由:</b> {{ judgementResult12.message }}</p>
+                  <p><b>根拠:</b> {{ judgementResult12.basis }}</p>
                 </v-alert>
               </v-card-text>
             </v-card>
