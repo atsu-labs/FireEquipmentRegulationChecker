@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import BuildingUseSelector from './components/BuildingUseSelector.vue';
-
-interface Floor {
-  level: number;
-  type: 'ground' | 'basement';
-  floorArea: number | null;
-  capacity: number | null;
-  isWindowless: boolean;
-}
+import BuildingUseSelector from '@/components/BuildingUseSelector.vue';
+import { useFireExtinguisherLogic } from '@/composables/useFireExtinguisherLogic';
+import type { Floor } from '@/types';
 
 const currentStep = ref(1);
 
@@ -20,6 +14,12 @@ const totalFloorAreaInput = ref<number | null>(null);
 const capacityInput = ref<number | null>(null);
 const hasNonFloorArea = ref(false);
 const nonFloorAreaValue = ref<number | null>(null);
+
+// --- 追加情報のデータ ---
+const usesFireEquipment = ref(false);
+const storesMinorHazardousMaterials = ref(false);
+const storesDesignatedCombustibles = ref(false);
+
 
 // hasNonFloorAreaがfalseになったら、面積をリセットする
 watch(hasNonFloorArea, (newValue) => {
@@ -117,6 +117,16 @@ const windowlessFloors = computed(() => {
   return floors.value
     .filter(floor => floor.isWindowless && floor.type === 'ground')
     .map(floor => `地上 ${floor.level} 階`);
+});
+
+// 判定ロジックを実行
+const { judgementResult } = useFireExtinguisherLogic({
+  buildingUse,
+  totalFloorAreaInput,
+  floors,
+  usesFireEquipment,
+  storesMinorHazardousMaterials,
+  storesDesignatedCombustibles,
 });
 
 
@@ -320,8 +330,21 @@ generateFloors();
                   <v-card>
                     <v-card-title>追加情報</v-card-title>
                     <v-card-text>
-                      <p>追加の情報をここに入力します。</p>
-                      <!-- ここに追加のフォーム要素を配置 -->
+                      <v-checkbox
+                        v-model="usesFireEquipment"
+                        label="火を使用する設備又は器具がある（簡易なものを除く）"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="storesMinorHazardousMaterials"
+                        label="少量危険物を貯蔵・取り扱いしている"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="storesDesignatedCombustibles"
+                        label="指定可燃物を貯蔵・取り扱いしている"
+                        hide-details
+                      ></v-checkbox>
                     </v-card-text>
                   </v-card>
                 </v-stepper-window-item>
@@ -379,7 +402,18 @@ generateFloors();
 
               <v-card-title>判定結果</v-card-title>
               <v-card-text>
-                <p>ここに判定結果が表示されます。</p>
+                <v-alert
+                  :type="judgementResult.result ? 'error' : 'success'"
+                  variant="tonal"
+                  prominent
+                >
+                  <div class="text-h6">
+                    {{ judgementResult.result ? '消火器の設置義務があります' : '消火器の設置義務はありません' }}
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <p><b>理由:</b> {{ judgementResult.reason }}</p>
+                  <p><b>根拠:</b> {{ judgementResult.根拠 }}</p>
+                </v-alert>
               </v-card-text>
             </v-card>
           </v-col>
