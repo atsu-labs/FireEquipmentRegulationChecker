@@ -93,15 +93,24 @@ const prevStep = () => {
 };
 
 
-// 延床面積を計算する算出プロパティ
-const totalFloorArea = computed(() => {
+// 各階の合計面積を計算する算出プロパティ
+const calculatedFloorArea = computed(() => {
   const floorsArea = floors.value.reduce((total, floor) => {
     return total + (floor.floorArea || 0);
   }, 0);
   const extraArea = hasNonFloorArea.value ? (nonFloorAreaValue.value || 0) : 0;
-  const totalArea = floorsArea + extraArea + (totalFloorAreaInput.value || 0);
-  return totalArea;
+  return floorsArea + extraArea;
 });
+
+// 面積の不一致をチェックする算出プロパティ
+const floorAreaMismatch = computed(() => {
+  if (totalFloorAreaInput.value === null || totalFloorAreaInput.value === 0) {
+    return false;
+  }
+  // toFixed(2)で比較することで、浮動小数点数の誤差を回避
+  return totalFloorAreaInput.value.toFixed(2) !== calculatedFloorArea.value.toFixed(2);
+});
+
 
 // 無窓階のリストを作成する算出プロパティ
 const windowlessFloors = computed(() => {
@@ -335,10 +344,27 @@ generateFloors();
               <v-card-title>建物概要</v-card-title>
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>延床面積</v-list-item-title>
-                  <v-list-item-subtitle>{{ totalFloorArea.toFixed(2) }} ㎡</v-list-item-subtitle>
+                  <v-list-item-title>申告延床面積</v-list-item-title>
+                  <v-list-item-subtitle>{{ (totalFloorAreaInput || 0).toFixed(2) }} ㎡</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>各階の合計面積</v-list-item-title>
+                  <v-list-item-subtitle>{{ calculatedFloorArea.toFixed(2) }} ㎡</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-alert
+                v-if="floorAreaMismatch"
+                type="warning"
+                density="compact"
+                variant="outlined"
+                class="ma-2"
+              >
+                申告延床面積と各階の合計面積が一致しません。
+              </v-alert>
+
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>無窓階</v-list-item-title>
