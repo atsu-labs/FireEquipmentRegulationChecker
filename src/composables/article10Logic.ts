@@ -1,9 +1,16 @@
 import { computed } from 'vue';
 import type { Ref } from 'vue';
 import type { BuildingData, Floor } from '@/types';
+import { buildingUses } from '@/data/buildingUses';
+
+// 用途コードから表示名を取得する関数
+function getUseDisplay(code: string): string {
+  const found = buildingUses.find(u => u.annexedCode === code);
+  return found ? found.annexedName : code;
+}
 
 // Composable関数としてロジックをエクスポート
-export function useFireExtinguisherLogic(data: BuildingData) {
+export function Article10Logic(data: BuildingData) {
   const judgementResult = computed(() => {
     const {
       buildingUse,
@@ -15,6 +22,7 @@ export function useFireExtinguisherLogic(data: BuildingData) {
     } = data;
 
     const useCode = buildingUse.value;
+    const useDisplay = getUseDisplay(useCode);
     const totalArea = totalFloorAreaInput.value || 0;
 
     if (!useCode) {
@@ -32,7 +40,7 @@ export function useFireExtinguisherLogic(data: BuildingData) {
       useCode === 'item17' ||
       useCode === 'item20';
     if (isItem1_i) {
-      return { result: true, reason: `用途（${useCode}）により、消火器の設置が必要です。`, 根拠: '令第十条第一項一号イ' };
+      return { result: true, reason: `用途（${useDisplay}）により、消火器の設置が必要です。`, 根拠: '令第十条第一項一号イ' };
     }
     // ロ: (3)項で火気設備あり
     if (useCode.startsWith('item03') && usesFireEquipment.value) {
@@ -54,7 +62,7 @@ export function useFireExtinguisherLogic(data: BuildingData) {
         useCode.startsWith('item13') ||
         useCode === 'item14';
       if (isItem2_i) {
-        return { result: true, reason: `延べ面積150㎡以上で、用途（${useCode}）により消火器の設置が必要です。`, 根拠: '令第十条第一項二号イ' };
+        return { result: true, reason: `延べ面積150㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, 根拠: '令第十条第一項二号イ' };
       }
       // ロ: (3)項で火気設備なし
       if (useCode.startsWith('item03') && !usesFireEquipment.value) {
@@ -71,7 +79,7 @@ export function useFireExtinguisherLogic(data: BuildingData) {
         useCode === 'item11' ||
         useCode === 'item15';
       if (isItem3) {
-        return { result: true, reason: `延べ面積300㎡以上で、用途（${useCode}）により消火器の設置が必要です。`, 根拠: '令第十条第一項三号' };
+        return { result: true, reason: `延べ面積300㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, 根拠: '令第十条第一項三号' };
       }
     }
 

@@ -16,3 +16,18 @@ export interface Floor {
   capacity: number | null;
   isWindowless: boolean;
 }
+
+export interface Article11UserInput {
+  buildingUse: string | null;
+  totalArea: number | null;
+  hasBasement: boolean;
+  basementArea: number;
+  hasNoWindowFloor: boolean;
+  noWindowFloorArea: number;
+  hasUpperFloors: boolean;
+  upperFloorsArea: number;
+  storesFlammableItems: boolean;
+  isFlammableItemsAmountOver750: boolean;
+  structureType: 'A' | 'B' | 'C' | null;
+  finishType: 'flammable' | 'other' | null;
+}

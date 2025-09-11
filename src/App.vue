@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import BuildingUseSelector from '@/components/BuildingUseSelector.vue';
-import { useFireExtinguisherLogic } from '@/composables/useFireExtinguisherLogic';
+import { Article10Logic } from '@/composables/article10Logic';
 import type { Floor } from '@/types';
+import { useArticle11Logic } from '@/composables/article11Logic';
+import { buildingUses } from '@/data/buildingUses';
 
 const currentStep = ref(1);
 
@@ -19,6 +21,9 @@ const nonFloorAreaValue = ref<number | null>(null);
 const usesFireEquipment = ref(false);
 const storesMinorHazardousMaterials = ref(false);
 const storesDesignatedCombustibles = ref(false);
+const isFlammableItemsAmountOver750 = ref(false);
+const structureType = ref<'A' | 'B' | 'C' | null>(null);
+const finishType = ref<'flammable' | 'other' | null>(null);
 
 
 // hasNonFloorAreaがfalseになったら、面積をリセットする
@@ -120,13 +125,38 @@ const windowlessFloors = computed(() => {
 });
 
 // 判定ロジックを実行
-const { judgementResult } = useFireExtinguisherLogic({
+const { judgementResult: judgementResult10 } = Article10Logic({
   buildingUse,
   totalFloorAreaInput,
   floors,
   usesFireEquipment,
   storesMinorHazardousMaterials,
   storesDesignatedCombustibles,
+});
+
+// Article11UserInputのためのComputedプロパティ
+const article11TotalArea = computed(() => totalFloorAreaInput.value);
+const hasBasement = computed(() => basementFloorsInput.value > 0);
+const basementArea = computed(() => floors.value.filter(f => f.type === 'basement').reduce((sum, f) => sum + (f.floorArea || 0), 0));
+const hasNoWindowFloor = computed(() => floors.value.some(f => f.isWindowless));
+const noWindowFloorArea = computed(() => floors.value.filter(f => f.isWindowless).reduce((sum, f) => sum + (f.floorArea || 0), 0));
+const hasUpperFloors = computed(() => groundFloorsInput.value >= 4);
+const upperFloorsArea = computed(() => floors.value.filter(f => f.type === 'ground' && f.level >= 4).reduce((sum, f) => sum + (f.floorArea || 0), 0));
+
+
+const { regulationResult: judgementResult11 } = useArticle11Logic({
+  buildingUse,
+  totalArea: article11TotalArea,
+  hasBasement,
+  basementArea,
+  hasNoWindowFloor,
+  noWindowFloorArea,
+  hasUpperFloors,
+  upperFloorsArea,
+  storesFlammableItems: storesDesignatedCombustibles,
+  isFlammableItemsAmountOver750,
+  structureType,
+  finishType,
 });
 
 
@@ -330,6 +360,7 @@ generateFloors();
                   <v-card>
                     <v-card-title>追加情報</v-card-title>
                     <v-card-text>
+                      <p class="font-weight-bold mb-2">令第10条（消火器）関連</p>
                       <v-checkbox
                         v-model="usesFireEquipment"
                         label="火を使用する設備又は器具がある（簡易なものを除く）"
@@ -340,11 +371,40 @@ generateFloors();
                         label="少量危険物を貯蔵・取り扱いしている"
                         hide-details
                       ></v-checkbox>
+                      <v-divider class="my-4"></v-divider>
+                      <p class="font-weight-bold mb-2">令第11条（屋内消火栓設備）関連</p>
                       <v-checkbox
                         v-model="storesDesignatedCombustibles"
                         label="指定可燃物を貯蔵・取り扱いしている"
                         hide-details
                       ></v-checkbox>
+                      <v-expand-transition>
+                        <div v-if="storesDesignatedCombustibles" class="ml-8">
+                          <v-checkbox
+                            v-model="isFlammableItemsAmountOver750"
+                            label="その量は750倍以上である"
+                            hide-details
+                          ></v-checkbox>
+                        </div>
+                      </v-expand-transition>
+
+                      <v-row class="mt-4">
+                        <v-col cols="12" md="6">
+                          <p class="mb-2">建物の構造</p>
+                          <v-radio-group v-model="structureType" hide-details>
+                            <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
+                            <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
+                            <v-radio label="その他" value="C"></v-radio>
+                          </v-radio-group>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                          <p class="mb-2">壁・天井の仕上げ</p>
+                          <v-radio-group v-model="finishType" hide-details>
+                            <v-radio label="難燃材料" value="flammable"></v-radio>
+                            <v-radio label="その他" value="other"></v-radio>
+                          </v-radio-group>
+                        </v-col>
+                      </v-row>
                     </v-card-text>
                   </v-card>
                 </v-stepper-window-item>
@@ -403,16 +463,30 @@ generateFloors();
               <v-card-title>判定結果</v-card-title>
               <v-card-text>
                 <v-alert
-                  :type="judgementResult.result ? 'error' : 'success'"
+                  :type="judgementResult10.result ? 'error' : 'success'"
+                  variant="tonal"
+                  prominent
+                  class="mb-4"
+                >
+                  <div class="text-h6">
+                    【消火器】{{ judgementResult10.result ? '設置義務あり' : '設置義務なし' }}
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <p><b>理由:</b> {{ judgementResult10.reason }}</p>
+                  <p><b>根拠:</b> {{ judgementResult10.根拠 }}</p>
+                </v-alert>
+
+                <v-alert
+                  :type="judgementResult11.required ? 'error' : 'success'"
                   variant="tonal"
                   prominent
                 >
                   <div class="text-h6">
-                    {{ judgementResult.result ? '消火器の設置義務があります' : '消火器の設置義務はありません' }}
+                    【屋内消火栓設備】{{ judgementResult11.required ? '設置義務あり' : '設置義務なし' }}
                   </div>
                   <v-divider class="my-2"></v-divider>
-                  <p><b>理由:</b> {{ judgementResult.reason }}</p>
-                  <p><b>根拠:</b> {{ judgementResult.根拠 }}</p>
+                  <p><b>理由:</b> {{ judgementResult11.message }}</p>
+                  <p><b>根拠:</b> {{ judgementResult11.basis }}</p>
                 </v-alert>
               </v-card-text>
             </v-card>
