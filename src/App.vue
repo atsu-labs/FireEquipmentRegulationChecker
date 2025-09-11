@@ -169,16 +169,7 @@ generateFloors();
                     ></v-checkbox>
                   </v-col>
                    <v-col v-if="hasNonFloorArea" cols="12" sm="2">
-                    <v-text-field
-                      label="面積"
-                      v-model.number="nonFloorAreaValue"
-                      type="number"
-                      min="0"
-                      placeholder="50"
-                      suffix="㎡"
-                      dense
-                      hide-details
-                    ></v-text-field>
+                    <!-- 階に該当しない部分の入力は各階入力エリアで表示するため、ここでは非表示 -->
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -189,6 +180,36 @@ generateFloors();
 
             <div v-if="floors.length > 0">
               <h2 class="mb-3">各階の情報を入力してください</h2>
+              <template v-if="hasNonFloorArea">
+                <v-card class="mb-3" color="grey-lighten-5">
+                  <v-card-text>
+                    <v-row align="center" class="py-2">
+                      <v-col cols="12" md="2" class="font-weight-bold text-md-center">
+                        階に該当しない部分
+                      </v-col>
+                      <v-col cols="12" md="10">
+                        <v-row align="center">
+                          <v-col cols="12" sm>
+                            <v-text-field
+                              label="面積"
+                              v-model.number="nonFloorAreaValue"
+                              type="number"
+                              min="0"
+                              placeholder="50"
+                              suffix="㎡"
+                              dense
+                              hide-details
+                            ></v-text-field>
+                          </v-col>
+                          <!-- 空のカラムで幅を揃える -->
+                          <v-col cols="12" sm></v-col>
+                          <v-col cols="12" sm style="min-height: 56px;"></v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </template>
               <v-card
                 v-for="floor in floors"
                 :key="`${floor.type}-${floor.level}`"
