@@ -2,8 +2,8 @@
   <v-select
     label="建物の用途"
     :items="buildingUses"
-    item-title="title"
-    item-value="value"
+    item-title="annexedName"
+    item-value="annexedCode"
     v-model="selectedUse"
     variant="outlined"
   ></v-select>
