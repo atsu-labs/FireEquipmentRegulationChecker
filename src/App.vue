@@ -10,6 +10,7 @@ interface Floor {
   isWindowless: boolean;
 }
 
+const currentStep = ref(1);
 
 const groundFloorsInput = ref<number>(1);
 const basementFloorsInput = ref<number>(0);
@@ -76,6 +77,22 @@ const generateFloors = () => {
   floors.value = newFloors;
 };
 
+const nextStep = () => {
+  if (currentStep.value === 1) {
+    generateFloors();
+  }
+  if (currentStep.value < 3) {
+    currentStep.value++;
+  }
+};
+
+const prevStep = () => {
+  if (currentStep.value > 1) {
+    currentStep.value--;
+  }
+};
+
+
 // 延床面積を計算する算出プロパティ
 const totalFloorArea = computed(() => {
   const floorsArea = floors.value.reduce((total, floor) => {
@@ -107,163 +124,210 @@ generateFloors();
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="7">
-            <v-card class="mb-4">
-              <v-card-title>建物情報を入力してください</v-card-title>
-              <v-card-text>
-                <v-row>
-                  <v-col cols="12" sm="3">
-                    <BuildingUseSelector v-model="buildingUse" />
-                  </v-col>
-                  <v-col cols="12" sm="3">
-                    <v-text-field
-                      label="延床面積"
-                      v-model.number="totalFloorAreaInput"
-                      type="number"
-                      min="0"
-                      suffix="㎡"
-                      dense
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="3">
-                    <v-text-field
-                      label="全体の収容人員"
-                      v-model.number="capacityInput"
-                      type="number"
-                      min="0"
-                      suffix="人"
-                      dense
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row align="center">
-                  <v-col cols="12" sm="3">
-                    <v-text-field
-                      label="地上階"
-                      v-model.number="groundFloorsInput"
-                      type="number"
-                      min="0"
-                      suffix="階"
-                      dense
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="3">
-                    <v-text-field
-                      label="地下階"
-                      v-model.number="basementFloorsInput"
-                      type="number"
-                      min="0"
-                      suffix="階"
-                      dense
-                      hide-details
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="4">
-                    <v-checkbox
-                      v-model="hasNonFloorArea"
-                      label="階に該当しない部分"
-                      dense
-                      hide-details
-                    ></v-checkbox>
-                  </v-col>
-                   <v-col v-if="hasNonFloorArea" cols="12" sm="2">
-                    <!-- 階に該当しない部分の入力は各階入力エリアで表示するため、ここでは非表示 -->
-                  </v-col>
-                </v-row>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="primary" @click="generateFloors">フォームを生成</v-btn>
-              </v-card-actions>
-            </v-card>
+            <v-stepper v-model="currentStep" alt-labels>
+              <v-stepper-header>
+                <v-stepper-item
+                  title="建物情報"
+                  :value="1"
+                  :complete="currentStep > 1"
+                ></v-stepper-item>
 
-            <div v-if="floors.length > 0">
-              <h2 class="mb-3">各階の情報を入力してください</h2>
-              <template v-if="hasNonFloorArea">
-                <v-card class="mb-3" color="grey-lighten-5">
-                  <v-card-text>
-                    <v-row align="center" class="py-2">
-                      <v-col cols="12" md="2" class="font-weight-bold text-md-center">
-                        階に該当しない部分
-                      </v-col>
-                      <v-col cols="12" md="10">
-                        <v-row align="center">
-                          <v-col cols="12" sm>
-                            <v-text-field
-                              label="面積"
-                              v-model.number="nonFloorAreaValue"
-                              type="number"
-                              min="0"
-                              placeholder="50"
-                              suffix="㎡"
-                              dense
-                              hide-details
-                            ></v-text-field>
-                          </v-col>
-                          <!-- 空のカラムで幅を揃える -->
-                          <v-col cols="12" sm></v-col>
-                          <v-col cols="12" sm style="min-height: 56px;"></v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
-              </template>
-              <v-card
-                v-for="floor in floors"
-                :key="`${floor.type}-${floor.level}`"
-                class="mb-3"
-                :color="floor.type === 'ground' ? 'grey-lighten-3' : 'brown-lighten-2'"
-                variant="flat"
-              >
-                <v-card-text>
-                  <v-row align="center" class="py-2">
-                    <v-col cols="12" md="2" class="font-weight-bold text-md-center">
-                      {{ floor.type === 'ground' ? `地上 ${floor.level} 階` : `地下 ${floor.level} 階` }}
-                    </v-col>
-                    <v-col cols="12" md="10">
-                      <v-row align="center">
-                        <v-col cols="12" sm>
+                <v-divider></v-divider>
+
+                <v-stepper-item
+                  title="各階の情報"
+                  :value="2"
+                  :complete="currentStep > 2"
+                ></v-stepper-item>
+
+                <v-divider></v-divider>
+
+                <v-stepper-item
+                  title="追加情報"
+                  :value="3"
+                ></v-stepper-item>
+              </v-stepper-header>
+
+              <v-stepper-window>
+                <v-stepper-window-item :value="1">
+                  <v-card class="mb-4">
+                    <v-card-title>建物情報を入力してください</v-card-title>
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="12" sm="3">
+                          <BuildingUseSelector v-model="buildingUse" />
+                        </v-col>
+                        <v-col cols="12" sm="3">
                           <v-text-field
-                            label="床面積"
-                            v-model.number="floor.floorArea"
+                            label="延床面積"
+                            v-model.number="totalFloorAreaInput"
                             type="number"
                             min="0"
-                            placeholder="500"
                             suffix="㎡"
                             dense
                             hide-details
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm>
+                        <v-col cols="12" sm="3">
                           <v-text-field
-                            label="階の収容人員"
-                            v-model.number="floor.capacity"
+                            label="全体の収容人員"
+                            v-model.number="capacityInput"
                             type="number"
                             min="0"
-                            placeholder="50"
                             suffix="人"
                             dense
                             hide-details
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm style="min-height: 56px;">
-                          <v-checkbox
-                            v-if="floor.type === 'ground'"
-                            v-model="floor.isWindowless"
-                            label="無窓階"
+                      </v-row>
+                      <v-row align="center">
+                        <v-col cols="12" sm="3">
+                          <v-text-field
+                            label="地上階"
+                            v-model.number="groundFloorsInput"
+                            type="number"
+                            min="0"
+                            suffix="階"
                             dense
                             hide-details
-                            class="mt-0"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="3">
+                          <v-text-field
+                            label="地下階"
+                            v-model.number="basementFloorsInput"
+                            type="number"
+                            min="0"
+                            suffix="階"
+                            dense
+                            hide-details
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                          <v-checkbox
+                            v-model="hasNonFloorArea"
+                            label="階に該当しない部分"
+                            dense
+                            hide-details
                           ></v-checkbox>
                         </v-col>
+                        <v-col v-if="hasNonFloorArea" cols="12" sm="2">
+                          <!-- 階に該当しない部分の入力は各階入力エリアで表示するため、ここでは非表示 -->
+                        </v-col>
                       </v-row>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </div>
+                    </v-card-text>
+                  </v-card>
+                </v-stepper-window-item>
+
+                <v-stepper-window-item :value="2">
+                  <div v-if="floors.length > 0">
+                    <h2 class="mb-3">各階の情報を入力してください</h2>
+                    <template v-if="hasNonFloorArea">
+                      <v-card class="mb-3" color="grey-lighten-5">
+                        <v-card-text>
+                          <v-row align="center" class="py-2">
+                            <v-col cols="12" md="2" class="font-weight-bold text-md-center">
+                              階に該当しない部分
+                            </v-col>
+                            <v-col cols="12" md="10">
+                              <v-row align="center">
+                                <v-col cols="12" sm>
+                                  <v-text-field
+                                    label="面積"
+                                    v-model.number="nonFloorAreaValue"
+                                    type="number"
+                                    min="0"
+                                    placeholder="50"
+                                    suffix="㎡"
+                                    dense
+                                    hide-details
+                                  ></v-text-field>
+                                </v-col>
+                                <!-- 空のカラムで幅を揃える -->
+                                <v-col cols="12" sm></v-col>
+                                <v-col cols="12" sm style="min-height: 56px;"></v-col>
+                              </v-row>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </template>
+                    <v-card
+                      v-for="floor in floors"
+                      :key="`${floor.type}-${floor.level}`"
+                      class="mb-3"
+                      :color="floor.type === 'ground' ? 'grey-lighten-3' : 'brown-lighten-2'"
+                      variant="flat"
+                    >
+                      <v-card-text>
+                        <v-row align="center" class="py-2">
+                          <v-col cols="12" md="2" class="font-weight-bold text-md-center">
+                            {{ floor.type === 'ground' ? `地上 ${floor.level} 階` : `地下 ${floor.level} 階` }}
+                          </v-col>
+                          <v-col cols="12" md="10">
+                            <v-row align="center">
+                              <v-col cols="12" sm>
+                                <v-text-field
+                                  label="床面積"
+                                  v-model.number="floor.floorArea"
+                                  type="number"
+                                  min="0"
+                                  placeholder="500"
+                                  suffix="㎡"
+                                  dense
+                                  hide-details
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm>
+                                <v-text-field
+                                  label="階の収容人員"
+                                  v-model.number="floor.capacity"
+                                  type="number"
+                                  min="0"
+                                  placeholder="50"
+                                  suffix="人"
+                                  dense
+                                  hide-details
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm style="min-height: 56px;">
+                                <v-checkbox
+                                  v-if="floor.type === 'ground'"
+                                  v-model="floor.isWindowless"
+                                  label="無窓階"
+                                  dense
+                                  hide-details
+                                  class="mt-0"
+                                ></v-checkbox>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </div>
+                </v-stepper-window-item>
+                <v-stepper-window-item :value="3">
+                  <v-card>
+                    <v-card-title>追加情報</v-card-title>
+                    <v-card-text>
+                      <p>追加の情報をここに入力します。</p>
+                      <!-- ここに追加のフォーム要素を配置 -->
+                    </v-card-text>
+                  </v-card>
+                </v-stepper-window-item>
+              </v-stepper-window>
+
+              <v-card-actions>
+                <v-btn v-if="currentStep > 1" @click="prevStep">
+                  戻る
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn v-if="currentStep < 3" color="primary" @click="nextStep">
+                  次へ
+                </v-btn>
+              </v-card-actions>
+            </v-stepper>
           </v-col>
 
           <v-col cols="12" md="5">
