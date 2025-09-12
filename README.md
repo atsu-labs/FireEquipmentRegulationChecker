@@ -1,5 +1,29 @@
-# Vue 3 + TypeScript + Vite
+# 消防用設備規制チェッカー
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 概要
+建物の用途・規模・構造等を入力することで、消防法令（令第10条・11条・12条）に基づく消火器・屋内消火栓・スプリンクラー設備の設置義務を自動判定するWebアプリです。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 主な機能
+- 建物情報の入力（用途、階数、面積等）
+- 消防用設備の設置判定（条文ごとに詳細な理由・根拠を表示）
+- 日本語UI・日本語メッセージ
+
+## 技術構成
+- Vue 3
+- TypeScript
+- Vite
+
+## 使い方
+1. `npm install`
+2. `npm run dev`
+3. ブラウザで `http://localhost:5173` を開く
+
+## 開発・貢献
+- ロジックは `src/composables/` に条文ごと分離
+- テストは `src/composables/*.spec.ts` に記述
+- Issue/TODOはGEMINI.md参照
+
+## 今後の予定
+- テストケースの拡充
+- UI/UX改善
+- 法改正・例外対応
