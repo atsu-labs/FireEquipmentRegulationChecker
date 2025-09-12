@@ -18,18 +18,18 @@ export interface Floor {
 }
 
 export interface Article11UserInput {
-  buildingUse: string | null;
-  totalArea: number | null;
-  hasBasement: boolean;
-  basementArea: number;
-  hasNoWindowFloor: boolean;
-  noWindowFloorArea: number;
-  hasUpperFloors: boolean;
-  upperFloorsArea: number;
-  storesFlammableItems: boolean;
-  isFlammableItemsAmountOver750: boolean;
-  structureType: 'A' | 'B' | 'C' | null;
-  finishType: 'flammable' | 'other' | null;
+  buildingUse: Ref<string | null>;
+  totalArea: Ref<number | null>;
+  hasBasement: Ref<boolean>;
+  basementArea: Ref<number>;
+  hasNoWindowFloor: Ref<boolean>;
+  noWindowFloorArea: Ref<number>;
+  hasUpperFloors: Ref<boolean>;
+  upperFloorsArea: Ref<number>;
+  storesFlammableItems: Ref<boolean>;
+  isFlammableItemsAmountOver750: Ref<boolean>;
+  structureType: Ref<'A' | 'B' | 'C' | null>;
+  finishType: Ref<'flammable' | 'other' | null>;
 }
 
 export interface Article12UserInput {
