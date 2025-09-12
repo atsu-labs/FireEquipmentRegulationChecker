@@ -94,10 +94,13 @@ const generateFloors = () => {
   floors.value = newFloors;
 };
 
-const nextStep = () => {
-  if (currentStep.value === 1) {
+watch(currentStep, (newValue, oldValue) => {
+  if (oldValue === 1 && newValue > 1) {
     generateFloors();
   }
+});
+
+const nextStep = () => {
   if (currentStep.value < 3) {
     currentStep.value++;
   }
@@ -221,12 +224,13 @@ generateFloors();
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="7">
-            <v-stepper v-model="currentStep" alt-labels>
+            <v-stepper v-model="currentStep" alt-labels non-linear>
               <v-stepper-header>
                 <v-stepper-item
                   title="建物情報"
                   :value="1"
                   :complete="currentStep > 1"
+                  editable
                 ></v-stepper-item>
 
                 <v-divider></v-divider>
@@ -235,6 +239,7 @@ generateFloors();
                   title="各階の情報"
                   :value="2"
                   :complete="currentStep > 2"
+                  editable
                 ></v-stepper-item>
 
                 <v-divider></v-divider>
@@ -242,6 +247,7 @@ generateFloors();
                 <v-stepper-item
                   title="追加情報"
                   :value="3"
+                  editable
                 ></v-stepper-item>
               </v-stepper-header>
 
@@ -310,6 +316,23 @@ generateFloors();
                         </v-col>
                         <v-col v-if="hasNonFloorArea" cols="12" sm="2">
                           <!-- 階に該当しない部分の入力は各階入力エリアで表示するため、ここでは非表示 -->
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-4">
+                        <v-col cols="12" md="6">
+                          <p class="mb-2">建物の構造</p>
+                          <v-radio-group v-model="structureType" hide-details>
+                            <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
+                            <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
+                            <v-radio label="その他" value="C"></v-radio>
+                          </v-radio-group>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                          <p class="mb-2">壁・天井の仕上げ</p>
+                          <v-radio-group v-model="finishType" hide-details>
+                            <v-radio label="難燃材料" value="flammable"></v-radio>
+                            <v-radio label="その他" value="other"></v-radio>
+                          </v-radio-group>
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -435,24 +458,6 @@ generateFloors();
                           ></v-checkbox>
                         </div>
                       </v-expand-transition>
-
-                      <v-row class="mt-4">
-                        <v-col cols="12" md="6">
-                          <p class="mb-2">建物の構造</p>
-                          <v-radio-group v-model="structureType" hide-details>
-                            <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
-                            <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
-                            <v-radio label="その他" value="C"></v-radio>
-                          </v-radio-group>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <p class="mb-2">壁・天井の仕上げ</p>
-                          <v-radio-group v-model="finishType" hide-details>
-                            <v-radio label="難燃材料" value="flammable"></v-radio>
-                            <v-radio label="その他" value="other"></v-radio>
-                          </v-radio-group>
-                        </v-col>
-                      </v-row>
                       <v-divider class="my-4"></v-divider>
                       <p class="font-weight-bold mb-2">令第12条（スプリンクラー設備）関連</p>
                       <v-checkbox
