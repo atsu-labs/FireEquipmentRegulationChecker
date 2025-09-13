@@ -1,0 +1,216 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十九条",
+    "title": "連結送水管に関する基準",
+    "main_provision": {
+      "subject": "連結送水管",
+      "action": "設置するものとする",
+      "target": "次の各号に掲げる防火対象物"
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "content": "別表第一に掲げる建築物で、地階を除く階数が七以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": "全項目"
+          }
+        ],
+        "target_type": "建築物",
+        "floor_requirement": {
+          "measurement_type": "地階を除く階数",
+          "minimum": 7,
+          "unit": "階",
+          "condition": "以上"
+        },
+        "description": "高層建築物（7階以上）",
+        "rationale": "消防隊の上階への進入・消火活動の困難性"
+      },
+      {
+        "item_number": "二",
+        "content": "前号に掲げるもののほか、地階を除く階数が五以上の別表第一に掲げる建築物で、延べ面積が六千平方メートル以上のもの",
+        "exclusion": "前号に掲げるもののほか",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": "全項目"
+          }
+        ],
+        "target_type": "建築物",
+        "conditions": [
+          {
+            "type": "階数要件",
+            "floor_requirement": {
+              "measurement_type": "地階を除く階数",
+              "minimum": 5,
+              "unit": "階",
+              "condition": "以上"
+            }
+          },
+          {
+            "type": "面積要件",
+            "area_requirement": {
+              "minimum_area": 6000,
+              "unit": "平方メートル",
+              "condition": "以上",
+              "measurement_type": "延べ面積"
+            }
+          }
+        ],
+        "logical_operator": "かつ",
+        "description": "中高層大規模建築物（5階以上かつ6000㎡以上）",
+        "rationale": "中高層であっても大規模な場合の消火活動困難性"
+      },
+      {
+        "item_number": "三",
+        "content": "別表第一（十六の二）項に掲げる防火対象物で、延べ面積が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十六の二）項"
+            ]
+          }
+        ],
+        "target_type": "防火対象物",
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        },
+        "description": "複合用途防火対象物（1000㎡以上）",
+        "rationale": "用途の複雑性による消火活動の困難性"
+      },
+      {
+        "item_number": "四",
+        "content": "別表第一（十八）項に掲げる防火対象物",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十八）項"
+            ]
+          }
+        ],
+        "target_type": "防火対象物",
+        "area_requirement": "面積要件なし",
+        "description": "自動車車庫等（面積規模によらず全て）",
+        "rationale": "自動車火災の特殊性と消火の困難性"
+      },
+      {
+        "item_number": "五",
+        "content": "前各号に掲げるもののほか、別表第一に掲げる防火対象物で、道路の用に供される部分を有するもの",
+        "exclusion": "前各号に掲げるもののほか",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": "全項目"
+          }
+        ],
+        "target_type": "防火対象物",
+        "special_condition": {
+          "condition": "道路の用に供される部分を有するもの",
+          "description": "建築物の一部が道路として使用されているもの"
+        },
+        "area_requirement": "面積要件なし",
+        "description": "道路部分を有する防火対象物",
+        "rationale": "道路機能維持と消火活動の両立の必要性"
+      }
+    ],
+    "application_pattern_analysis": {
+      "階数基準": [
+        {
+          "pattern": "7階以上",
+          "coverage": "別表第一全項目",
+          "additional_requirements": "なし"
+        },
+        {
+          "pattern": "5-6階",
+          "coverage": "別表第一全項目", 
+          "additional_requirements": "延べ面積6000㎡以上"
+        }
+      ],
+      "面積基準": [
+        {
+          "pattern": "6000㎡以上",
+          "applicable_to": "5階以上の一般建築物",
+          "rationale": "大規模建築物での消火水量確保"
+        },
+        {
+          "pattern": "1000㎡以上", 
+          "applicable_to": "複合用途防火対象物",
+          "rationale": "複合用途の複雑性を考慮した低い閾値"
+        }
+      ],
+      "特殊用途": [
+        {
+          "pattern": "面積要件なし",
+          "applicable_to": [
+            "自動車車庫等（十八項）",
+            "道路部分を有するもの"
+          ],
+          "rationale": "特殊な火災特性・公共性"
+        }
+      ]
+    },
+    "fire_suppression_strategy": {
+      "high_rise_buildings": {
+        "challenge": "上階への消防隊進入・ホース延長の困難",
+        "solution": "連結送水管による各階への直接送水"
+      },
+      "large_scale_buildings": {
+        "challenge": "大容量放水・長距離送水の必要性",
+        "solution": "建物内配管による効率的な送水"
+      },
+      "complex_use_buildings": {
+        "challenge": "用途の複雑性・避難経路の多様性",
+        "solution": "建物特性に応じた送水システム"
+      },
+      "special_use_buildings": {
+        "challenge": "特殊な火災特性・公共機能",
+        "solution": "用途特性に応じた確実な送水確保"
+      }
+    },
+    "threshold_rationale": {
+      "7階以上": "はしご車等の限界を考慮した高層建築物の基準",
+      "5階以上_6000㎡": "中高層でも大規模な場合の消火困難性",
+      "1000㎡_複合用途": "用途の複雑性を考慮した低い閾値",
+      "面積要件なし_特殊用途": "火災特性・公共性による全面適用"
+    },
+    "definitions": [
+      {
+        "term": "連結送水管",
+        "definition": "消防ポンプ車等から建築物内に送水し、各階で消火活動を行うための配管設備"
+      },
+      {
+        "term": "地階を除く階数",
+        "definition": "建築物の地上階数（地下階は除く）"
+      },
+      {
+        "term": "延べ面積",
+        "definition": "建築物の各階の床面積の合計"
+      },
+      {
+        "term": "複合用途防火対象物",
+        "definition": "（十六の二）項に規定される、複数の用途が混在する防火対象物"
+      },
+      {
+        "term": "自動車車庫等",
+        "definition": "（十八）項に規定される自動車車庫、駐車場等の防火対象物"
+      },
+      {
+        "term": "道路の用に供される部分",
+        "definition": "建築物の一部が道路として一般の通行に供されている部分"
+      }
+    ]
+  }
+}

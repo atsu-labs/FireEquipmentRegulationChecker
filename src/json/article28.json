@@ -1,0 +1,213 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十八条",
+    "title": "排煙設備に関する基準",
+    "main_provision": {
+      "subject": "排煙設備",
+      "action": "設置するものとする",
+      "target": "次に掲げる防火対象物又はその部分"
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "content": "別表第一（十六の二）項に掲げる防火対象物で、延べ面積が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十六の二）項"
+            ]
+          }
+        ],
+        "target_type": "防火対象物全体",
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        },
+        "description": "大規模複合用途防火対象物"
+      },
+      {
+        "item_number": "二",
+        "content": "別表第一（一）項に掲げる防火対象物の舞台部で、床面積が五百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（一）項"
+            ]
+          }
+        ],
+        "target_type": "特定部分",
+        "specific_part": "舞台部",
+        "area_requirement": {
+          "minimum_area": 500,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "床面積"
+        },
+        "description": "劇場・映画館等の舞台部"
+      },
+      {
+        "item_number": "三",
+        "content": "別表第一（二）項、（四）項、（十）項及び（十三）項に掲げる防火対象物の地階又は無窓階で、床面積が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（二）項",
+              "（四）項",
+              "（十）項",
+              "（十三）項"
+            ]
+          }
+        ],
+        "target_type": "特定階",
+        "specific_floors": [
+          "地階",
+          "無窓階"
+        ],
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "床面積"
+        },
+        "description": "キャバレー・料理店・車庫・工場等の地階又は無窓階",
+        "use_types": [
+          {
+            "item": "（二）項",
+            "description": "キャバレー、料理店等"
+          },
+          {
+            "item": "（四）項", 
+            "description": "百貨店、マーケット等"
+          },
+          {
+            "item": "（十）項",
+            "description": "車庫、駐車場"
+          },
+          {
+            "item": "（十三）項",
+            "description": "工場、作業場"
+          }
+        ]
+      }
+    ],
+    "application_analysis": {
+      "coverage_pattern": {
+        "whole_building": [
+          {
+            "item": "一",
+            "description": "（十六の二）項防火対象物全体",
+            "threshold": "1000㎡（延べ面積）"
+          }
+        ],
+        "specific_parts": [
+          {
+            "item": "二", 
+            "description": "（一）項の舞台部のみ",
+            "threshold": "500㎡（床面積）"
+          },
+          {
+            "item": "三",
+            "description": "特定用途の地階・無窓階のみ",
+            "threshold": "1000㎡（床面積）"
+          }
+        ]
+      },
+      "area_requirements": {
+        "延べ面積基準": [
+          {
+            "threshold": "1000㎡以上",
+            "applicable_to": "（十六の二）項防火対象物全体"
+          }
+        ],
+        "床面積基準": [
+          {
+            "threshold": "500㎡以上",
+            "applicable_to": "（一）項の舞台部"
+          },
+          {
+            "threshold": "1000㎡以上", 
+            "applicable_to": "特定用途の地階・無窓階"
+          }
+        ]
+      },
+      "floor_specific_requirements": {
+        "地階": {
+          "applicable_uses": [
+            "（二）項",
+            "（四）項", 
+            "（十）項",
+            "（十三）項"
+          ],
+          "area_threshold": "1000㎡以上"
+        },
+        "無窓階": {
+          "applicable_uses": [
+            "（二）項",
+            "（四）項",
+            "（十）項", 
+            "（十三）項"
+          ],
+          "area_threshold": "1000㎡以上"
+        }
+      }
+    },
+    "risk_assessment_basis": {
+      "high_risk_factors": [
+        {
+          "factor": "大規模複合用途",
+          "description": "（十六の二）項：多様な用途が混在し避難が複雑"
+        },
+        {
+          "factor": "舞台部の火災危険",
+          "description": "（一）項舞台部：可燃物が多く火災拡大が早い"
+        },
+        {
+          "factor": "避難困難階",
+          "description": "地階・無窓階：自然排煙が困難で煙の滞留リスクが高い"
+        }
+      ],
+      "threshold_rationale": {
+        "1000㎡": "大規模建物における煙制御の必要性",
+        "500㎡": "舞台部特有の火災危険性を考慮した低い閾値"
+      }
+    },
+    "definitions": [
+      {
+        "term": "排煙設備",
+        "definition": "火災時に発生する煙を屋外に排出するための設備"
+      },
+      {
+        "term": "舞台部",
+        "definition": "劇場・映画館等における舞台及びその付属部分"
+      },
+      {
+        "term": "地階", 
+        "definition": "建築物の地下階"
+      },
+      {
+        "term": "無窓階",
+        "definition": "建築物の地上階のうち、総務省令で定める避難上又は消火活動上有効な開口部を有しない階"
+      },
+      {
+        "term": "延べ面積",
+        "definition": "建築物の各階の床面積の合計"
+      },
+      {
+        "term": "床面積", 
+        "definition": "特定の階又は部分の床面積"
+      }
+    ]
+  }
+}

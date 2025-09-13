@@ -1,0 +1,187 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十一条の二",
+    "title": "ガス漏れ火災警報設備に関する基準",
+    "main_provision": {
+      "subject": "ガス漏れ火災警報設備",
+      "action": "設置するものとする",
+      "target": "次に掲げる防火対象物又はその部分",
+      "general_exception": "総務省令で定めるものを除く"
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "content": "別表第一（十六の二）項に掲げる防火対象物で、延べ面積が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["（十六の二）項"]
+          }
+        ],
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        }
+      },
+      {
+        "item_number": "二",
+        "content": "別表第一（十六の三）項に掲げる防火対象物のうち、延べ面積が千平方メートル以上で、かつ、同表（一）項から（四）項まで、（五）項イ、（六）項又は（九）項イに掲げる防火対象物の用途に供される部分の床面積の合計が五百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["（十六の三）項"]
+          }
+        ],
+        "requirements": [
+          {
+            "type": "延べ面積",
+            "minimum_area": 1000,
+            "unit": "平方メートル",
+            "condition": "以上"
+          },
+          {
+            "type": "特定用途部分の床面積の合計",
+            "minimum_area": 500,
+            "unit": "平方メートル",
+            "condition": "以上",
+            "applicable_uses": [
+              "別表第一（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項イ",
+              "（六）項",
+              "（九）項イ"
+            ]
+          }
+        ]
+      },
+      {
+        "item_number": "三",
+        "content": "前二号に掲げる防火対象物以外の別表第一に掲げる建築物その他の工作物（収容人員が総務省令で定める数に満たないものを除く。）で、その内部に、温泉の採取のための設備で総務省令で定めるもの（温泉法（昭和二十三年法律第百二十五号）第十四条の五第一項の確認を受けた者が当該確認に係る温泉の採取の場所において温泉を採取するための設備を除く。）が設置されているもの",
+        "exclusion": "前二号に掲げる防火対象物以外",
+        "target": "別表第一に掲げる建築物その他の工作物",
+        "occupancy_requirement": {
+          "condition": "収容人員が総務省令で定める数に満たないものを除く",
+          "note": "総務省令で定める数以上の収容人員が必要"
+        },
+        "equipment_requirement": {
+          "type": "温泉の採取のための設備",
+          "specification": "総務省令で定めるもの",
+          "location": "その内部に設置されているもの"
+        },
+        "equipment_exception": {
+          "description": "温泉法第十四条の五第一項の確認を受けた者が当該確認に係る温泉の採取の場所において温泉を採取するための設備を除く",
+          "legal_reference": {
+            "law": "温泉法",
+            "law_number": "昭和二十三年法律第百二十五号",
+            "article": "第十四条の五第一項",
+            "requirement": "確認を受けた者が当該確認に係る温泉の採取の場所において温泉を採取するための設備"
+          }
+        }
+      },
+      {
+        "item_number": "四",
+        "content": "別表第一（一）項から（四）項まで、（五）項イ、（六）項及び（九）項イに掲げる防火対象物（前号に掲げるものを除く。）の地階で、床面積の合計が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項イ",
+              "（六）項",
+              "（九）項イ"
+            ]
+          }
+        ],
+        "exclusion": "前号に掲げるものを除く",
+        "floor_type": "地階",
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "床面積の合計"
+        }
+      },
+      {
+        "item_number": "五",
+        "content": "別表第一（十六）項イに掲げる防火対象物（第三号に掲げるものを除く。）の地階のうち、床面積の合計が千平方メートル以上で、かつ、同表（一）項から（四）項まで、（五）項イ、（六）項又は（九）項イに掲げる防火対象物の用途に供される部分の床面積の合計が五百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["（十六）項イ"]
+          }
+        ],
+        "exclusion": "第三号に掲げるものを除く",
+        "floor_type": "地階",
+        "requirements": [
+          {
+            "type": "床面積の合計",
+            "minimum_area": 1000,
+            "unit": "平方メートル",
+            "condition": "以上"
+          },
+          {
+            "type": "特定用途部分の床面積の合計",
+            "minimum_area": 500,
+            "unit": "平方メートル",
+            "condition": "以上",
+            "applicable_uses": [
+              "別表第一（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項イ",
+              "（六）項",
+              "（九）項イ"
+            ]
+          }
+        ]
+      }
+    ],
+    "common_features": {
+      "general_exception": "総務省令で定めるものを除く",
+      "area_thresholds": {
+        "large_buildings": {
+          "total_floor_area": 1000,
+          "unit": "平方メートル"
+        },
+        "specific_use_areas": {
+          "minimum_area": 500,
+          "unit": "平方メートル"
+        }
+      },
+      "target_uses": [
+        "別表第一（一）項から（四）項まで",
+        "（五）項イ",
+        "（六）項",
+        "（九）項イ"
+      ],
+      "special_equipment": {
+        "hot_spring_equipment": {
+          "specification": "総務省令で定めるもの",
+          "exception": "温泉法第十四条の五第一項の確認を受けた設備"
+        }
+      }
+    },
+    "legal_references": [
+      {
+        "law": "温泉法",
+        "law_number": "昭和二十三年法律第百二十五号",
+        "relevant_article": "第十四条の五第一項"
+      }
+    ]
+  }
+}

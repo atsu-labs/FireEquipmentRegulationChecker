@@ -1,0 +1,317 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十四条",
+    "title": "非常警報器具又は非常警報設備に関する基準",
+    "paragraphs": [
+      {
+        "paragraph_number": "1",
+        "main_provision": {
+          "subject": "非常警報器具",
+          "action": "設置するものとする",
+          "target": "別表第一（四）項、（六）項ロ、ハ及びニ、（九）項ロ並びに（十二）項に掲げる防火対象物で収容人員が二十人以上五十人未満のもの（次項に掲げるものを除く。）"
+        },
+        "target_conditions": {
+          "referenced_tables": [
+            {
+              "table": "別表第一",
+              "items": [
+                "（四）項",
+                "（六）項ロ",
+                "（六）項ハ",
+                "（六）項ニ",
+                "（九）項ロ",
+                "（十二）項"
+              ]
+            }
+          ],
+          "occupancy_requirement": {
+            "minimum": 20,
+            "maximum": 49,
+            "unit": "人",
+            "condition": "以上五十人未満"
+          },
+          "exclusion": "次項に掲げるものを除く"
+        },
+        "exception": {
+          "condition": "これらの防火対象物に自動火災報知設備又は非常警報設備が第二十一条若しくは第四項に定める技術上の基準に従い、又は当該技術上の基準の例により設置されているとき",
+          "scope": "当該設備の有効範囲内の部分については、この限りでない",
+          "applicable_equipment": [
+            "自動火災報知設備",
+            "非常警報設備"
+          ],
+          "technical_standards": [
+            "第二十一条に定める技術上の基準",
+            "第四項に定める技術上の基準",
+            "当該技術上の基準の例"
+          ]
+        }
+      },
+      {
+        "paragraph_number": "2",
+        "main_provision": {
+          "subject": "非常ベル、自動式サイレン又は放送設備",
+          "action": "設置するものとする",
+          "target": "次に掲げる防火対象物（次項の適用を受けるものを除く。）"
+        },
+        "equipment_types": [
+          "非常ベル",
+          "自動式サイレン",
+          "放送設備"
+        ],
+        "target_exclusion": "次項の適用を受けるものを除く",
+        "items": [
+          {
+            "item_number": "一",
+            "content": "別表第一（五）項イ、（六）項イ及び（九）項イに掲げる防火対象物で、収容人員が二十人以上のもの",
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（五）項イ",
+                  "（六）項イ",
+                  "（九）項イ"
+                ]
+              }
+            ],
+            "occupancy_requirement": {
+              "minimum": 20,
+              "unit": "人",
+              "condition": "以上"
+            }
+          },
+          {
+            "item_number": "二",
+            "content": "前号に掲げる防火対象物以外の別表第一（一）項から（十七）項までに掲げる防火対象物で、収容人員が五十人以上のもの又は地階及び無窓階の収容人員が二十人以上のもの",
+            "exclusion": "前号に掲げる防火対象物以外",
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（一）項",
+                  "（二）項",
+                  "（三）項",
+                  "（四）項",
+                  "（五）項",
+                  "（六）項",
+                  "（七）項",
+                  "（八）項",
+                  "（九）項",
+                  "（十）項",
+                  "（十一）項",
+                  "（十二）項",
+                  "（十三）項",
+                  "（十四）項",
+                  "（十五）項",
+                  "（十六）項",
+                  "（十七）項"
+                ]
+              }
+            ],
+            "conditions": [
+              {
+                "type": "全体収容人員",
+                "occupancy_requirement": {
+                  "minimum": 50,
+                  "unit": "人",
+                  "condition": "以上"
+                }
+              },
+              {
+                "type": "特定階収容人員",
+                "description": "地階及び無窓階の収容人員が二十人以上のもの",
+                "floors": [
+                  "地階",
+                  "無窓階"
+                ],
+                "occupancy_requirement": {
+                  "minimum": 20,
+                  "unit": "人",
+                  "condition": "以上"
+                }
+              }
+            ],
+            "logical_operator": "又は"
+          }
+        ],
+        "exception": {
+          "condition": "これらの防火対象物に自動火災報知設備が第二十一条に定める技術上の基準に従い、又は当該技術上の基準の例により設置されているとき",
+          "scope": "当該設備の有効範囲内の部分については、この限りでない",
+          "applicable_equipment": [
+            "自動火災報知設備"
+          ],
+          "technical_standards": [
+            "第二十一条に定める技術上の基準",
+            "当該技術上の基準の例"
+          ]
+        }
+      },
+      {
+        "paragraph_number": "3",
+        "main_provision": {
+          "subject": "非常ベル及び放送設備又は自動式サイレン及び放送設備",
+          "action": "設置するものとする",
+          "target": "次に掲げる防火対象物"
+        },
+        "equipment_combinations": [
+          {
+            "combination": "非常ベル及び放送設備"
+          },
+          {
+            "combination": "自動式サイレン及び放送設備"
+          }
+        ],
+        "items": [
+          {
+            "item_number": "一",
+            "content": "別表第一（十六の二）項及び（十六の三）項に掲げる防火対象物",
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（十六の二）項",
+                  "（十六の三）項"
+                ]
+              }
+            ]
+          },
+          {
+            "item_number": "二",
+            "content": "別表第一に掲げる防火対象物（前号に掲げるものを除く。）で、地階を除く階数が十一以上のもの又は地階の階数が三以上のもの",
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": "全項目"
+              }
+            ],
+            "exclusion": "前号に掲げるものを除く",
+            "conditions": [
+              {
+                "type": "地上階数",
+                "description": "地階を除く階数が十一以上のもの",
+                "floor_requirement": {
+                  "minimum": 11,
+                  "unit": "階",
+                  "condition": "以上",
+                  "measurement_type": "地階を除く階数"
+                }
+              },
+              {
+                "type": "地下階数",
+                "description": "地階の階数が三以上のもの",
+                "floor_requirement": {
+                  "minimum": 3,
+                  "unit": "階",
+                  "condition": "以上",
+                  "measurement_type": "地階の階数"
+                }
+              }
+            ],
+            "logical_operator": "又は"
+          },
+          {
+            "item_number": "三",
+            "content": "別表第一（十六）項イに掲げる防火対象物で、収容人員が五百人以上のもの",
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（十六）項イ"
+                ]
+              }
+            ],
+            "occupancy_requirement": {
+              "minimum": 500,
+              "unit": "人",
+              "condition": "以上"
+            }
+          },
+          {
+            "item_number": "四",
+            "content": "前二号に掲げるもののほか、別表第一（一）項から（四）項まで、（五）項イ、（六）項及び（九）項イに掲げる防火対象物で収容人員が三百人以上のもの又は同表（五）項ロ、（七）項及び（八）項に掲げる防火対象物で収容人員が八百人以上のもの",
+            "exclusion": "前二号に掲げるもののほか",
+            "conditions": [
+              {
+                "type": "グループA",
+                "referenced_tables": [
+                  {
+                    "table": "別表第一",
+                    "items": [
+                      "（一）項",
+                      "（二）項",
+                      "（三）項",
+                      "（四）項",
+                      "（五）項イ",
+                      "（六）項",
+                      "（九）項イ"
+                    ]
+                  }
+                ],
+                "occupancy_requirement": {
+                  "minimum": 300,
+                  "unit": "人",
+                  "condition": "以上"
+                }
+              },
+              {
+                "type": "グループB",
+                "referenced_tables": [
+                  {
+                    "table": "別表第一",
+                    "items": [
+                      "（五）項ロ",
+                      "（七）項",
+                      "（八）項"
+                    ]
+                  }
+                ],
+                "occupancy_requirement": {
+                  "minimum": 800,
+                  "unit": "人",
+                  "condition": "以上"
+                }
+              }
+            ],
+            "logical_operator": "又は"
+          }
+        ]
+      }
+    ],
+    "definitions": [
+      {
+        "term": "非常警報器具",
+        "definition": "第1項に規定する警報器具"
+      },
+      {
+        "term": "非常ベル",
+        "definition": "第2項及び第3項に規定する警報設備の一種"
+      },
+      {
+        "term": "自動式サイレン",
+        "definition": "第2項及び第3項に規定する警報設備の一種"
+      },
+      {
+        "term": "放送設備",
+        "definition": "第2項及び第3項に規定する警報設備の一種"
+      },
+      {
+        "term": "収容人員",
+        "definition": "防火対象物に収容される人員数"
+      },
+      {
+        "term": "地階",
+        "definition": "建築物の地下階"
+      },
+      {
+        "term": "無窓階",
+        "definition": "建築物の地上階のうち、総務省令で定める避難上又は消火活動上有効な開口部を有しない階"
+      }
+    ]
+  }
+}

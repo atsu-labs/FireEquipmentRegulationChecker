@@ -1,0 +1,228 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十二条",
+    "title": "漏電火災警報器に関する基準",
+    "main_provision": {
+      "subject": "漏電火災警報器",
+      "action": "設置するものとする",
+      "target": "次に掲げる防火対象物で、間柱若しくは下地を準不燃材料以外の材料で造つた鉄網入りの壁、根太若しくは下地を準不燃材料以外の材料で造つた鉄網入りの床又は天井野縁若しくは下地を準不燃材料以外の材料で造つた鉄網入りの天井を有するもの"
+    },
+    "structural_requirements": {
+      "condition": "以下のいずれかの構造を有するもの",
+      "structures": [
+        {
+          "type": "壁",
+          "description": "間柱若しくは下地を準不燃材料以外の材料で造つた鉄網入りの壁"
+        },
+        {
+          "type": "床",
+          "description": "根太若しくは下地を準不燃材料以外の材料で造つた鉄網入りの床"
+        },
+        {
+          "type": "天井",
+          "description": "天井野縁若しくは下地を準不燃材料以外の材料で造つた鉄網入りの天井"
+        }
+      ],
+      "material_reference": {
+        "term": "準不燃材料",
+        "definition": "建築基準法施行令第一条第五号に規定する準不燃材料をいう",
+        "scope": "この項において同じ"
+      }
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "content": "別表第一（十七）項に掲げる建築物",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十七）項"
+            ]
+          }
+        ],
+        "target_type": "建築物"
+      },
+      {
+        "item_number": "二",
+        "content": "別表第一（五）項及び（九）項に掲げる建築物で、延べ面積が百五十平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（五）項",
+              "（九）項"
+            ]
+          }
+        ],
+        "target_type": "建築物",
+        "area_requirement": {
+          "minimum_area": 150,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        }
+      },
+      {
+        "item_number": "三",
+        "content": "別表第一（一）項から（四）項まで、（六）項、（十二）項及び（十六の二）項に掲げる防火対象物で、延べ面積が三百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（六）項",
+              "（十二）項",
+              "（十六の二）項"
+            ]
+          }
+        ],
+        "target_type": "防火対象物",
+        "area_requirement": {
+          "minimum_area": 300,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        }
+      },
+      {
+        "item_number": "四",
+        "content": "別表第一（七）項、（八）項、（十）項及び（十一）項に掲げる建築物で、延べ面積が五百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（七）項",
+              "（八）項",
+              "（十）項",
+              "（十一）項"
+            ]
+          }
+        ],
+        "target_type": "建築物",
+        "area_requirement": {
+          "minimum_area": 500,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        }
+      },
+      {
+        "item_number": "五",
+        "content": "別表第一（十四）項及び（十五）項に掲げる建築物で、延べ面積が千平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十四）項",
+              "（十五）項"
+            ]
+          }
+        ],
+        "target_type": "建築物",
+        "area_requirement": {
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition": "以上",
+          "measurement_type": "延べ面積"
+        }
+      },
+      {
+        "item_number": "六",
+        "content": "別表第一（十六）項イに掲げる防火対象物のうち、延べ面積が五百平方メートル以上で、かつ、同表（一）項から（四）項まで、（五）項イ、（六）項又は（九）項イに掲げる防火対象物の用途に供される部分の床面積の合計が三百平方メートル以上のもの",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（十六）項イ"
+            ]
+          }
+        ],
+        "target_type": "防火対象物",
+        "conditions": [
+          {
+            "type": "延べ面積要件",
+            "area_requirement": {
+              "minimum_area": 500,
+              "unit": "平方メートル",
+              "condition": "以上",
+              "measurement_type": "延べ面積"
+            }
+          },
+          {
+            "type": "用途部分床面積要件",
+            "description": "同表（一）項から（四）項まで、（五）項イ、（六）項又は（九）項イに掲げる防火対象物の用途に供される部分の床面積の合計が三百平方メートル以上",
+            "referenced_use_types": [
+              "（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項イ",
+              "（六）項",
+              "（九）項イ"
+            ],
+            "area_requirement": {
+              "minimum_area": 300,
+              "unit": "平方メートル",
+              "condition": "以上",
+              "measurement_type": "床面積の合計"
+            }
+          }
+        ],
+        "logical_operator": "かつ"
+      },
+      {
+        "item_number": "七",
+        "content": "前各号に掲げるもののほか、別表第一（一）項から（六）項まで、（十五）項及び（十六）項に掲げる建築物で、当該建築物における契約電流容量が五十アンペアを超えるもの",
+        "exclusion": "前各号に掲げるもののほか",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項",
+              "（六）項",
+              "（十五）項",
+              "（十六）項"
+            ]
+          }
+        ],
+        "target_type": "建築物",
+        "electrical_requirement": {
+          "parameter": "契約電流容量",
+          "threshold": 50,
+          "unit": "アンペア",
+          "condition": "を超える",
+          "special_case": {
+            "condition": "同一建築物で契約種別の異なる電気が供給されているもの",
+            "measurement": "そのうちの最大契約電流容量"
+          }
+        }
+      }
+    ],
+    "definitions": [
+      {
+        "term": "準不燃材料",
+        "definition": "建築基準法施行令第一条第五号に規定する準不燃材料",
+        "scope": "この項において同じ"
+      },
+      {
+        "term": "契約電流容量",
+        "definition": "当該建築物における契約電流容量（同一建築物で契約種別の異なる電気が供給されているものにあつては、そのうちの最大契約電流容量）"
+      }
+    ]
+  }
+}
