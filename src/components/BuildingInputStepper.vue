@@ -130,7 +130,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="延床面積"
                   :model-value="totalFloorAreaInput"
-                  @update:model-value="emit('update:totalFloorAreaInput', $event)"
+                  @update:model-value="emit('update:totalFloorAreaInput', $event === '' ? null : Number($event))"
                   type="number"
                   min="0"
                   suffix="㎡"
@@ -142,7 +142,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="全体の収容人員"
                   :model-value="capacityInput"
-                  @update:model-value="emit('update:capacityInput', $event)"
+                  @update:model-value="emit('update:capacityInput', $event === '' ? null : Number($event))"
                   type="number"
                   min="0"
                   suffix="人"
@@ -156,7 +156,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="地上階"
                   :model-value="groundFloorsInput"
-                  @update:model-value="emit('update:groundFloorsInput', $event)"
+                  @update:model-value="emit('update:groundFloorsInput', Number($event))"
                   type="number"
                   min="0"
                   suffix="階"
@@ -168,7 +168,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="地下階"
                   :model-value="basementFloorsInput"
-                  @update:model-value="emit('update:basementFloorsInput', $event)"
+                  @update:model-value="emit('update:basementFloorsInput', Number($event))"
                   type="number"
                   min="0"
                   suffix="階"
@@ -231,7 +231,7 @@ const emit = defineEmits([
                         <v-text-field
                           label="面積"
                           :model-value="nonFloorAreaValue"
-                          @update:model-value="emit('update:nonFloorAreaValue', $event)"
+                          @update:model-value="emit('update:nonFloorAreaValue', $event === '' ? null : Number($event))"
                           type="number"
                           min="0"
                           placeholder="50"
@@ -391,7 +391,7 @@ const emit = defineEmits([
                   <v-text-field
                     label="舞台部の面積"
                     :model-value="stageArea"
-                    @update:model-value="emit('update:stageArea', $event)"
+                    @update:model-value="emit('update:stageArea', $event === '' ? null : Number($event))"
                     type="number"
                     min="0"
                     suffix="㎡"
@@ -414,7 +414,7 @@ const emit = defineEmits([
                   <v-text-field
                     label="天井の高さ"
                     :model-value="ceilingHeight"
-                    @update:model-value="emit('update:ceilingHeight', $event)"
+                    @update:model-value="emit('update:ceilingHeight', $event === '' ? null : Number($event))"
                     type="number"
                     min="0"
                     suffix="m"
@@ -460,7 +460,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="屋上部分の床面積"
                   :model-value="roadPartRooftopArea"
-                  @update:model-value="emit('update:roadPartRooftopArea', $event)"
+                  @update:model-value="emit('update:roadPartRooftopArea', $event === '' ? null : Number($event))"
                   type="number"
                   min="0"
                   suffix="㎡"
@@ -469,7 +469,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="屋上以外の部分の床面積"
                   :model-value="roadPartOtherArea"
-                  @update:model-value="emit('update:roadPartOtherArea', $event)"
+                  @update:model-value="emit('update:roadPartOtherArea', $event === '' ? null : Number($event))"
                   type="number"
                   min="0"
                   suffix="㎡"
@@ -489,7 +489,7 @@ const emit = defineEmits([
                 <v-text-field
                   label="当該部分の床面積"
                   :model-value="parkingPartArea"
-                  @update:model-value="emit('update:parkingPartArea', $event)"
+                  @update:model-value="emit('update:parkingPartArea', $event === '' ? null : Number($event))"
                   type="number"
                   min="0"
                   suffix="㎡"
