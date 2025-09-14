@@ -145,7 +145,7 @@ const floorAreaMismatch = computed(() => {
     return false;
   }
   // toFixed(2)で比較することで、浮動小数点数の誤差を回避
-  return totalFloorAreaInput.value.toFixed(2) !== calculatedFloorArea.value.toFixed(2);
+  return (Number(totalFloorAreaInput.value) || 0).toFixed(2) !== calculatedFloorArea.value.toFixed(2);
 });
 
 
