@@ -5,6 +5,7 @@ import { Article10Logic } from '@/composables/article10Logic';
 import type { Floor } from '@/types';
 import { useArticle11Logic } from '@/composables/article11Logic';
 import { useArticle12Logic } from '@/composables/article12Logic';
+import { useArticle21Logic } from '@/composables/article21Logic';
 import { buildingUses } from '@/data/buildingUses';
 
 const currentStep = ref(1);
@@ -25,6 +26,8 @@ const storesDesignatedCombustibles = ref(false);
 const isFlammableItemsAmountOver750 = ref(false);
 const structureType = ref<'A' | 'B' | 'C' | null>(null);
 const finishType = ref<'flammable' | 'other' | null>(null);
+const hasLodging = ref(false); // 令21条用
+const isSpecifiedOneStaircase = ref(false); // 令21条7号用
 
 // 令12条
 const isCareDependentOccupancy = ref(false);
@@ -36,6 +39,20 @@ const ceilingHeight = ref<number | null>(null);
 const isCombustiblesAmountOver1000 = ref(false);
 const hasFireSuppressingStructure = ref(false);
 const hasBeds = ref(false);
+const storesCombustiblesOver500x = ref(false); // 令21条8号用
+const hasRoadPart = ref(false); // 令21条12号用
+const roadPartRooftopArea = ref<number | null>(null);
+const roadPartOtherArea = ref<number | null>(null);
+const hasParkingPart = ref(false); // 令21条13号用
+const parkingPartArea = ref<number | null>(null);
+const canAllVehiclesExitSimultaneously = ref(false);
+const hasTelecomRoomOver500sqm = ref(false); // 令21条15号用
+
+const showArticle21Item7Checkbox = computed(() => {
+  if (!buildingUse.value) return false;
+  const targetUses = ['item01', 'item02', 'item03', 'item04', 'item05_i', 'item06', 'item09_i', 'item16_i'];
+  return targetUses.some(use => buildingUse.value!.startsWith(use));
+});
 
 
 // hasNonFloorAreaがfalseになったら、面積をリセットする
@@ -190,6 +207,22 @@ const { regulationResult: judgementResult12 } = useArticle12Logic({
   hasBeds,
 });
 
+const { result: article21Result } = useArticle21Logic({
+  buildingUse: buildingUse,
+  totalArea: totalFloorAreaInput,
+  hasLodging,
+  floors,
+  isSpecifiedOneStaircase,
+  storesCombustiblesOver500x,
+  hasRoadPart,
+  roadPartRooftopArea,
+  roadPartOtherArea,
+  hasParkingPart,
+  parkingPartArea,
+  canAllVehiclesExitSimultaneously,
+  hasTelecomRoomOver500sqm,
+});
+
 const judgementResult12Type = computed(() => {
   if (judgementResult12.value.required === true) {
     return 'error';
@@ -208,6 +241,26 @@ const judgementResult12Title = computed(() => {
     return '【スプリンクラー設備】要確認';
   }
   return '【スプリンクラー設備】設置義務なし';
+});
+
+const article21ResultType = computed(() => {
+  if (article21Result.value.required === true) {
+    return 'error';
+  }
+  if (article21Result.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const article21ResultTitle = computed(() => {
+  if (article21Result.value.required === true) {
+    return '【自動火災報知設備】設置義務あり';
+  }
+  if (article21Result.value.required === 'warning') {
+    return '【自動火災報知設備】要確認';
+  }
+  return '【自動火災報知設備】設置義務なし';
 });
 
 
@@ -531,6 +584,83 @@ generateFloors();
                         </v-expand-transition>
                       </div>
 
+                      <v-divider class="my-4"></v-divider>
+                      <p class="font-weight-bold mb-2">令第21条（自動火災報知設備）関連</p>
+                      <v-checkbox
+                        v-model="hasLodging"
+                        label="宿泊施設、入居施設、または宿泊を伴うサービスがある"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-if="showArticle21Item7Checkbox"
+                        v-model="isSpecifiedOneStaircase"
+                        label="特定一階段等防火対象物に該当する"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="storesCombustiblesOver500x"
+                        label="指定可燃物を基準数量の500倍以上、貯蔵・取り扱いしている"
+                        hide-details
+                      ></v-checkbox>
+
+                      <v-divider class="my-4"></v-divider>
+                      <p class="font-weight-bold mb-2">令第21条（自動火災報知設備）関連 - 追加項目</p>
+
+                      <v-checkbox
+                        v-model="hasRoadPart"
+                        label="道路の用に供される部分がある"
+                        hide-details
+                      ></v-checkbox>
+                      <v-expand-transition>
+                        <div v-if="hasRoadPart" class="ml-8">
+                          <v-text-field
+                            label="屋上部分の床面積"
+                            v-model.number="roadPartRooftopArea"
+                            type="number"
+                            min="0"
+                            suffix="㎡"
+                            dense
+                          ></v-text-field>
+                          <v-text-field
+                            label="屋上以外の部分の床面積"
+                            v-model.number="roadPartOtherArea"
+                            type="number"
+                            min="0"
+                            suffix="㎡"
+                            dense
+                          ></v-text-field>
+                        </div>
+                      </v-expand-transition>
+
+                      <v-checkbox
+                        v-model="hasParkingPart"
+                        label="地階、2階以上に駐車の用に供する部分がある"
+                        hide-details
+                      ></v-checkbox>
+                      <v-expand-transition>
+                        <div v-if="hasParkingPart" class="ml-8">
+                          <v-text-field
+                            label="当該部分の床面積"
+                            v-model.number="parkingPartArea"
+                            type="number"
+                            min="0"
+                            suffix="㎡"
+                            dense
+                          ></v-text-field>
+                          <v-checkbox
+                            v-model="canAllVehiclesExitSimultaneously"
+                            label="駐車するすべての車両が同時に屋外に出られる構造の階である"
+                            hide-details
+                          ></v-checkbox>
+                        </div>
+                      </v-expand-transition>
+
+                      <v-checkbox
+                        v-model="hasTelecomRoomOver500sqm"
+                        label="通信機器室500㎡以上"
+                        hide-details
+                      ></v-checkbox>
+
                     </v-card-text>
                   </v-card>
                 </v-stepper-window-item>
@@ -620,6 +750,7 @@ generateFloors();
                   :type="judgementResult12Type"
                   variant="tonal"
                   prominent
+                  class="mb-4"
                 >
                   <div class="text-h6">
                     {{ judgementResult12Title }}
@@ -627,6 +758,19 @@ generateFloors();
                   <v-divider class="my-2"></v-divider>
                   <p><b>理由:</b> {{ judgementResult12.message }}</p>
                   <p><b>根拠:</b> {{ judgementResult12.basis }}</p>
+                </v-alert>
+
+                <v-alert
+                  :type="article21ResultType"
+                  variant="tonal"
+                  prominent
+                >
+                  <div class="text-h6">
+                    {{ article21ResultTitle }}
+                  </div>
+                  <v-divider class="my-2"></v-divider>
+                  <p><b>理由:</b> {{ article21Result.message }}</p>
+                  <p><b>根拠:</b> {{ article21Result.basis }}</p>
                 </v-alert>
               </v-card-text>
             </v-card>
