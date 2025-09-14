@@ -74,17 +74,34 @@ export function useArticle12Logic(userInput: Article12UserInput) {
             if (!(useCode.startsWith('item06_i_2') && !hasBeds.value)) {
                  return {
                     required: true,
-                    message: `用途（${useDisplay}）が（6）項イに該当し、延焼抑制構造でないため、設置が必要です。`,
+                    message: `用途（${useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
                     basis: '令第12条第1項第1号イ',
                 };
             }
         }
-        // ハ: (6)項ロ(2),(4),(5)で延べ面積275㎡以上
+        // ロ: (6)項ロ(1)及び(3)
+        if (checkUseGroup(useCode, ['item06_ro_1', 'item06_ro_3'])) {
+            return {
+                required: true,
+                message: `用途（${useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
+                basis: '令第12条第1項第1号ロ',
+            };
+        }
+        // ハ: (6)項ロ(2),(4),(5)
         if (checkUseGroup(useCode, ['item06_ro_2', 'item06_ro_4', 'item06_ro_5'])) {
+            // 介助が必要な者が入所する施設の場合、面積に関わらず設置義務あり
+            if (isCareDependentOccupancy.value) {
+                return {
+                    required: true,
+                    message: `用途（${useDisplay}）で、介助がなければ避難できない者を主として入所させる施設であり、かつ延焼抑制構造でないため、設置が必要です。`,
+                    basis: '令第12条第1項第1号ハ',
+                };
+            }
+            // それ以外の施設の場合、延べ面積が275㎡以上で設置義務あり
             if (!isCareDependentOccupancy.value && totalArea >= 275) {
                 return {
                     required: true,
-                    message: `用途（${useDisplay}）が（6）項ロに該当し、介助がなければ避難できない者を主として入所させるもの以外で延べ面積が275㎡以上、かつ延焼抑制構造でないため、設置が必要です。`,
+                    message: `用途（${useDisplay}）で、介助がなければ避難できない者を主として入所させるもの以外で延べ面積が275㎡以上、かつ延焼抑制構造でないため、設置が必要です。`,
                     basis: '令第12条第1項第1号ハ',
                 };
             }
