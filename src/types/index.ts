@@ -17,6 +17,12 @@ export interface Floor {
   isWindowless: boolean;
 }
 
+export interface JudgementResult {
+  required: boolean | 'warning';
+  message: string;
+  basis: string;
+}
+
 export interface Article11UserInput {
   buildingUse: Ref<string | null>;
   totalArea: Ref<number | null>;

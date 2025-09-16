@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
 import { useArticle12Logic } from './article12Logic';
-import type { Article12UserInput, Floor } from '@/types';
+import type { Article12UserInput } from '@/types';
 
 // テストデータ生成のヘルパー関数
 const createMockInput = (overrides: Partial<Article12UserInput> = {}): Article12UserInput => {

@@ -125,7 +125,7 @@ const prevStep = () => {
 
 // 各階の合計面積を計算する算出プロパティ
 const calculatedFloorArea = computed(() => {
-  const floorsArea = floors.value.reduce((total, floor) => {
+  const floorsArea = floors.value.reduce((total: number, floor: Floor) => {
     return total + (floor.floorArea || 0);
   }, 0);
   const extraArea = hasNonFloorArea.value ? (nonFloorAreaValue.value || 0) : 0;
@@ -144,8 +144,8 @@ const floorAreaMismatch = computed(() => {
 // 無窓階のリストを作成する算出プロパティ
 const windowlessFloors = computed(() => {
   return floors.value
-    .filter(floor => floor.isWindowless && floor.type === 'ground')
-    .map(floor => `地上 ${floor.level} 階`);
+    .filter((floor: Floor) => floor.isWindowless && floor.type === 'ground')
+    .map((floor: Floor) => `地上 ${floor.level} 階`);
 });
 
 // 判定ロジックを実行
@@ -160,11 +160,11 @@ const { judgementResult: judgementResult10 } = Article10Logic({
 
 const article11TotalArea = computed(() => totalFloorAreaInput.value);
 const hasBasement = computed(() => basementFloorsInput.value > 0);
-const basementArea = computed(() => floors.value.filter(f => f.type === 'basement').reduce((sum, f) => sum + (f.floorArea || 0), 0));
-const hasNoWindowFloor = computed(() => floors.value.some(f => f.isWindowless));
-const noWindowFloorArea = computed(() => floors.value.filter(f => f.isWindowless).reduce((sum, f) => sum + (f.floorArea || 0), 0));
+const basementArea = computed(() => floors.value.filter((f: Floor) => f.type === 'basement').reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
+const hasNoWindowFloor = computed(() => floors.value.some((f: Floor) => f.isWindowless));
+const noWindowFloorArea = computed(() => floors.value.filter((f: Floor) => f.isWindowless).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
 const hasUpperFloors = computed(() => groundFloorsInput.value >= 4);
-const upperFloorsArea = computed(() => floors.value.filter(f => f.type === 'ground' && f.level >= 4).reduce((sum, f) => sum + (f.floorArea || 0), 0));
+const upperFloorsArea = computed(() => floors.value.filter((f: Floor) => f.type === 'ground' && f.level >= 4).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
 
 
 const { regulationResult: judgementResult11 } = useArticle11Logic({
@@ -214,7 +214,7 @@ const { result: article21Result } = useArticle21Logic({
   hasTelecomRoomOver500sqm,
 });
 
-const judgementResult12Type = computed(() => {
+const judgementResult12Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
   if (judgementResult12.value.required === true) {
     return 'error';
   }
@@ -234,7 +234,7 @@ const judgementResult12Title = computed(() => {
   return '【スプリンクラー設備】設置義務なし';
 });
 
-const article21ResultType = computed(() => {
+const article21ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
   if (article21Result.value.required === true) {
     return 'error';
   }

@@ -32,8 +32,8 @@ describe('Article10Logic', () => {
   it('建物の用途が選択されていない場合、設置義務なしと判定されること', () => {
     const data = createMockData();
     const { judgementResult } = Article10Logic(data);
-    expect(judgementResult.value.result).toBe(false);
-    expect(judgementResult.value.reason).toBe('建物の用途を選択してください。');
+    expect(judgementResult.value.required).toBe(false);
+    expect(judgementResult.value.message).toBe('建物の用途を選択してください。');
   });
 
   // --- 第一号 ---
@@ -41,15 +41,15 @@ describe('Article10Logic', () => {
     it('イ: (1)項イに該当する場合、面積に関わらず設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item01_i') });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項一号イ');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項一号イ');
     });
 
     it('ロ: (3)項で火気設備がある場合、面積に関わらず設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item03_i'), usesFireEquipment: ref(true) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項一号ロ');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項一号ロ');
     });
   });
 
@@ -58,22 +58,22 @@ describe('Article10Logic', () => {
     it('イ: (4)項で延べ面積が150㎡以上の場合、設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item04'), totalFloorAreaInput: ref(150) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項二号イ');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項二号イ');
     });
 
     it('イ: (4)項で延べ面積が150㎡未満の場合、(二号の事由では)設置義務なしと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item04'), totalFloorAreaInput: ref(149) });
       const { judgementResult } = Article10Logic(data);
       // 他の条件に該当しない限りfalse
-      expect(judgementResult.value.result).toBe(false);
+      expect(judgementResult.value.required).toBe(false);
     });
 
     it('ロ: (3)項で火気設備がなく、延べ面積が150㎡以上の場合、設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item03_i'), totalFloorAreaInput: ref(150), usesFireEquipment: ref(false) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項二号ロ');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項二号ロ');
     });
   });
 
@@ -82,14 +82,14 @@ describe('Article10Logic', () => {
     it('(7)項で延べ面積が300㎡以上の場合、設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item07'), totalFloorAreaInput: ref(300) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項三号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項三号');
     });
 
     it('(7)項で延べ面積が300㎡未満の場合、(三号の事由では)設置義務なしと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item07'), totalFloorAreaInput: ref(299) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(false);
+      expect(judgementResult.value.required).toBe(false);
     });
   });
 
@@ -98,15 +98,15 @@ describe('Article10Logic', () => {
     it('少量危険物を貯蔵している場合、設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item16'), storesMinorHazardousMaterials: ref(true) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項四号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項四号');
     });
 
     it('指定可燃物を貯蔵している場合、設置義務ありと判定されること', () => {
       const data = createMockData({ buildingUse: ref('item16'), storesDesignatedCombustibles: ref(true) });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項四号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項四号');
     });
   });
 
@@ -116,31 +116,31 @@ describe('Article10Logic', () => {
       const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 50, capacity: null, isWindowless: false }]);
       const data = createMockData({ buildingUse: ref('item16'), floors });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項五号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項五号');
     });
 
     it('床面積50㎡以上の無窓階がある場合、設置義務ありと判定されること', () => {
       const floors = ref<Floor[]>([{ level: 1, type: 'ground', floorArea: 50, capacity: null, isWindowless: true }]);
       const data = createMockData({ buildingUse: ref('item16'), floors });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項五号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項五号');
     });
 
     it('床面積50㎡以上の地上3階以上の階がある場合、設置義務ありと判定されること', () => {
       const floors = ref<Floor[]>([{ level: 3, type: 'ground', floorArea: 50, capacity: null, isWindowless: false }]);
       const data = createMockData({ buildingUse: ref('item16'), floors });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(true);
-      expect(judgementResult.value.根拠).toBe('令第十条第一項五号');
+      expect(judgementResult.value.required).toBe(true);
+      expect(judgementResult.value.basis).toBe('令第十条第一項五号');
     });
 
      it('床面積が50㎡未満の特定階があっても、設置義務なしと判定されること', () => {
       const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 49, capacity: null, isWindowless: false }]);
       const data = createMockData({ buildingUse: ref('item16'), floors });
       const { judgementResult } = Article10Logic(data);
-      expect(judgementResult.value.result).toBe(false);
+      expect(judgementResult.value.required).toBe(false);
     });
   });
 
@@ -158,7 +158,7 @@ describe('Article10Logic', () => {
       storesDesignatedCombustibles: ref(false),
     });
     const { judgementResult } = Article10Logic(data);
-    expect(judgementResult.value.result).toBe(false);
-    expect(judgementResult.value.reason).toBe('消火器の設置義務はありません。');
+    expect(judgementResult.value.required).toBe(false);
+    expect(judgementResult.value.message).toBe('消火器の設置義務はありません。');
   });
 });

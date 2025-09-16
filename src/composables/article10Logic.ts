@@ -1,6 +1,5 @@
 import { computed } from 'vue';
-import type { Ref } from 'vue';
-import type { BuildingData, Floor } from '@/types';
+import type { BuildingData, JudgementResult } from '@/types';
 import { buildingUses } from '@/data/buildingUses';
 
 // 用途コードから表示名を取得する関数
@@ -11,7 +10,7 @@ function getUseDisplay(code: string): string {
 
 // Composable関数としてロジックをエクスポート
 export function Article10Logic(data: BuildingData) {
-  const judgementResult = computed(() => {
+  const judgementResult = computed((): JudgementResult => {
     const {
       buildingUse,
       totalFloorAreaInput,
@@ -22,12 +21,13 @@ export function Article10Logic(data: BuildingData) {
     } = data;
 
     const useCode = buildingUse.value;
+    
+    if (!useCode) {
+      return { required: false, message: '建物の用途を選択してください。', basis: '－' };
+    }
+    
     const useDisplay = getUseDisplay(useCode);
     const totalArea = totalFloorAreaInput.value || 0;
-
-    if (!useCode) {
-      return { result: false, reason: '建物の用途を選択してください。', 根拠: '－' };
-    }
 
     // --- 第一号 ---
     // イ: (1)項イ, (2)項, (6)項イ(1)~(3), (6)項ロ, (16の2)項, (17)項, (20)項
@@ -40,11 +40,11 @@ export function Article10Logic(data: BuildingData) {
       useCode === 'item17' ||
       useCode === 'item20';
     if (isItem1_i) {
-      return { result: true, reason: `用途（${useDisplay}）により、消火器の設置が必要です。`, 根拠: '令第十条第一項一号イ' };
+      return { required: true, message: `用途（${useDisplay}）により、消火器の設置が必要です。`, basis: '令第十条第一項一号イ' };
     }
     // ロ: (3)項で火気設備あり
     if (useCode.startsWith('item03') && usesFireEquipment.value) {
-      return { result: true, reason: '（3）項の防火対象物で火気設備等があるため、消火器の設置が必要です。', 根拠: '令第十条第一項一号ロ' };
+      return { required: true, message: '（3）項の防火対象物で火気設備等があるため、消火器の設置が必要です。', basis: '令第十条第一項一号ロ' };
     }
 
     // --- 第二号 --- (延べ面積150㎡以上)
@@ -62,11 +62,11 @@ export function Article10Logic(data: BuildingData) {
         useCode.startsWith('item13') ||
         useCode === 'item14';
       if (isItem2_i) {
-        return { result: true, reason: `延べ面積150㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, 根拠: '令第十条第一項二号イ' };
+        return { required: true, message: `延べ面積150㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項二号イ' };
       }
       // ロ: (3)項で火気設備なし
       if (useCode.startsWith('item03') && !usesFireEquipment.value) {
-        return { result: true, reason: '延べ面積150㎡以上の（3）項の防火対象物（火気設備等がない場合）のため、消火器の設置が必要です。', 根拠: '令第十条第一項二号ロ' };
+        return { required: true, message: '延べ面積150㎡以上の（3）項の防火対象物（火気設備等がない場合）のため、消火器の設置が必要です。', basis: '令第十条第一項二号ロ' };
       }
     }
 
@@ -79,7 +79,7 @@ export function Article10Logic(data: BuildingData) {
         useCode === 'item11' ||
         useCode === 'item15';
       if (isItem3) {
-        return { result: true, reason: `延べ面積300㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, 根拠: '令第十条第一項三号' };
+        return { required: true, message: `延べ面積300㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項三号' };
       }
     }
 
@@ -89,7 +89,7 @@ export function Article10Logic(data: BuildingData) {
       if (storesMinorHazardousMaterials.value) reasonText += '少量危険物';
       if (storesMinorHazardousMaterials.value && storesDesignatedCombustibles.value) reasonText += '・';
       if (storesDesignatedCombustibles.value) reasonText += '指定可燃物';
-      return { result: true, reason: `${reasonText}の貯蔵・取り扱いがあるため、消火器の設置が必要です。`, 根拠: '令第十条第一項四号' };
+      return { required: true, message: `${reasonText}の貯蔵・取り扱いがあるため、消火器の設置が必要です。`, basis: '令第十条第一項四号' };
     }
 
     // --- 第五号 ---
@@ -104,10 +104,10 @@ export function Article10Logic(data: BuildingData) {
 
     if (applicableFloors.length > 0) {
         const floorNames = applicableFloors.map(f => `${f.type === 'ground' ? '地上' : '地下'}${f.level}階`).join(', ');
-        return { result: true, reason: `床面積50㎡以上の特定の階（${floorNames}）があるため、消火器の設置が必要です。`, 根拠: '令第十条第一項五号' };
+        return { required: true, message: `床面積50㎡以上の特定の階（${floorNames}）があるため、消火器の設置が必要です。`, basis: '令第十条第一項五号' };
     }
 
-    return { result: false, reason: '消火器の設置義務はありません。', 根拠: '－' };
+    return { required: false, message: '消火器の設置義務はありません。', basis: '－' };
   });
 
   return {

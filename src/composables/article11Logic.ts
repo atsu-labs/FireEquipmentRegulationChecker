@@ -1,7 +1,6 @@
 import { computed } from 'vue';
-import type { Ref } from 'vue';
+import type { Article11UserInput, JudgementResult } from '@/types';
 import { buildingUses } from '@/data/buildingUses';
-import type { Article11UserInput } from '@/types';
 
 // 用途コードから表示名を取得する関数
 function getUseDisplay(code: string | null): string {
@@ -17,7 +16,7 @@ function checkUseGroup(useCode: string, groups: string[]): boolean {
 
 // Composable関数
 export function useArticle11Logic(userInput: Article11UserInput) {
-  const regulationResult = computed(() => {
+  const regulationResult = computed((): JudgementResult => {
     const buildingUse = userInput.buildingUse.value;
     if (!buildingUse) {
       return { required: false, message: '建物の用途を選択してください。', basis: '-' };
@@ -166,3 +165,4 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     regulationResult,
   };
 }
+   

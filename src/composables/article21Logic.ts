@@ -1,6 +1,6 @@
 import { computed, type Ref } from 'vue';
-import type { Floor } from '../types';
-import { buildingUses } from '../data/buildingUses';
+import type { Floor, JudgementResult } from '@/types';
+import { buildingUses } from '@/data/buildingUses';
 
 export interface Article21UserInput {
   buildingUse: Ref<string | null>;
@@ -34,7 +34,7 @@ const useCodeMatches = (buildingUse: string | null, requiredCodes: string[]): bo
 };
 
 export function useArticle21Logic(userInput: Article21UserInput) {
-  const result = computed((): EquipmentResult => {
+  const result = computed((): JudgementResult => {
     const buildingUse = userInput.buildingUse.value;
     const totalArea = userInput.totalArea.value || 0;
     const hasLodging = userInput.hasLodging.value;
@@ -102,7 +102,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     // --- 第7号 ---
     const item7_codes = ['item01', 'item02', 'item03', 'item04', 'item05_i', 'item06', 'item09_i', 'item16_i'];
     if (useCodeMatches(buildingUse, item7_codes) && isSpecifiedOneStaircase) {
-      return { required: true, message: `特定一階段等防火対象物に該当するため、設置が必要です。`, basis: '令第21条第1項第7号' };
+      return { required: true, message: '特定一階段等防火対象物に該当するため、設置が必要です。', basis: '令第21条第1項第7号' };
     }
 
     // --- 第8号 ---
@@ -112,7 +112,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
 
     // --- 第9号 ---
     if (useCodeMatches(buildingUse, ['item16_2']) ) {
-        return { required: 'warning', message: `(16の2)の対象物は、(2)項ニ、(5)項イ、(6)項イ(1)～(3)、(6)項ロ、(6)項ハ（入居、宿泊施設）の部分に設置が必要です。`, basis: '令第21条第1項第9号' };
+        return { required: 'warning', message: '(16の2)の対象物は、(2)項ニ、(5)項イ、(6)項イ(1)～(3)、(6)項ロ、(6)項ハ（入居、宿泊施設）の部分に設置が必要です。', basis: '令第21条第1項第9号' };
     }
 
     // --- 第10号 ---
@@ -128,7 +128,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
       return { required: true, message: `${floorName}（${reason}）の床面積が100㎡以上のため、設置が必要です。`, basis: '令第21条第1項第10号' };
     }
     if (useCodeMatches(buildingUse, ['item16_i'])  && applicableFloor10 ) {
-      return { required: 'warning', message: `(2)項、(3)項の用途に供される地階・無窓階の床面積の合計が100㎡以上の場合は設置が必要になります。`, basis: '令第21条第1項第10号' };
+      return { required: 'warning', message: '(2)項、(3)項の用途に供される地階・無窓階の床面積の合計が100㎡以上の場合は設置が必要になります。', basis: '令第21条第1項第10号' };
     }
     // --- 第11号 ---
     const applicableFloor11 = floors.find(floor => {

@@ -12,7 +12,7 @@ defineProps({
   groundFloorsInput: { type: Number, required: true },
   basementFloorsInput: { type: Number, required: true },
   hasNonFloorArea: { type: Boolean, required: true },
-  nonFloorAreaValue: { type: Number as PropType<number | null>, default: null },
+  nonFloorAreaValue: { type: Object as PropType<number | null | undefined>, default: null },
   structureType: { type: String as PropType<'A' | 'B' | 'C' | null>, default: null },
   finishType: { type: String as PropType<'flammable' | 'other' | null>, default: null },
   usesFireEquipment: { type: Boolean, required: true },

@@ -1,8 +1,7 @@
 
 import { computed } from 'vue';
-import type { Ref } from 'vue';
 import { buildingUses } from '@/data/buildingUses';
-import type { Article12UserInput, Floor } from '@/types';
+import type { Article12UserInput, JudgementResult } from '@/types';
 
 // 用途コードから表示名を取得する関数
 function getUseDisplay(code: string | null): string {
@@ -18,7 +17,7 @@ function checkUseGroup(useCode: string, groups: string[]): boolean {
 
 // Composable関数
 export function useArticle12Logic(userInput: Article12UserInput) {
-  const regulationResult = computed(() => {
+  const regulationResult = computed((): JudgementResult => {
     const {
       buildingUse,
       groundFloors,
