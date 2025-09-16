@@ -1,5 +1,10 @@
 name = 'fer-checker'
-main = "workers-site/index.js"
+main = "src/main.ts"
 compatibility_date = "2025-09-16"
 [site]
 bucket = "dist"
+ "assets": {
+   "directory": "./dist",
+   "binding": "ASSETS",
+   "not_found_handling": "single-page-application"
+ }
