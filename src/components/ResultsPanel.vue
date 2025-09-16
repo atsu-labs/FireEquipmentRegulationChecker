@@ -1,26 +1,11 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-
-// 複雑なプロップスの型を定義
-interface JudgementResult {
-  result?: boolean;
-  required?: boolean | 'warning';
-  reason?: string;
-  message?: string;
-  根拠?: string;
-  basis?: string;
-}
-
-interface Article21Result {
-  required: boolean | 'warning';
-  message: string;
-  basis: string;
-}
+import type { JudgementResult } from '@/types';
 
 defineProps({
   totalFloorAreaInput: {
-    type: Number,
-    default: 0,
+    type: [Number, null] as PropType<number | null>,
+    default: null,
   },
   calculatedFloorArea: {
     type: Number,
@@ -47,7 +32,7 @@ defineProps({
     required: true,
   },
   judgementResult12Type: {
-    type: String,
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
     required: true,
   },
   judgementResult12Title: {
@@ -55,11 +40,11 @@ defineProps({
     required: true,
   },
   article21Result: {
-    type: Object as PropType<Article21Result>,
+    type: Object as PropType<JudgementResult>,
     required: true,
   },
   article21ResultType: {
-    type: String,
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
     required: true,
   },
   article21ResultTitle: {
@@ -104,17 +89,17 @@ defineProps({
     <v-card-title>判定結果</v-card-title>
     <v-card-text>
       <v-alert
-        :type="judgementResult10.result ? 'error' : 'success'"
+        :type="judgementResult10.required ? 'error' : 'success'"
         variant="tonal"
         prominent
         class="mb-4"
       >
         <div class="text-h6">
-          【消火器】{{ judgementResult10.result ? '設置義務あり' : '設置義務なし' }}
+          【消火器】{{ judgementResult10.required ? '設置義務あり' : '設置義務なし' }}
         </div>
         <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult10.reason }}</p>
-        <p><b>根拠:</b> {{ judgementResult10.根拠 }}</p>
+        <p><b>理由:</b> {{ judgementResult10.message }}</p>
+        <p><b>根拠:</b> {{ judgementResult10.basis }}</p>
       </v-alert>
 
       <v-alert
