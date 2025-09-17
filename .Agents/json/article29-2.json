@@ -1,0 +1,68 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十九条の二",
+    "title": "非常コンセント設備に関する基準",
+    "main_provision": {
+      "subject": "非常コンセント設備",
+      "action": "設置するものとする",
+      "target": "次に掲げる防火対象物"
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "target": "別表第一に掲げる建築物",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["全項目"]
+          }
+        ],
+        "condition": {
+          "type": "階数条件",
+          "description": "地階を除く階数が十一以上のもの",
+          "minimum_floors": 11,
+          "exclusion": "地階を除く",
+          "condition_type": "以上"
+        }
+      },
+      {
+        "item_number": "二",
+        "target": "別表第一（十六の二）項に掲げる防火対象物",
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["（十六の二）項"]
+          }
+        ],
+        "condition": {
+          "type": "面積条件",
+          "description": "延べ面積が千平方メートル以上のもの",
+          "minimum_area": 1000,
+          "unit": "平方メートル",
+          "condition_type": "以上"
+        }
+      }
+    ]
+  },
+  "definitions": [
+    {
+      "term": "非常コンセント設備",
+      "definition": "消防活動に必要な電源を供給するための設備"
+    },
+    {
+      "term": "地階を除く階数",
+      "definition": "建築物の階数から地下階を除いた階数"
+    },
+    {
+      "term": "延べ面積",
+      "definition": "建築物の各階の床面積の合計"
+    }
+  ]
+}

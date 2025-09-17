@@ -1,0 +1,155 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十三条",
+    "title": "消防機関へ通報する火災報知設備に関する基準",
+    "main_provision": {
+      "subject": "消防機関へ通報する火災報知設備",
+      "action": "設置するものとする",
+      "target": "次に掲げる防火対象物",
+      "exception": {
+        "condition": "消防機関から著しく離れた場所その他総務省令で定める場所にある防火対象物",
+        "effect": "この限りでない"
+      }
+    },
+    "paragraph_1": {
+      "items": [
+        {
+          "item_number": "一",
+          "target_building": {
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（六）項イ（１）",
+                  "（六）項イ（２）",
+                  "（六）項イ（３）",
+                  "（六）項ロ",
+                  "（十六の二）項",
+                  "（十六の三）項"
+                ]
+              }
+            ]
+          },
+          "conditions": {
+            "note": "面積要件なし（全ての該当建築物）"
+          }
+        },
+        {
+          "item_number": "二",
+          "target_building": {
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（一）項",
+                  "（二）項",
+                  "（四）項",
+                  "（五）項イ",
+                  "（六）項イ（４）",
+                  "（六）項ハ",
+                  "（六）項ニ",
+                  "（十二）項",
+                  "（十七）項"
+                ]
+              }
+            ]
+          },
+          "area_requirement": {
+            "minimum_area": 500,
+            "unit": "平方メートル",
+            "condition": "以上"
+          }
+        },
+        {
+          "item_number": "三",
+          "target_building": {
+            "referenced_tables": [
+              {
+                "table": "別表第一",
+                "items": [
+                  "（三）項",
+                  "（五）項ロ",
+                  "（七）項",
+                  "（八）項",
+                  "（九）項",
+                  "（十）項",
+                  "（十一）項",
+                  "（十三）項",
+                  "（十四）項",
+                  "（十五）項"
+                ]
+              }
+            ]
+          },
+          "area_requirement": {
+            "minimum_area": 1000,
+            "unit": "平方メートル",
+            "condition": "以上"
+          }
+        }
+      ]
+    },
+    "paragraph_2": {
+      "title": "設置方法",
+      "provision": "前項の火災報知設備は、当該火災報知設備の種別に応じ総務省令で定めるところにより、設置するものとする"
+    },
+    "paragraph_3": {
+      "title": "電話による代替規定",
+      "target": {
+        "base": "第一項各号に掲げる防火対象物",
+        "exclusions": [
+          {
+            "category": "同項第一号に掲げる防火対象物",
+            "specific_items": [
+              "別表第一（六）項イ（１）",
+              "別表第一（六）項イ（２）",
+              "別表第一（六）項イ（３）",
+              "別表第一（六）項ロ"
+            ]
+          },
+          {
+            "category": "第一項第二号に掲げる防火対象物",
+            "specific_items": [
+              "同表（五）項イ",
+              "同表（六）項イ（４）",
+              "同表（六）項ハ"
+            ]
+          }
+        ]
+      },
+      "alternative_equipment": {
+        "equipment": "消防機関へ常時通報することができる電話",
+        "effect": "第一項の規定にかかわらず、同項の火災報知設備を設置しないことができる"
+      }
+    }
+  },
+  "definitions": [
+    {
+      "term": "消防機関へ通報する火災報知設備",
+      "definition": "火災の発生を自動的に消防機関に通報する設備"
+    },
+    {
+      "term": "延べ面積",
+      "definition": "建築物の各階の床面積の合計"
+    },
+    {
+      "term": "消防機関から著しく離れた場所",
+      "definition": "総務省令で定める場所の一例"
+    },
+    {
+      "term": "常時通報することができる電話",
+      "definition": "24時間体制で消防機関へ通報可能な電話設備"
+    },
+    {
+      "term": "火災報知設備の種別",
+      "definition": "総務省令で定める火災報知設備の分類"
+    }
+  ]
+}

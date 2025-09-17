@@ -1,0 +1,43 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十九条の三",
+    "title": "無線通信補助設備に関する基準",
+    "main_provision": {
+      "subject": "無線通信補助設備",
+      "action": "設置するものとする",
+      "target": "別表第一（十六の二）項に掲げる防火対象物で、延べ面積が千平方メートル以上のもの"
+    },
+    "requirements": {
+      "target_building": {
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": ["（十六の二）項"]
+          }
+        ]
+      },
+      "area_requirement": {
+        "minimum_area": 1000,
+        "unit": "平方メートル",
+        "condition": "以上"
+      }
+    }
+  },
+  "definitions": [
+    {
+      "term": "無線通信補助設備",
+      "definition": "地下等で無線通信が困難な場所において消防隊の無線通信を補助する設備"
+    },
+    {
+      "term": "延べ面積",
+      "definition": "建築物の各階の床面積の合計"
+    }
+  ]
+}

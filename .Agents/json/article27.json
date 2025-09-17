@@ -1,0 +1,137 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第二十七条",
+    "title": "消防用水に関する基準",
+    "main_provision": {
+      "subject": "消防用水",
+      "action": "設置するものとする",
+      "target": "次に掲げる建築物"
+    },
+    "items": [
+      {
+        "item_number": "一",
+        "target_building": {
+          "referenced_tables": [
+            {
+              "table": "別表第一",
+              "items": [
+                "（一）項",
+                "（二）項",
+                "（三）項",
+                "（四）項",
+                "（五）項",
+                "（六）項",
+                "（七）項",
+                "（八）項",
+                "（九）項",
+                "（十）項",
+                "（十一）項",
+                "（十二）項",
+                "（十三）項",
+                "（十四）項",
+                "（十五）項",
+                "（十七）項",
+                "（十八）項"
+              ]
+            }
+          ]
+        },
+        "conditions": {
+          "site_area_requirement": {
+            "minimum_area": 20000,
+            "unit": "平方メートル",
+            "condition": "以上"
+          },
+          "floor_area_requirements": [
+            {
+              "building_type": "耐火建築物",
+              "minimum_area": 15000,
+              "unit": "平方メートル",
+              "condition": "以上"
+            },
+            {
+              "building_type": "準耐火建築物",
+              "minimum_area": 10000,
+              "unit": "平方メートル",
+              "condition": "以上"
+            },
+            {
+              "building_type": "その他の建築物",
+              "minimum_area": 5000,
+              "unit": "平方メートル",
+              "condition": "以上"
+            }
+          ],
+          "logical_operator": "かつ",
+          "exclusion": "次号に掲げる建築物を除く"
+        },
+        "floor_area_definition_reference": "床面積の定義は第十九条と同じ"
+      },
+      {
+        "item_number": "二",
+        "target_building": {
+          "referenced_tables": [
+            {
+              "table": "別表第一",
+              "items": ["全項目"]
+            }
+          ]
+        },
+        "conditions": {
+          "height_requirement": {
+            "minimum_height": 31,
+            "unit": "メートル",
+            "condition": "を超え"
+          },
+          "total_floor_area_requirement": {
+            "minimum_area": 25000,
+            "unit": "平方メートル",
+            "condition": "以上",
+            "exclusion": "地階に係るものを除く",
+            "scope_note": "以下この条において同じ"
+          },
+          "logical_operator": "かつ"
+        }
+      }
+    ]
+  },
+  "definitions": [
+    {
+      "term": "消防用水",
+      "definition": "消防活動に使用する水の供給設備"
+    },
+    {
+      "term": "床面積",
+      "definition": "地階を除く階数が一であるものにあっては一階の床面積を、地階を除く階数が二以上であるものにあっては一階及び二階の部分の床面積の合計",
+      "reference": "第十九条において定義されたもの"
+    },
+    {
+      "term": "延べ面積",
+      "definition": "建築物の各階の床面積の合計（地階に係るものを除く）",
+      "scope": "この条において"
+    },
+    {
+      "term": "敷地の面積",
+      "definition": "建築物が建っている敷地全体の面積"
+    },
+    {
+      "term": "高さ",
+      "definition": "建築物の地盤面からの高さ"
+    },
+    {
+      "term": "耐火建築物",
+      "definition": "建築基準法に規定する耐火建築物"
+    },
+    {
+      "term": "準耐火建築物",
+      "definition": "建築基準法第二条第九号の三に規定する準耐火建築物"
+    }
+  ]
+}

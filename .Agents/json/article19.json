@@ -1,0 +1,156 @@
+{
+  "law_info": {
+    "law_name": "消防法施行令",
+    "law_number": "昭和36年3月25日政令第37号",
+    "section": "第3節",
+    "subsection": "第二款",
+    "subsection_title": "消火設備に関する基準"
+  },
+  "article": {
+    "article_number": "第十九条",
+    "title": "屋外消火栓設備に関する基準",
+    "main_provision": {
+      "subject": "屋外消火栓設備",
+      "action": "設置するものとする",
+      "target": "次に掲げる建築物"
+    },
+    "paragraph_1": {
+      "target_buildings": {
+        "referenced_tables": [
+          {
+            "table": "別表第一",
+            "items": [
+              "（一）項",
+              "（二）項",
+              "（三）項",
+              "（四）項",
+              "（五）項",
+              "（六）項",
+              "（七）項",
+              "（八）項",
+              "（九）項",
+              "（十）項",
+              "（十一）項",
+              "（十二）項",
+              "（十三）項",
+              "（十四）項",
+              "（十五）項",
+              "（十七）項",
+              "（十八）項"
+            ]
+          }
+        ]
+      },
+      "floor_area_definition": {
+        "description": "床面積の計算方法",
+        "single_floor": {
+          "condition": "地階を除く階数が一であるもの",
+          "calculation": "一階の床面積"
+        },
+        "multi_floor": {
+          "condition": "地階を除く階数が二以上であるもの",
+          "calculation": "一階及び二階の部分の床面積の合計"
+        },
+        "note": "第二十七条において同じ"
+      },
+      "area_requirements": [
+        {
+          "building_type": "耐火建築物",
+          "minimum_area": 9000,
+          "unit": "平方メートル",
+          "condition": "以上"
+        },
+        {
+          "building_type": "準耐火建築物",
+          "definition": "建築基準法第二条第九号の三に規定する準耐火建築物",
+          "note": "以下同じ",
+          "minimum_area": 6000,
+          "unit": "平方メートル",
+          "condition": "以上"
+        },
+        {
+          "building_type": "その他の建築物",
+          "minimum_area": 3000,
+          "unit": "平方メートル",
+          "condition": "以上"
+        }
+      ]
+    },
+    "paragraph_2": {
+      "title": "同一敷地内の複数建築物の一体化規定",
+      "target": {
+        "location": "同一敷地内",
+        "building_count": "二以上",
+        "building_types": {
+          "referenced_tables": [
+            {
+              "table": "別表第一",
+              "items": [
+                "（一）項",
+                "（二）項",
+                "（三）項",
+                "（四）項",
+                "（五）項",
+                "（六）項",
+                "（七）項",
+                "（八）項",
+                "（九）項",
+                "（十）項",
+                "（十一）項",
+                "（十二）項",
+                "（十三）項",
+                "（十四）項",
+                "（十五）項",
+                "（十七）項",
+                "（十八）項"
+              ]
+            }
+          ],
+          "exclusion": "耐火建築物及び準耐火建築物を除く"
+        }
+      },
+      "proximity_conditions": {
+        "measurement_method": "当該建築物相互の一階の外壁間の中心線からの水平距離",
+        "distance_requirements": [
+          {
+            "floor": "一階",
+            "maximum_distance": 3,
+            "unit": "メートル",
+            "condition": "以下"
+          },
+          {
+            "floor": "二階",
+            "maximum_distance": 5,
+            "unit": "メートル",
+            "condition": "以下"
+          }
+        ],
+        "requirement": "である部分を有するもの"
+      },
+      "legal_effect": {
+        "application_rule": "前項の規定の適用については",
+        "treatment": "一の建築物とみなす"
+      }
+    }
+  },
+  "definitions": [
+    {
+      "term": "床面積",
+      "definition": "地階を除く階数が一であるものにあっては一階の床面積を、地階を除く階数が二以上であるものにあっては一階及び二階の部分の床面積の合計をいう",
+      "scope": "第二十七条において同じ"
+    },
+    {
+      "term": "準耐火建築物",
+      "definition": "建築基準法第二条第九号の三に規定する準耐火建築物",
+      "scope": "以下同じ"
+    },
+    {
+      "term": "耐火建築物",
+      "definition": "建築基準法に規定する耐火建築物"
+    },
+    {
+      "term": "水平距離",
+      "definition": "建築物相互の一階の外壁間の中心線からの距離"
+    }
+  ]
+}
