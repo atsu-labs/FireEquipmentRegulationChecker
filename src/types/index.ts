@@ -68,3 +68,8 @@ export interface Article21_2UserInput {
   hasHotSpringFacility: Ref<boolean>;
   isHotSpringFacilityConfirmed: Ref<boolean>;
 }
+
+export interface Article23UserInput {
+  buildingUse: Ref<string | null>;
+  totalArea: Ref<number | null>;
+}

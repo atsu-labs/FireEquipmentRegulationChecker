@@ -75,6 +75,18 @@ defineProps({
     type: String,
     required: true,
   },
+  article23Result: {
+    type: Object as PropType<JudgementResult>,
+    required: true,
+  },
+  article23ResultType: {
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
+    required: true,
+  },
+  article23ResultTitle: {
+    type: String,
+    required: true,
+  },
 });
 </script>
 
@@ -193,6 +205,20 @@ defineProps({
         <v-divider class="my-2"></v-divider>
         <p><b>理由:</b> {{ article21_2Result.message }}</p>
         <p><b>根拠:</b> {{ article21_2Result.basis }}</p>
+      </v-alert>
+
+      <v-alert
+        :type="article23ResultType"
+        variant="tonal"
+        prominent
+        class="mt-4"
+      >
+        <div class="text-h6">
+          {{ article23ResultTitle }}
+        </div>
+        <v-divider class="my-2"></v-divider>
+        <p><b>理由:</b> {{ article23Result.message }}</p>
+        <p><b>根拠:</b> {{ article23Result.basis }}</p>
       </v-alert>
     </v-card-text>
   </v-card>

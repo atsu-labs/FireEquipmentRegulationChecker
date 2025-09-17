@@ -9,6 +9,7 @@ import { useArticle12Logic } from '@/composables/article12Logic';
 import { useArticle21Logic } from '@/composables/article21Logic';
 import { useArticle22Logic } from '@/composables/article22Logic';
 import { useArticle21_2Logic } from '@/composables/article21-2Logic';
+import { useArticle23Logic } from '@/composables/article23Logic';
 
 const currentStep = ref(1);
 
@@ -319,6 +320,31 @@ const article21_2ResultTitle = computed(() => {
   return '【ガス漏れ火災警報設備】設置義務なし';
 });
 
+const { result: article23Result } = useArticle23Logic({
+  buildingUse,
+  totalArea: totalFloorAreaInput,
+});
+
+const article23ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (article23Result.value.required === true) {
+    return 'error';
+  }
+  if (article23Result.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const article23ResultTitle = computed(() => {
+  if (article23Result.value.required === true) {
+    return '【消防機関へ通報する火災報知設備】設置義務あり';
+  }
+  if (article23Result.value.required === 'warning') {
+    return '【消防機関へ通報する火災報知設備】要確認';
+  }
+  return '【消防機関へ通報する火災報知設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -398,6 +424,9 @@ generateFloors();
               :article21_2Result="article21_2Result"
               :article21_2ResultType="article21_2ResultType"
               :article21_2ResultTitle="article21_2ResultTitle"
+              :article23Result="article23Result"
+              :article23ResultType="article23ResultType"
+              :article23ResultTitle="article23ResultTitle"
             />
           </v-col>
         </v-row>
