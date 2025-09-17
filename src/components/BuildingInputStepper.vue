@@ -39,6 +39,10 @@ defineProps({
   canAllVehiclesExitSimultaneously: { type: Boolean, required: true },
   hasTelecomRoomOver500sqm: { type: Boolean, required: true },
 
+  // Article 22
+  hasSpecialCombustibleStructure: { type: Boolean, required: true },
+  contractedCurrentCapacity: { type: Number as PropType<number | null>, default: null },
+
   // Other reactive props
   floors: { type: Array as PropType<Floor[]>, required: true },
   showArticle21Item7Checkbox: { type: Boolean, required: true },
@@ -82,6 +86,8 @@ const emit = defineEmits([
   'update:parkingPartArea',
   'update:canAllVehiclesExitSimultaneously',
   'update:hasTelecomRoomOver500sqm',
+  'update:hasSpecialCombustibleStructure',
+  'update:contractedCurrentCapacity',
 ]);
 </script>
 
@@ -510,6 +516,26 @@ const emit = defineEmits([
               label="通信機器室500㎡以上"
               hide-details
             ></v-checkbox>
+
+            <v-divider class="my-4"></v-divider>
+            <p class="font-weight-bold mb-2">令第22条（漏電火災警報器）関連</p>
+            <v-checkbox
+              :model-value="hasSpecialCombustibleStructure"
+              @update:model-value="emit('update:hasSpecialCombustibleStructure', $event)"
+              label="鉄網入りの壁・床・天井など、特殊な可燃性構造を有する"
+              hide-details
+            ></v-checkbox>
+            <v-text-field
+              class="mt-4"
+              label="契約電流容量"
+              :model-value="contractedCurrentCapacity"
+              @update:model-value="emit('update:contractedCurrentCapacity', $event === '' ? null : Number($event))"
+              type="number"
+              min="0"
+              suffix="A"
+              dense
+              style="max-width: 200px;"
+            ></v-text-field>
 
           </v-card-text>
         </v-card>

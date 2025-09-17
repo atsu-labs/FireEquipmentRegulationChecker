@@ -53,3 +53,10 @@ export interface Article12UserInput {
   hasFireSuppressingStructure: Ref<boolean>;
   hasBeds: Ref<boolean>;
 }
+
+export interface Article22UserInput {
+  buildingUse: Ref<string | null>;
+  totalArea: Ref<number | null>;
+  hasSpecialCombustibleStructure: Ref<boolean>;
+  contractedCurrentCapacity: Ref<number | null>;
+}

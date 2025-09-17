@@ -7,6 +7,7 @@ import type { Floor } from '@/types';
 import { useArticle11Logic } from '@/composables/article11Logic';
 import { useArticle12Logic } from '@/composables/article12Logic';
 import { useArticle21Logic } from '@/composables/article21Logic';
+import { useArticle22Logic } from '@/composables/article22Logic';
 
 const currentStep = ref(1);
 
@@ -47,6 +48,10 @@ const hasParkingPart = ref(false); // 令21条13号用
 const parkingPartArea = ref<number | null>(null);
 const canAllVehiclesExitSimultaneously = ref(false);
 const hasTelecomRoomOver500sqm = ref(false); // 令21条15号用
+
+// 令22条
+const hasSpecialCombustibleStructure = ref(false);
+const contractedCurrentCapacity = ref<number | null>(null);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
@@ -254,6 +259,33 @@ const article21ResultTitle = computed(() => {
   return '【自動火災報知設備】設置義務なし';
 });
 
+const { result: article22Result } = useArticle22Logic({
+  buildingUse,
+  totalArea: totalFloorAreaInput,
+  hasSpecialCombustibleStructure,
+  contractedCurrentCapacity,
+});
+
+const article22ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (article22Result.value.required === true) {
+    return 'error';
+  }
+  if (article22Result.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const article22ResultTitle = computed(() => {
+  if (article22Result.value.required === true) {
+    return '【漏電火災警報器】設置義務あり';
+  }
+  if (article22Result.value.required === 'warning') {
+    return '【漏電火災警報器】要確認';
+  }
+  return '【漏電火災警報器】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -302,6 +334,8 @@ generateFloors();
               v-model:parkingPartArea="parkingPartArea"
               v-model:canAllVehiclesExitSimultaneously="canAllVehiclesExitSimultaneously"
               v-model:hasTelecomRoomOver500sqm="hasTelecomRoomOver500sqm"
+              v-model:hasSpecialCombustibleStructure="hasSpecialCombustibleStructure"
+              v-model:contractedCurrentCapacity="contractedCurrentCapacity"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
@@ -323,6 +357,9 @@ generateFloors();
               :article21Result="article21Result"
               :article21ResultType="article21ResultType"
               :article21ResultTitle="article21ResultTitle"
+              :article22Result="article22Result"
+              :article22ResultType="article22ResultType"
+              :article22ResultTitle="article22ResultTitle"
             />
           </v-col>
         </v-row>
