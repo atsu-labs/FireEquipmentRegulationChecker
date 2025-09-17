@@ -43,6 +43,10 @@ defineProps({
   hasSpecialCombustibleStructure: { type: Boolean, required: true },
   contractedCurrentCapacity: { type: Number as PropType<number | null>, default: null },
 
+  // Article 21-2
+  hasHotSpringFacility: { type: Boolean, required: true },
+  isHotSpringFacilityConfirmed: { type: Boolean, required: true },
+
   // Other reactive props
   floors: { type: Array as PropType<Floor[]>, required: true },
   showArticle21Item7Checkbox: { type: Boolean, required: true },
@@ -88,6 +92,8 @@ const emit = defineEmits([
   'update:hasTelecomRoomOver500sqm',
   'update:hasSpecialCombustibleStructure',
   'update:contractedCurrentCapacity',
+  'update:hasHotSpringFacility',
+  'update:isHotSpringFacilityConfirmed',
 ]);
 </script>
 
@@ -536,6 +542,25 @@ const emit = defineEmits([
               dense
               style="max-width: 200px;"
             ></v-text-field>
+
+            <v-divider class="my-4"></v-divider>
+            <p class="font-weight-bold mb-2">令第21条の2（ガス漏れ火災警報設備）関連</p>
+            <v-checkbox
+              :model-value="hasHotSpringFacility"
+              @update:model-value="emit('update:hasHotSpringFacility', $event)"
+              label="温泉の採取のための設備がある"
+              hide-details
+            ></v-checkbox>
+            <v-expand-transition>
+              <div v-if="hasHotSpringFacility" class="ml-8">
+                <v-checkbox
+                  :model-value="isHotSpringFacilityConfirmed"
+                  @update:model-value="emit('update:isHotSpringFacilityConfirmed', $event)"
+                  label="上記設備は温泉法の確認を受けている"
+                  hide-details
+                ></v-checkbox>
+              </div>
+            </v-expand-transition>
 
           </v-card-text>
         </v-card>

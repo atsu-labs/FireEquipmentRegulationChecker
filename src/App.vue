@@ -8,6 +8,7 @@ import { useArticle11Logic } from '@/composables/article11Logic';
 import { useArticle12Logic } from '@/composables/article12Logic';
 import { useArticle21Logic } from '@/composables/article21Logic';
 import { useArticle22Logic } from '@/composables/article22Logic';
+import { useArticle21_2Logic } from '@/composables/article21-2Logic';
 
 const currentStep = ref(1);
 
@@ -52,6 +53,10 @@ const hasTelecomRoomOver500sqm = ref(false); // 令21条15号用
 // 令22条
 const hasSpecialCombustibleStructure = ref(false);
 const contractedCurrentCapacity = ref<number | null>(null);
+
+// 令21条の2
+const hasHotSpringFacility = ref(false);
+const isHotSpringFacilityConfirmed = ref(false);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
@@ -286,6 +291,34 @@ const article22ResultTitle = computed(() => {
   return '【漏電火災警報器】設置義務なし';
 });
 
+const { result: article21_2Result } = useArticle21_2Logic({
+  buildingUse,
+  totalArea: totalFloorAreaInput,
+  floors,
+  hasHotSpringFacility,
+  isHotSpringFacilityConfirmed,
+});
+
+const article21_2ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (article21_2Result.value.required === true) {
+    return 'error';
+  }
+  if (article21_2Result.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const article21_2ResultTitle = computed(() => {
+  if (article21_2Result.value.required === true) {
+    return '【ガス漏れ火災警報設備】設置義務あり';
+  }
+  if (article21_2Result.value.required === 'warning') {
+    return '【ガス漏れ火災警報設備】要確認';
+  }
+  return '【ガス漏れ火災警報設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -336,6 +369,8 @@ generateFloors();
               v-model:hasTelecomRoomOver500sqm="hasTelecomRoomOver500sqm"
               v-model:hasSpecialCombustibleStructure="hasSpecialCombustibleStructure"
               v-model:contractedCurrentCapacity="contractedCurrentCapacity"
+              v-model:hasHotSpringFacility="hasHotSpringFacility"
+              v-model:isHotSpringFacilityConfirmed="isHotSpringFacilityConfirmed"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
@@ -360,6 +395,9 @@ generateFloors();
               :article22Result="article22Result"
               :article22ResultType="article22ResultType"
               :article22ResultTitle="article22ResultTitle"
+              :article21_2Result="article21_2Result"
+              :article21_2ResultType="article21_2ResultType"
+              :article21_2ResultTitle="article21_2ResultTitle"
             />
           </v-col>
         </v-row>

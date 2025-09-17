@@ -60,3 +60,11 @@ export interface Article22UserInput {
   hasSpecialCombustibleStructure: Ref<boolean>;
   contractedCurrentCapacity: Ref<number | null>;
 }
+
+export interface Article21_2UserInput {
+  buildingUse: Ref<string | null>;
+  totalArea: Ref<number | null>;
+  floors: Ref<Floor[]>;
+  hasHotSpringFacility: Ref<boolean>;
+  isHotSpringFacilityConfirmed: Ref<boolean>;
+}
