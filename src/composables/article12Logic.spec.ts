@@ -28,7 +28,7 @@ const createMockInput = (overrides: Partial<Article12UserInput> = {}): Article12
   for (const key in defaults) {
       const k = key as keyof Article12UserInput;
       if (defaults[k] && 'value' in defaults[k]) {
-          (merged[k] as any) = ref((defaults[k] as any).value);
+        (merged[k] as Ref<unknown>).value = (defaults[k] as Ref<unknown>).value;
       }
   }
 
@@ -36,7 +36,7 @@ const createMockInput = (overrides: Partial<Article12UserInput> = {}): Article12
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
       const k = key as keyof Article12UserInput;
       if (merged[k] && 'value' in merged[k]) {
-        (merged[k] as any).value = (overrides[k] as any).value;
+        (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }
     }
   }

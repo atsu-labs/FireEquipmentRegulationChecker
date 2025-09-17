@@ -24,7 +24,7 @@ const createMockInput = (overrides: Partial<Article11UserInput> = {}): Article11
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
       const k = key as keyof Article11UserInput;
       if (merged[k] && 'value' in merged[k]) {
-        (merged[k] as any).value = (overrides[k] as any).value;
+        (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }
     }
   }

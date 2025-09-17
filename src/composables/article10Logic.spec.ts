@@ -20,7 +20,7 @@ const createMockData = (overrides: Partial<BuildingData> = {}): BuildingData => 
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
       const k = key as keyof BuildingData;
       if (merged[k] && 'value' in merged[k]) {
-        (merged[k] as any).value = (overrides[k] as any).value;
+        (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }
     }
   }
