@@ -73,3 +73,10 @@ export interface Article23UserInput {
   buildingUse: Ref<string | null>;
   totalArea: Ref<number | null>;
 }
+
+export interface Article26Result {
+  exitGuideLight: JudgementResult;
+  corridorGuideLight: JudgementResult;
+  auditoriumGuideLight: JudgementResult;
+  guideSign: JudgementResult;
+}

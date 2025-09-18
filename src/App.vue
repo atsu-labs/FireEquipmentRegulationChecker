@@ -14,6 +14,7 @@ import { useArticle25Logic } from '@/composables/article25Logic';
 import { useArticle13Logic } from '@/composables/article13Logic';
 import { useArticle19Logic } from '@/composables/article19Logic';
 import { useArticle24Logic } from '@/composables/article24Logic';
+import { useArticle26Logic } from '@/composables/article26Logic';
 
 const currentStep = ref(1);
 
@@ -258,6 +259,13 @@ const { regulationResult: judgementResult24 } = useArticle24Logic({
   floors,
 });
 
+const { regulationResult: judgementResult26 } = useArticle26Logic({
+  buildingUse,
+  basementFloors: basementFloorsInput,
+  groundFloors: groundFloorsInput,
+  floors,
+});
+
 const { result: article21Result } = useArticle21Logic({
   buildingUse: buildingUse,
   totalArea: totalFloorAreaInput,
@@ -479,6 +487,59 @@ const judgementResult24Title = computed(() => {
   return '【非常警報器具・設備】設置義務なし';
 });
 
+// --- 令第26条 算出プロパティ ---
+const judgementResult26_exitType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  const required = judgementResult26.value.exitGuideLight.required;
+  if (required === true) return 'error';
+  if (required === 'warning') return 'warning';
+  return 'success';
+});
+const judgementResult26_exitTitle = computed(() => {
+  const required = judgementResult26.value.exitGuideLight.required;
+  if (required === true) return '【避難口誘導灯】設置義務あり';
+  if (required === 'warning') return '【避難口誘導灯】要確認';
+  return '【避難口誘導灯】設置義務なし';
+});
+
+const judgementResult26_corridorType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  const required = judgementResult26.value.corridorGuideLight.required;
+  if (required === true) return 'error';
+  if (required === 'warning') return 'warning';
+  return 'success';
+});
+const judgementResult26_corridorTitle = computed(() => {
+  const required = judgementResult26.value.corridorGuideLight.required;
+  if (required === true) return '【通路誘導灯】設置義務あり';
+  if (required === 'warning') return '【通路誘導灯】要確認';
+  return '【通路誘導灯】設置義務なし';
+});
+
+const judgementResult26_auditoriumType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  const required = judgementResult26.value.auditoriumGuideLight.required;
+  if (required === true) return 'error';
+  if (required === 'warning') return 'warning';
+  return 'success';
+});
+const judgementResult26_auditoriumTitle = computed(() => {
+  const required = judgementResult26.value.auditoriumGuideLight.required;
+  if (required === true) return '【客席誘導灯】設置義務あり';
+  if (required === 'warning') return '【客席誘導灯】要確認';
+  return '【客席誘導灯】設置義務なし';
+});
+
+const judgementResult26_signType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  const required = judgementResult26.value.guideSign.required;
+  if (required === true) return 'error';
+  if (required === 'warning') return 'warning';
+  return 'success';
+});
+const judgementResult26_signTitle = computed(() => {
+  const required = judgementResult26.value.guideSign.required;
+  if (required === true) return '【誘導標識】設置義務あり';
+  if (required === 'warning') return '【誘導標識】要確認';
+  return '【誘導標識】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -584,6 +645,15 @@ generateFloors();
               :judgementResult24="judgementResult24"
               :judgementResult24Type="judgementResult24Type"
               :judgementResult24Title="judgementResult24Title"
+              :judgementResult26="judgementResult26"
+              :judgementResult26_exitType="judgementResult26_exitType"
+              :judgementResult26_exitTitle="judgementResult26_exitTitle"
+              :judgementResult26_corridorType="judgementResult26_corridorType"
+              :judgementResult26_corridorTitle="judgementResult26_corridorTitle"
+              :judgementResult26_auditoriumType="judgementResult26_auditoriumType"
+              :judgementResult26_auditoriumTitle="judgementResult26_auditoriumTitle"
+              :judgementResult26_signType="judgementResult26_signType"
+              :judgementResult26_signTitle="judgementResult26_signTitle"
             />
           </v-col>
         </v-row>
