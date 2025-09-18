@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { useArticle11Logic } from './article11Logic';
 import type { Article11UserInput } from '@/types';
 
