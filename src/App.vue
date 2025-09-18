@@ -10,6 +10,7 @@ import { useArticle21Logic } from '@/composables/article21Logic';
 import { useArticle22Logic } from '@/composables/article22Logic';
 import { useArticle21_2Logic } from '@/composables/article21-2Logic';
 import { useArticle23Logic } from '@/composables/article23Logic';
+import { useArticle25Logic } from '@/composables/article25Logic';
 
 const currentStep = ref(1);
 
@@ -345,6 +346,31 @@ const article23ResultTitle = computed(() => {
   return '【消防機関へ通報する火災報知設備】設置義務なし';
 });
 
+const { result: article25Result } = useArticle25Logic({
+  buildingUse,
+  floors,
+});
+
+const article25ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (article25Result.value.required === true) {
+    return 'error';
+  }
+  if (article25Result.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const article25ResultTitle = computed(() => {
+  if (article25Result.value.required === true) {
+    return '【避難器具】設置義務あり';
+  }
+  if (article25Result.value.required === 'warning') {
+    return '【避難器具】要確認';
+  }
+  return '【避難器具】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -427,6 +453,9 @@ generateFloors();
               :article23Result="article23Result"
               :article23ResultType="article23ResultType"
               :article23ResultTitle="article23ResultTitle"
+              :article25Result="article25Result"
+              :article25ResultType="article25ResultType"
+              :article25ResultTitle="article25ResultTitle"
             />
           </v-col>
         </v-row>
