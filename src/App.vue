@@ -13,6 +13,7 @@ import { useArticle23Logic } from '@/composables/article23Logic';
 import { useArticle25Logic } from '@/composables/article25Logic';
 import { useArticle13Logic } from '@/composables/article13Logic';
 import { useArticle19Logic } from '@/composables/article19Logic';
+import { useArticle24Logic } from '@/composables/article24Logic';
 
 const currentStep = ref(1);
 
@@ -249,6 +250,14 @@ const { regulationResult: judgementResult19 } = useArticle19Logic({
   hasMultipleBuildingsOnSite,
 });
 
+const { regulationResult: judgementResult24 } = useArticle24Logic({
+  buildingUse,
+  totalCapacity: capacityInput,
+  groundFloors: groundFloorsInput,
+  basementFloors: basementFloorsInput,
+  floors,
+});
+
 const { result: article21Result } = useArticle21Logic({
   buildingUse: buildingUse,
   totalArea: totalFloorAreaInput,
@@ -450,6 +459,26 @@ const judgementResult19Title = computed(() => {
   return '【屋外消火栓設備】設置義務なし';
 });
 
+const judgementResult24Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult24.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult24.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult24Title = computed(() => {
+  if (judgementResult24.value.required === true) {
+    return '【非常警報器具・設備】設置義務あり';
+  }
+  if (judgementResult24.value.required === 'warning') {
+    return '【非常警報器具・設備】要確認';
+  }
+  return '【非常警報器具・設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -552,6 +581,9 @@ generateFloors();
               :judgementResult19="judgementResult19"
               :judgementResult19Type="judgementResult19Type"
               :judgementResult19Title="judgementResult19Title"
+              :judgementResult24="judgementResult24"
+              :judgementResult24Type="judgementResult24Type"
+              :judgementResult24Title="judgementResult24Title"
             />
           </v-col>
         </v-row>
