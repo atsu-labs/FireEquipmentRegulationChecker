@@ -15,6 +15,7 @@ import { useArticle13Logic } from '@/composables/article13Logic';
 import { useArticle19Logic } from '@/composables/article19Logic';
 import { useArticle24Logic } from '@/composables/article24Logic';
 import { useArticle26Logic } from '@/composables/article26Logic';
+import { useArticle27Logic } from '@/composables/article27Logic';
 
 const currentStep = ref(1);
 
@@ -78,6 +79,10 @@ const article13_hasRoadwayPart = ref(false);
 // 令19条
 const buildingStructure = ref<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>(null);
 const hasMultipleBuildingsOnSite = ref(false);
+
+// 令27条
+const siteArea = ref<number | null>(null);
+const buildingHeight = ref<number | null>(null);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
@@ -249,6 +254,16 @@ const { regulationResult: judgementResult19 } = useArticle19Logic({
   floors,
   buildingStructure,
   hasMultipleBuildingsOnSite,
+});
+
+const { regulationResult: judgementResult27 } = useArticle27Logic({
+  buildingUse,
+  siteArea,
+  buildingHeight,
+  totalArea: totalFloorAreaInput,
+  groundFloors: groundFloorsInput,
+  floors,
+  buildingStructure,
 });
 
 const { regulationResult: judgementResult24 } = useArticle24Logic({
@@ -540,6 +555,26 @@ const judgementResult26_signTitle = computed(() => {
   return '【誘導標識】設置義務なし';
 });
 
+const judgementResult27Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult27.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult27.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult27Title = computed(() => {
+  if (judgementResult27.value.required === true) {
+    return '【消防用水】設置義務あり';
+  }
+  if (judgementResult27.value.required === 'warning') {
+    return '【消防用水】要確認';
+  }
+  return '【消防用水】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -603,6 +638,8 @@ generateFloors();
               v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
               v-model:buildingStructure="buildingStructure"
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
+              v-model:siteArea="siteArea"
+              v-model:buildingHeight="buildingHeight"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
@@ -654,6 +691,9 @@ generateFloors();
               :judgementResult26_auditoriumTitle="judgementResult26_auditoriumTitle"
               :judgementResult26_signType="judgementResult26_signType"
               :judgementResult26_signTitle="judgementResult26_signTitle"
+              :judgementResult27="judgementResult27"
+              :judgementResult27Type="judgementResult27Type"
+              :judgementResult27Title="judgementResult27Title"
             />
           </v-col>
         </v-row>

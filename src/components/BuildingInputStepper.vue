@@ -62,6 +62,10 @@ defineProps({
   buildingStructure: { type: String as PropType<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>, default: null },
   hasMultipleBuildingsOnSite: { type: Boolean, required: true },
 
+  // Article 27
+  siteArea: { type: Number as PropType<number | null>, default: null },
+  buildingHeight: { type: Number as PropType<number | null>, default: null },
+
   // Other reactive props
   floors: { type: Array as PropType<Floor[]>, required: true },
   showArticle21Item7Checkbox: { type: Boolean, required: true },
@@ -120,6 +124,8 @@ const emit = defineEmits([
   'update:article13_hasRoadwayPart',
   'update:buildingStructure',
   'update:hasMultipleBuildingsOnSite',
+  'update:siteArea',
+  'update:buildingHeight',
 ]);
 </script>
 
@@ -184,6 +190,30 @@ const emit = defineEmits([
                   type="number"
                   min="0"
                   suffix="人"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="3">
+                <v-text-field
+                  label="敷地面積"
+                  :model-value="siteArea"
+                  @update:model-value="emit('update:siteArea', $event === '' ? null : Number($event))"
+                  type="number"
+                  min="0"
+                  suffix="㎡"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="3">
+                <v-text-field
+                  label="建物の高さ"
+                  :model-value="buildingHeight"
+                  @update:model-value="emit('update:buildingHeight', $event === '' ? null : Number($event))"
+                  type="number"
+                  min="0"
+                  suffix="m"
                   dense
                   hide-details
                 ></v-text-field>
