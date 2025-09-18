@@ -16,6 +16,7 @@ import { useArticle19Logic } from '@/composables/article19Logic';
 import { useArticle24Logic } from '@/composables/article24Logic';
 import { useArticle26Logic } from '@/composables/article26Logic';
 import { useArticle27Logic } from '@/composables/article27Logic';
+import { useArticle28Logic } from '@/composables/article28Logic';
 
 const currentStep = ref(1);
 
@@ -264,6 +265,14 @@ const { regulationResult: judgementResult27 } = useArticle27Logic({
   groundFloors: groundFloorsInput,
   floors,
   buildingStructure,
+});
+
+const { regulationResult: judgementResult28 } = useArticle28Logic({
+  buildingUse,
+  totalArea: totalFloorAreaInput,
+  hasStageArea,
+  stageArea,
+  floors,
 });
 
 const { regulationResult: judgementResult24 } = useArticle24Logic({
@@ -575,6 +584,26 @@ const judgementResult27Title = computed(() => {
   return '【消防用水】設置義務なし';
 });
 
+const judgementResult28Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult28.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult28.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult28Title = computed(() => {
+  if (judgementResult28.value.required === true) {
+    return '【排煙設備】設置義務あり';
+  }
+  if (judgementResult28.value.required === 'warning') {
+    return '【排煙設備】要確認';
+  }
+  return '【排煙設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -694,6 +723,9 @@ generateFloors();
               :judgementResult27="judgementResult27"
               :judgementResult27Type="judgementResult27Type"
               :judgementResult27Title="judgementResult27Title"
+              :judgementResult28="judgementResult28"
+              :judgementResult28Type="judgementResult28Type"
+              :judgementResult28Title="judgementResult28Title"
             />
           </v-col>
         </v-row>
