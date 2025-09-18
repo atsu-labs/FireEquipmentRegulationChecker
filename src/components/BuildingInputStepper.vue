@@ -47,6 +47,17 @@ defineProps({
   hasHotSpringFacility: { type: Boolean, required: true },
   isHotSpringFacilityConfirmed: { type: Boolean, required: true },
 
+  // Article 13
+  article13_hasParkingArea: { type: Boolean, required: true },
+  article13_hasMechanicalParking: { type: Boolean, required: true },
+  article13_mechanicalParkingCapacity: { type: Number as PropType<number | null>, default: null },
+  article13_hasCarRepairArea: { type: Boolean, required: true },
+  article13_hasHelicopterLandingZone: { type: Boolean, required: true },
+  article13_hasHighFireUsageArea: { type: Boolean, required: true },
+  article13_hasElectricalEquipmentArea: { type: Boolean, required: true },
+  article13_hasCommunicationEquipmentRoom: { type: Boolean, required: true },
+  article13_hasRoadwayPart: { type: Boolean, required: true },
+
   // Other reactive props
   floors: { type: Array as PropType<Floor[]>, required: true },
   showArticle21Item7Checkbox: { type: Boolean, required: true },
@@ -94,6 +105,15 @@ const emit = defineEmits([
   'update:contractedCurrentCapacity',
   'update:hasHotSpringFacility',
   'update:isHotSpringFacilityConfirmed',
+  'update:article13_hasParkingArea',
+  'update:article13_hasMechanicalParking',
+  'update:article13_mechanicalParkingCapacity',
+  'update:article13_hasCarRepairArea',
+  'update:article13_hasHelicopterLandingZone',
+  'update:article13_hasHighFireUsageArea',
+  'update:article13_hasElectricalEquipmentArea',
+  'update:article13_hasCommunicationEquipmentRoom',
+  'update:article13_hasRoadwayPart',
 ]);
 </script>
 
@@ -561,6 +581,71 @@ const emit = defineEmits([
                 ></v-checkbox>
               </div>
             </v-expand-transition>
+
+            <v-divider class="my-4"></v-divider>
+            <p class="font-weight-bold mb-2">令第13条（水噴霧消火設備等）関連</p>
+            <v-checkbox
+              :model-value="article13_hasParkingArea"
+              @update:model-value="emit('update:article13_hasParkingArea', $event)"
+              label="駐車の用に供される部分がある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasMechanicalParking"
+              @update:model-value="emit('update:article13_hasMechanicalParking', $event)"
+              label="機械式駐車場がある"
+              hide-details
+            ></v-checkbox>
+            <v-expand-transition>
+              <div v-if="article13_hasMechanicalParking" class="ml-8">
+                <v-text-field
+                  label="収容台数"
+                  :model-value="article13_mechanicalParkingCapacity"
+                  @update:model-value="emit('update:article13_mechanicalParkingCapacity', $event === '' ? null : Number($event))"
+                  type="number"
+                  min="0"
+                  suffix="台"
+                  dense
+                  style="max-width: 200px;"
+                ></v-text-field>
+              </div>
+            </v-expand-transition>
+            <v-checkbox
+              :model-value="article13_hasCarRepairArea"
+              @update:model-value="emit('update:article13_hasCarRepairArea', $event)"
+              label="自動車の修理・整備工場がある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasHelicopterLandingZone"
+              @update:model-value="emit('update:article13_hasHelicopterLandingZone', $event)"
+              label="屋上にヘリポートがある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasHighFireUsageArea"
+              @update:model-value="emit('update:article13_hasHighFireUsageArea', $event)"
+              label="ボイラー室など多量の火気を使用する部分がある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasElectricalEquipmentArea"
+              @update:model-value="emit('update:article13_hasElectricalEquipmentArea', $event)"
+              label="変圧器など電気設備がある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasCommunicationEquipmentRoom"
+              @update:model-value="emit('update:article13_hasCommunicationEquipmentRoom', $event)"
+              label="通信機器室がある"
+              hide-details
+            ></v-checkbox>
+            <v-checkbox
+              :model-value="article13_hasRoadwayPart"
+              @update:model-value="emit('update:article13_hasRoadwayPart', $event)"
+              label="道路の用に供される部分がある"
+              hide-details
+            ></v-checkbox>
 
           </v-card-text>
         </v-card>

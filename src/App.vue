@@ -11,6 +11,7 @@ import { useArticle22Logic } from '@/composables/article22Logic';
 import { useArticle21_2Logic } from '@/composables/article21-2Logic';
 import { useArticle23Logic } from '@/composables/article23Logic';
 import { useArticle25Logic } from '@/composables/article25Logic';
+import { useArticle13Logic } from '@/composables/article13Logic';
 
 const currentStep = ref(1);
 
@@ -59,6 +60,17 @@ const contractedCurrentCapacity = ref<number | null>(null);
 // 令21条の2
 const hasHotSpringFacility = ref(false);
 const isHotSpringFacilityConfirmed = ref(false);
+
+// 令13条
+const article13_hasParkingArea = ref(false);
+const article13_hasMechanicalParking = ref(false);
+const article13_mechanicalParkingCapacity = ref<number | null>(null);
+const article13_hasCarRepairArea = ref(false);
+const article13_hasHelicopterLandingZone = ref(false);
+const article13_hasHighFireUsageArea = ref(false);
+const article13_hasElectricalEquipmentArea = ref(false);
+const article13_hasCommunicationEquipmentRoom = ref(false);
+const article13_hasRoadwayPart = ref(false);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
@@ -208,6 +220,20 @@ const { regulationResult: judgementResult12 } = useArticle12Logic({
   isCombustiblesAmountOver1000,
   hasFireSuppressingStructure,
   hasBeds,
+});
+
+const { regulationResult: judgementResult13 } = useArticle13Logic({
+  buildingUse,
+  isCombustiblesAmountOver1000,
+  hasParkingArea: article13_hasParkingArea,
+  hasMechanicalParking: article13_hasMechanicalParking,
+  mechanicalParkingCapacity: article13_mechanicalParkingCapacity,
+  hasCarRepairArea: article13_hasCarRepairArea,
+  hasHelicopterLandingZone: article13_hasHelicopterLandingZone,
+  hasHighFireUsageArea: article13_hasHighFireUsageArea,
+  hasElectricalEquipmentArea: article13_hasElectricalEquipmentArea,
+  hasCommunicationEquipmentRoom: article13_hasCommunicationEquipmentRoom,
+  hasRoadwayPart: article13_hasRoadwayPart,
 });
 
 const { result: article21Result } = useArticle21Logic({
@@ -371,6 +397,26 @@ const article25ResultTitle = computed(() => {
   return '【避難器具】設置義務なし';
 });
 
+const judgementResult13Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult13.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult13.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult13Title = computed(() => {
+  if (judgementResult13.value.required === true) {
+    return '【水噴霧消火設備等】設置義務あり';
+  }
+  if (judgementResult13.value.required === 'warning') {
+    return '【水噴霧消火設備等】要確認';
+  }
+  return '【水噴霧消火設備等】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -423,6 +469,15 @@ generateFloors();
               v-model:contractedCurrentCapacity="contractedCurrentCapacity"
               v-model:hasHotSpringFacility="hasHotSpringFacility"
               v-model:isHotSpringFacilityConfirmed="isHotSpringFacilityConfirmed"
+              v-model:article13_hasParkingArea="article13_hasParkingArea"
+              v-model:article13_hasMechanicalParking="article13_hasMechanicalParking"
+              v-model:article13_mechanicalParkingCapacity="article13_mechanicalParkingCapacity"
+              v-model:article13_hasCarRepairArea="article13_hasCarRepairArea"
+              v-model:article13_hasHelicopterLandingZone="article13_hasHelicopterLandingZone"
+              v-model:article13_hasHighFireUsageArea="article13_hasHighFireUsageArea"
+              v-model:article13_hasElectricalEquipmentArea="article13_hasElectricalEquipmentArea"
+              v-model:article13_hasCommunicationEquipmentRoom="article13_hasCommunicationEquipmentRoom"
+              v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
@@ -456,6 +511,9 @@ generateFloors();
               :article25Result="article25Result"
               :article25ResultType="article25ResultType"
               :article25ResultTitle="article25ResultTitle"
+              :judgementResult13="judgementResult13"
+              :judgementResult13Type="judgementResult13Type"
+              :judgementResult13Title="judgementResult13Title"
             />
           </v-col>
         </v-row>
