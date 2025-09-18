@@ -58,6 +58,10 @@ defineProps({
   article13_hasCommunicationEquipmentRoom: { type: Boolean, required: true },
   article13_hasRoadwayPart: { type: Boolean, required: true },
 
+  // Article 19
+  buildingStructure: { type: String as PropType<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>, default: null },
+  hasMultipleBuildingsOnSite: { type: Boolean, required: true },
+
   // Other reactive props
   floors: { type: Array as PropType<Floor[]>, required: true },
   showArticle21Item7Checkbox: { type: Boolean, required: true },
@@ -114,6 +118,8 @@ const emit = defineEmits([
   'update:article13_hasElectricalEquipmentArea',
   'update:article13_hasCommunicationEquipmentRoom',
   'update:article13_hasRoadwayPart',
+  'update:buildingStructure',
+  'update:hasMultipleBuildingsOnSite',
 ]);
 </script>
 
@@ -645,6 +651,28 @@ const emit = defineEmits([
               @update:model-value="emit('update:article13_hasRoadwayPart', $event)"
               label="道路の用に供される部分がある"
               hide-details
+            ></v-checkbox>
+
+            <v-divider class="my-4"></v-divider>
+            <p class="font-weight-bold mb-2">令第19条（屋外消火栓設備）関連</p>
+            <div>
+              <p class="mb-2">建物の耐火性能</p>
+              <v-radio-group
+                :model-value="buildingStructure"
+                @update:model-value="emit('update:buildingStructure', $event)"
+                hide-details
+              >
+                <v-radio label="耐火建築物" value="fire-resistant"></v-radio>
+                <v-radio label="準耐火建築物" value="quasi-fire-resistant"></v-radio>
+                <v-radio label="その他" value="other"></v-radio>
+              </v-radio-group>
+            </div>
+            <v-checkbox
+              :model-value="hasMultipleBuildingsOnSite"
+              @update:model-value="emit('update:hasMultipleBuildingsOnSite', $event)"
+              label="同一敷地内に複数の建物がある"
+              hide-details
+              class="mt-2"
             ></v-checkbox>
 
           </v-card-text>

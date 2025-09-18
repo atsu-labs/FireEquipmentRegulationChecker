@@ -12,6 +12,7 @@ import { useArticle21_2Logic } from '@/composables/article21-2Logic';
 import { useArticle23Logic } from '@/composables/article23Logic';
 import { useArticle25Logic } from '@/composables/article25Logic';
 import { useArticle13Logic } from '@/composables/article13Logic';
+import { useArticle19Logic } from '@/composables/article19Logic';
 
 const currentStep = ref(1);
 
@@ -71,6 +72,10 @@ const article13_hasHighFireUsageArea = ref(false);
 const article13_hasElectricalEquipmentArea = ref(false);
 const article13_hasCommunicationEquipmentRoom = ref(false);
 const article13_hasRoadwayPart = ref(false);
+
+// 令19条
+const buildingStructure = ref<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>(null);
+const hasMultipleBuildingsOnSite = ref(false);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
@@ -234,6 +239,14 @@ const { regulationResult: judgementResult13 } = useArticle13Logic({
   hasElectricalEquipmentArea: article13_hasElectricalEquipmentArea,
   hasCommunicationEquipmentRoom: article13_hasCommunicationEquipmentRoom,
   hasRoadwayPart: article13_hasRoadwayPart,
+});
+
+const { regulationResult: judgementResult19 } = useArticle19Logic({
+  buildingUse,
+  groundFloors: groundFloorsInput,
+  floors,
+  buildingStructure,
+  hasMultipleBuildingsOnSite,
 });
 
 const { result: article21Result } = useArticle21Logic({
@@ -417,6 +430,26 @@ const judgementResult13Title = computed(() => {
   return '【水噴霧消火設備等】設置義務なし';
 });
 
+const judgementResult19Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult19.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult19.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult19Title = computed(() => {
+  if (judgementResult19.value.required === true) {
+    return '【屋外消火栓設備】設置義務あり';
+  }
+  if (judgementResult19.value.required === 'warning') {
+    return '【屋外消火栓設備】要確認';
+  }
+  return '【屋外消火栓設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -478,6 +511,8 @@ generateFloors();
               v-model:article13_hasElectricalEquipmentArea="article13_hasElectricalEquipmentArea"
               v-model:article13_hasCommunicationEquipmentRoom="article13_hasCommunicationEquipmentRoom"
               v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
+              v-model:buildingStructure="buildingStructure"
+              v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
@@ -514,6 +549,9 @@ generateFloors();
               :judgementResult13="judgementResult13"
               :judgementResult13Type="judgementResult13Type"
               :judgementResult13Title="judgementResult13Title"
+              :judgementResult19="judgementResult19"
+              :judgementResult19Type="judgementResult19Type"
+              :judgementResult19Title="judgementResult19Title"
             />
           </v-col>
         </v-row>
