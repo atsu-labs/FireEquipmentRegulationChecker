@@ -207,6 +207,30 @@ defineProps({
     type: String,
     required: true,
   },
+  judgementResult29_2: {
+    type: Object as PropType<JudgementResult>,
+    required: true,
+  },
+  judgementResult29_2Type: {
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
+    required: true,
+  },
+  judgementResult29_2Title: {
+    type: String,
+    required: true,
+  },
+  judgementResult29_3: {
+    type: Object as PropType<JudgementResult>,
+    required: true,
+  },
+  judgementResult29_3Type: {
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
+    required: true,
+  },
+  judgementResult29_3Title: {
+    type: String,
+    required: true,
+  },
 });
 </script>
 
@@ -496,6 +520,34 @@ defineProps({
         <v-divider class="my-2"></v-divider>
         <p><b>理由:</b> {{ judgementResult29.message }}</p>
         <p><b>根拠:</b> {{ judgementResult29.basis }}</p>
+      </v-alert>
+
+      <v-alert
+        :type="judgementResult29_2Type"
+        variant="tonal"
+        prominent
+        class="mt-4"
+      >
+        <div class="text-h6">
+          {{ judgementResult29_2Title }}
+        </div>
+        <v-divider class="my-2"></v-divider>
+        <p><b>理由:</b> {{ judgementResult29_2.message }}</p>
+        <p><b>根拠:</b> {{ judgementResult29_2.basis }}</p>
+      </v-alert>
+
+      <v-alert
+        :type="judgementResult29_3Type"
+        variant="tonal"
+        prominent
+        class="mt-4"
+      >
+        <div class="text-h6">
+          {{ judgementResult29_3Title }}
+        </div>
+        <v-divider class="my-2"></v-divider>
+        <p><b>理由:</b> {{ judgementResult29_3.message }}</p>
+        <p><b>根拠:</b> {{ judgementResult29_3.basis }}</p>
       </v-alert>
     </v-card-text>
   </v-card>

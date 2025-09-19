@@ -18,6 +18,8 @@ import { useArticle26Logic } from '@/composables/article26Logic';
 import { useArticle27Logic } from '@/composables/article27Logic';
 import { useArticle28Logic } from '@/composables/article28Logic';
 import { Article29Logic } from '@/composables/article29Logic';
+import { Article29_2Logic } from '@/composables/article29-2Logic';
+import { Article29_3Logic } from '@/composables/article29-3Logic';
 
 const currentStep = ref(1);
 
@@ -634,6 +636,57 @@ const judgementResult29Title = computed(() => {
   return '【連結送水管】設置義務なし';
 });
 
+const { judgementResult: judgementResult29_2 } = Article29_2Logic({
+  buildingUse,
+  totalFloorAreaInput,
+  floors,
+});
+
+const judgementResult29_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult29_2.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult29_2.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult29_2Title = computed(() => {
+  if (judgementResult29_2.value.required === true) {
+    return '【非常コンセント設備】設置義務あり';
+  }
+  if (judgementResult29_2.value.required === 'warning') {
+    return '【非常コンセント設備】要確認';
+  }
+  return '【非常コンセント設備】設置義務なし';
+});
+
+const { judgementResult: judgementResult29_3 } = Article29_3Logic({
+  buildingUse,
+  totalFloorAreaInput,
+});
+
+const judgementResult29_3Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult29_3.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult29_3.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult29_3Title = computed(() => {
+  if (judgementResult29_3.value.required === true) {
+    return '【無線通信補助設備】設置義務あり';
+  }
+  if (judgementResult29_3.value.required === 'warning') {
+    return '【無線通信補助設備】要確認';
+  }
+  return '【無線通信補助設備】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -759,6 +812,12 @@ generateFloors();
               :judgementResult29="judgementResult29"
               :judgementResult29Type="judgementResult29Type"
               :judgementResult29Title="judgementResult29Title"
+              :judgementResult29_2="judgementResult29_2"
+              :judgementResult29_2Type="judgementResult29_2Type"
+              :judgementResult29_2Title="judgementResult29_2Title"
+              :judgementResult29_3="judgementResult29_3"
+              :judgementResult29_3Type="judgementResult29_3Type"
+              :judgementResult29_3Title="judgementResult29_3Title"
             />
           </v-col>
         </v-row>
