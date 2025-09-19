@@ -1,12 +1,11 @@
-
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
 import { useArticle26Logic, type Article26UserInput } from './article26Logic';
 import type { Floor } from '@/types';
 
-const createMockInput = (overrides: Partial<Article26UserInput> = {}): Article26UserInput => {
+const createMockUserInput = (overrides: Partial<Article26UserInput>): Article26UserInput => {
   const defaults: Article26UserInput = {
-    buildingUse: ref('item18'), // Default to a non-applicable use
+    buildingUse: ref(null),
     basementFloors: ref(0),
     groundFloors: ref(1),
     floors: ref<Floor[]>([]),
@@ -15,84 +14,88 @@ const createMockInput = (overrides: Partial<Article26UserInput> = {}): Article26
 };
 
 describe('useArticle26Logic', () => {
-  it('用途が選択されていない場合、すべての判定をスキップする', () => {
-    const input = createMockInput({ buildingUse: ref(null) });
-    const { regulationResult } = useArticle26Logic(input);
-    const result = regulationResult.value;
-    expect(result.exitGuideLight.required).toBe(false);
-    expect(result.corridorGuideLight.required).toBe(false);
-    expect(result.auditoriumGuideLight.required).toBe(false);
-    expect(result.guideSign.required).toBe(false);
-    expect(result.exitGuideLight.message).toContain('選択してください');
+  it('用途が選択されていない場合、設置義務なしと判定されること', () => {
+    const userInput = createMockUserInput({});
+    const { regulationResult } = useArticle26Logic(userInput);
+    expect(regulationResult.value.required).toBe(false);
+    expect(regulationResult.value.message).toContain('建物の用途を選択してください');
   });
 
-  describe('避難口誘導灯 & 通路誘導灯', () => {
-    it('全部適用用途（例: (1)項）の場合、設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item01_i_ro') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.exitGuideLight.required).toBe(true);
-      expect(regulationResult.value.corridorGuideLight.required).toBe(true);
-      expect(regulationResult.value.exitGuideLight.basis).toContain('第1号, 第2号');
+  describe('誘導灯の判定', () => {
+    it('(1)項の場合、誘導灯と客席誘導灯が必要と判定されること', () => {
+      const userInput = createMockUserInput({ buildingUse: ref('item01') });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe(true);
+      expect(regulationResult.value.message).toContain('誘導灯の設置が必要です');
+      expect(regulationResult.value.message).toContain('客席誘導灯も必要です');
     });
 
-    it('部分適用用途（例: (7)項）で対象階がない場合、設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('item07') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.exitGuideLight.required).toBe(false);
+    it('(7)項で2階が無窓階の場合、メッセージに「2階（無窓階）」が含まれること', () => {
+      const userInput = createMockUserInput({
+        buildingUse: ref('item07'),
+        floors: ref([{ level: 2, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true }])
+      });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe(true);
+      expect(regulationResult.value.message).toContain('2階（無窓階）の部分に誘導灯の設置が必要です');
     });
 
-    it('部分適用用途（例: (7)項）で地階がある場合、設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item07'), basementFloors: ref(1) });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.exitGuideLight.required).toBe(true);
+    it('地階、無窓階、11階以上の複合条件で、メッセージが正しく連結されること', () => {
+      const userInput = createMockUserInput({
+        buildingUse: ref('item08'), // (8)項
+        basementFloors: ref(1),
+        groundFloors: ref(12),
+        floors: ref([
+          { level: 1, type: 'basement', floorArea: 100, capacity: 10, isWindowless: false },
+          { level: 3, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true },
+        ])
+      });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe(true);
+      expect(regulationResult.value.message).toContain('地下1階、3階（無窓階）、11階以上の階の部分に誘導灯の設置が必要です');
     });
 
-    it('部分適用用途（例: (7)項）で無窓階がある場合、設置義務あり', () => {
-      const floors: Floor[] = [{ level: 2, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true }];
-      const input = createMockInput({ buildingUse: ref('item07'), floors: ref(floors) });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.exitGuideLight.required).toBe(true);
-    });
-
-    it('部分適用用途（例: (7)項）で11階以上の場合、設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item07'), groundFloors: ref(11) });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.exitGuideLight.required).toBe(true);
-    });
-  });
-
-  describe('客席誘導灯', () => {
-    it('用途が(1)項の場合、設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item01_i_ro') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.auditoriumGuideLight.required).toBe(true);
-    });
-
-    it('用途が(16)項イの場合、警告を返す', () => {
-      const input = createMockInput({ buildingUse: ref('item16_i') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.auditoriumGuideLight.required).toBe('warning');
-      expect(regulationResult.value.auditoriumGuideLight.message).toContain('要確認');
-    });
-
-    it('その他の用途の場合、設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('item02_i') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.auditoriumGuideLight.required).toBe(false);
+    it('(16)項イの場合、warningと判定され、誘導灯と客席誘導灯の確認メッセージが表示されること', () => {
+      const userInput = createMockUserInput({ buildingUse: ref('item16_i') });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe('warning');
+      expect(regulationResult.value.message).toContain('この用途の建物には誘導灯の設置が必要です');
+      expect(regulationResult.value.message).toContain('【要確認】');
     });
   });
 
-  describe('誘導標識', () => {
-    it('適用用途（例: (15)項）の場合、設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item15') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.guideSign.required).toBe(true);
+  describe('誘導標識の判定', () => {
+    it('誘導灯が不要な(5)項ロで、地階や無窓階がない場合、誘導標識が必要と判定されること', () => {
+      const userInput = createMockUserInput({ buildingUse: ref('item05_ro') });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe('info');
+      expect(regulationResult.value.message).toContain('誘導標識の設置が必要です');
     });
 
-    it('適用外用途（例: (17)項）の場合、設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('item17') });
-      const { regulationResult } = useArticle26Logic(input);
-      expect(regulationResult.value.guideSign.required).toBe(false);
+    it('誘導灯が必要な(1)項の場合、誘導標識は不要と判定されること（誘導灯が優先される）', () => {
+      const userInput = createMockUserInput({ buildingUse: ref('item01') });
+      const { regulationResult } = useArticle26Logic(userInput);
+      // このテストは上の「誘導灯の判定」でカバーされているが、意図を明確にするために残す
+      expect(regulationResult.value.message).not.toContain('誘導標識');
+    });
+
+    it('(7)項で誘導灯の条件に当てはまらない場合、誘導標識が必要と判定されること', () => {
+        const userInput = createMockUserInput({ 
+            buildingUse: ref('item07'),
+            groundFloors: ref(10),
+        });
+        const { regulationResult } = useArticle26Logic(userInput);
+        expect(regulationResult.value.required).toBe('info');
+        expect(regulationResult.value.message).toContain('誘導標識の設置が必要です');
+    });
+  });
+
+  describe('どちらも不要なケース', () => {
+    it('対象外の用途（(17)項など）の場合、どちらも不要と判定されること', () => {
+      const userInput = createMockUserInput({ buildingUse: ref('item17') });
+      const { regulationResult } = useArticle26Logic(userInput);
+      expect(regulationResult.value.required).toBe(false);
+      expect(regulationResult.value.message).toContain('誘導灯および誘導標識の設置義務はありません');
     });
   });
 });

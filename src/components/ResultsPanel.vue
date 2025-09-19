@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { JudgementResult, Article26Result } from '@/types';
+import type { JudgementResult } from '@/types';
 
 defineProps({
   totalFloorAreaInput: {
@@ -135,39 +135,15 @@ defineProps({
     type: String,
     required: true,
   },
-  judgementResult26: {
-    type: Object as PropType<Article26Result>,
+  article26Result: {
+    type: Object as PropType<JudgementResult>,
     required: true,
   },
-  judgementResult26_exitType: {
+  article26ResultType: {
     type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
     required: true,
   },
-  judgementResult26_exitTitle: {
-    type: String,
-    required: true,
-  },
-  judgementResult26_corridorType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult26_corridorTitle: {
-    type: String,
-    required: true,
-  },
-  judgementResult26_auditoriumType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult26_auditoriumTitle: {
-    type: String,
-    required: true,
-  },
-  judgementResult26_signType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult26_signTitle: {
+  article26ResultTitle: {
     type: String,
     required: true,
   },
@@ -449,63 +425,18 @@ defineProps({
       <p class="text-h5 mb-2">令第26条 誘導灯・誘導標識</p>
 
       <v-alert
-        :type="judgementResult26_exitType"
+        :type="article26ResultType"
         variant="tonal"
         density="compact"
         prominent
         class="mb-2"
       >
         <div class="text-h6">
-          {{ judgementResult26_exitTitle }}
+          {{ article26ResultTitle }}
         </div>
         <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult26.exitGuideLight.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult26.exitGuideLight.basis }}</p>
-      </v-alert>
-
-      <v-alert
-        :type="judgementResult26_corridorType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult26_corridorTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult26.corridorGuideLight.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult26.corridorGuideLight.basis }}</p>
-      </v-alert>
-
-      <v-alert
-        :type="judgementResult26_auditoriumType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult26_auditoriumTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult26.auditoriumGuideLight.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult26.auditoriumGuideLight.basis }}</p>
-      </v-alert>
-
-      <v-alert
-        :type="judgementResult26_signType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult26_signTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult26.guideSign.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult26.guideSign.basis }}</p>
+        <p><b>理由:</b> {{ article26Result.message }}</p>
+        <p><b>根拠:</b> {{ article26Result.basis }}</p>
       </v-alert>
 
       <v-alert

@@ -24,8 +24,6 @@ import { Article28_2Logic } from '@/composables/article28-2Logic';
 
 const currentStep = ref(1);
 
-
-
 const groundFloorsInput = ref<number>(1);
 const basementFloorsInput = ref<number>(0);
 const floors = ref<Floor[]>([]);
@@ -97,8 +95,6 @@ const showArticle21Item7Checkbox = computed(() => {
   return targetUses.some(use => buildingUse.value!.startsWith(use));
 });
 
-
-// hasNonFloorAreaがfalseになったら、面積をリセットする
 watch(hasNonFloorArea, (newValue) => {
   if (!newValue) {
     nonFloorAreaValue.value = null;
@@ -165,8 +161,6 @@ const prevStep = () => {
   }
 };
 
-
-// 各階の合計面積を計算する算出プロパティ
 const calculatedFloorArea = computed(() => {
   const floorsArea = floors.value.reduce((total: number, floor: Floor) => {
     return total + (floor.floorArea || 0);
@@ -175,7 +169,6 @@ const calculatedFloorArea = computed(() => {
   return floorsArea + extraArea;
 });
 
-// 面積の不一致をチェックする算出プロパティ
 const floorAreaMismatch = computed(() => {
   if (totalFloorAreaInput.value === null || totalFloorAreaInput.value === 0) {
     return false;
@@ -183,15 +176,12 @@ const floorAreaMismatch = computed(() => {
   return (Number(totalFloorAreaInput.value) || 0).toFixed(2) !== calculatedFloorArea.value.toFixed(2);
 });
 
-
-// 無窓階のリストを作成する算出プロパティ
 const windowlessFloors = computed(() => {
   return floors.value
     .filter((floor: Floor) => floor.isWindowless && floor.type === 'ground')
     .map((floor: Floor) => `地上 ${floor.level} 階`);
 });
 
-// 判定ロジックを実行
 const { judgementResult: judgementResult10 } = Article10Logic({
   buildingUse,
   totalFloorAreaInput,
@@ -208,7 +198,6 @@ const hasNoWindowFloor = computed(() => floors.value.some((f: Floor) => f.isWind
 const noWindowFloorArea = computed(() => floors.value.filter((f: Floor) => f.isWindowless).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
 const hasUpperFloors = computed(() => groundFloorsInput.value >= 4);
 const upperFloorsArea = computed(() => floors.value.filter((f: Floor) => f.type === 'ground' && f.level >= 4).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
-
 
 const { regulationResult: judgementResult11 } = useArticle11Logic({
   buildingUse,
@@ -289,13 +278,6 @@ const { regulationResult: judgementResult24 } = useArticle24Logic({
   floors,
 });
 
-const { regulationResult: judgementResult26 } = useArticle26Logic({
-  buildingUse,
-  basementFloors: basementFloorsInput,
-  groundFloors: groundFloorsInput,
-  floors,
-});
-
 const { result: article21Result } = useArticle21Logic({
   buildingUse: buildingUse,
   totalArea: totalFloorAreaInput,
@@ -313,42 +295,26 @@ const { result: article21Result } = useArticle21Logic({
 });
 
 const judgementResult12Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult12.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult12.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult12.value.required === true) return 'error';
+  if (judgementResult12.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult12Title = computed(() => {
-  if (judgementResult12.value.required === true) {
-    return '【スプリンクラー設備】設置義務あり';
-  }
-  if (judgementResult12.value.required === 'warning') {
-    return '【スプリンクラー設備】要確認';
-  }
+  if (judgementResult12.value.required === true) return '【スプリンクラー設備】設置義務あり';
+  if (judgementResult12.value.required === 'warning') return '【スプリンクラー設備】要確認';
   return '【スプリンクラー設備】設置義務なし';
 });
 
 const article21ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article21Result.value.required === true) {
-    return 'error';
-  }
-  if (article21Result.value.required === 'warning') {
-    return 'warning';
-  }
+  if (article21Result.value.required === true) return 'error';
+  if (article21Result.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const article21ResultTitle = computed(() => {
-  if (article21Result.value.required === true) {
-    return '【自動火災報知設備】設置義務あり';
-  }
-  if (article21Result.value.required === 'warning') {
-    return '【自動火災報知設備】要確認';
-  }
+  if (article21Result.value.required === true) return '【自動火災報知設備】設置義務あり';
+  if (article21Result.value.required === 'warning') return '【自動火災報知設備】要確認';
   return '【自動火災報知設備】設置義務なし';
 });
 
@@ -360,22 +326,14 @@ const { result: article22Result } = useArticle22Logic({
 });
 
 const article22ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article22Result.value.required === true) {
-    return 'error';
-  }
-  if (article22Result.value.required === 'warning') {
-    return 'warning';
-  }
+  if (article22Result.value.required === true) return 'error';
+  if (article22Result.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const article22ResultTitle = computed(() => {
-  if (article22Result.value.required === true) {
-    return '【漏電火災警報器】設置義務あり';
-  }
-  if (article22Result.value.required === 'warning') {
-    return '【漏電火災警報器】要確認';
-  }
+  if (article22Result.value.required === true) return '【漏電火災警報器】設置義務あり';
+  if (article22Result.value.required === 'warning') return '【漏電火災警報器】要確認';
   return '【漏電火災警報器】設置義務なし';
 });
 
@@ -388,22 +346,14 @@ const { result: article21_2Result } = useArticle21_2Logic({
 });
 
 const article21_2ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article21_2Result.value.required === true) {
-    return 'error';
-  }
-  if (article21_2Result.value.required === 'warning') {
-    return 'warning';
-  }
+  if (article21_2Result.value.required === true) return 'error';
+  if (article21_2Result.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const article21_2ResultTitle = computed(() => {
-  if (article21_2Result.value.required === true) {
-    return '【ガス漏れ火災警報設備】設置義務あり';
-  }
-  if (article21_2Result.value.required === 'warning') {
-    return '【ガス漏れ火災警報設備】要確認';
-  }
+  if (article21_2Result.value.required === true) return '【ガス漏れ火災警報設備】設置義務あり';
+  if (article21_2Result.value.required === 'warning') return '【ガス漏れ火災警報設備】要確認';
   return '【ガス漏れ火災警報設備】設置義務なし';
 });
 
@@ -413,22 +363,14 @@ const { result: article23Result } = useArticle23Logic({
 });
 
 const article23ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article23Result.value.required === true) {
-    return 'error';
-  }
-  if (article23Result.value.required === 'warning') {
-    return 'warning';
-  }
+  if (article23Result.value.required === true) return 'error';
+  if (article23Result.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const article23ResultTitle = computed(() => {
-  if (article23Result.value.required === true) {
-    return '【消防機関へ通報する火災報知設備】設置義務あり';
-  }
-  if (article23Result.value.required === 'warning') {
-    return '【消防機関へ通報する火災報知設備】要確認';
-  }
+  if (article23Result.value.required === true) return '【消防機関へ通報する火災報知設備】設置義務あり';
+  if (article23Result.value.required === 'warning') return '【消防機関へ通報する火災報知設備】要確認';
   return '【消防機関へ通報する火災報知設備】設置義務なし';
 });
 
@@ -438,175 +380,96 @@ const { result: article25Result } = useArticle25Logic({
 });
 
 const article25ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article25Result.value.required === true) {
-    return 'error';
-  }
-  if (article25Result.value.required === 'warning') {
-    return 'warning';
-  }
+  if (article25Result.value.required === true) return 'error';
+  if (article25Result.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const article25ResultTitle = computed(() => {
-  if (article25Result.value.required === true) {
-    return '【避難器具】設置義務あり';
-  }
-  if (article25Result.value.required === 'warning') {
-    return '【避難器具】要確認';
-  }
+  if (article25Result.value.required === true) return '【避難器具】設置義務あり';
+  if (article25Result.value.required === 'warning') return '【避難器具】要確認';
   return '【避難器具】設置義務なし';
 });
 
 const judgementResult13Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult13.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult13.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult13.value.required === true) return 'error';
+  if (judgementResult13.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult13Title = computed(() => {
-  if (judgementResult13.value.required === true) {
-    return '【水噴霧消火設備等】設置義務あり';
-  }
-  if (judgementResult13.value.required === 'warning') {
-    return '【水噴霧消火設備等】要確認';
-  }
+  if (judgementResult13.value.required === true) return '【水噴霧消火設備等】設置義務あり';
+  if (judgementResult13.value.required === 'warning') return '【水噴霧消火設備等】要確認';
   return '【水噴霧消火設備等】設置義務なし';
 });
 
 const judgementResult19Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult19.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult19.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult19.value.required === true) return 'error';
+  if (judgementResult19.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult19Title = computed(() => {
-  if (judgementResult19.value.required === true) {
-    return '【屋外消火栓設備】設置義務あり';
-  }
-  if (judgementResult19.value.required === 'warning') {
-    return '【屋外消火栓設備】要確認';
-  }
+  if (judgementResult19.value.required === true) return '【屋外消火栓設備】設置義務あり';
+  if (judgementResult19.value.required === 'warning') return '【屋外消火栓設備】要確認';
   return '【屋外消火栓設備】設置義務なし';
 });
 
 const judgementResult24Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult24.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult24.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult24.value.required === true) return 'error';
+  if (judgementResult24.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult24Title = computed(() => {
-  if (judgementResult24.value.required === true) {
-    return '【非常警報器具・設備】設置義務あり';
-  }
-  if (judgementResult24.value.required === 'warning') {
-    return '【非常警報器具・設備】要確認';
-  }
+  if (judgementResult24.value.required === true) return '【非常警報器具・設備】設置義務あり';
+  if (judgementResult24.value.required === 'warning') return '【非常警報器具・設備】要確認';
   return '【非常警報器具・設備】設置義務なし';
 });
 
-// --- 令第26条 算出プロパティ ---
-const judgementResult26_exitType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  const required = judgementResult26.value.exitGuideLight.required;
-  if (required === true) return 'error';
-  if (required === 'warning') return 'warning';
-  return 'success';
-});
-const judgementResult26_exitTitle = computed(() => {
-  const required = judgementResult26.value.exitGuideLight.required;
-  if (required === true) return '【避難口誘導灯】設置義務あり';
-  if (required === 'warning') return '【避難口誘導灯】要確認';
-  return '【避難口誘導灯】設置義務なし';
+const { regulationResult: article26Result } = useArticle26Logic({
+  buildingUse,
+  groundFloors: groundFloorsInput,
+  floors,
 });
 
-const judgementResult26_corridorType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  const required = judgementResult26.value.corridorGuideLight.required;
-  if (required === true) return 'error';
-  if (required === 'warning') return 'warning';
-  return 'success';
-});
-const judgementResult26_corridorTitle = computed(() => {
-  const required = judgementResult26.value.corridorGuideLight.required;
-  if (required === true) return '【通路誘導灯】設置義務あり';
-  if (required === 'warning') return '【通路誘導灯】要確認';
-  return '【通路誘導灯】設置義務なし';
+const article26ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (article26Result.value.required === 'warning') return 'warning';
+  if (article26Result.value.required === 'info') return 'info';
+  return article26Result.value.required ? 'error' : 'success';
 });
 
-const judgementResult26_auditoriumType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  const required = judgementResult26.value.auditoriumGuideLight.required;
-  if (required === true) return 'error';
-  if (required === 'warning') return 'warning';
-  return 'success';
-});
-const judgementResult26_auditoriumTitle = computed(() => {
-  const required = judgementResult26.value.auditoriumGuideLight.required;
-  if (required === true) return '【客席誘導灯】設置義務あり';
-  if (required === 'warning') return '【客席誘導灯】要確認';
-  return '【客席誘導灯】設置義務なし';
-});
-
-const judgementResult26_signType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  const required = judgementResult26.value.guideSign.required;
-  if (required === true) return 'error';
-  if (required === 'warning') return 'warning';
-  return 'success';
-});
-const judgementResult26_signTitle = computed(() => {
-  const required = judgementResult26.value.guideSign.required;
-  if (required === true) return '【誘導標識】設置義務あり';
-  if (required === 'warning') return '【誘導標識】要確認';
-  return '【誘導標識】設置義務なし';
+const article26ResultTitle = computed(() => {
+  if (!article26Result.value.required) {
+    return '【誘導灯・誘導標識】設置義務なし';
+  }
+  if (article26Result.value.basis.includes('第4号')) {
+    return '【誘導標識】設置義務あり';
+  }
+  return '【誘導灯】設置義務あり';
 });
 
 const judgementResult27Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult27.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult27.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult27.value.required === true) return 'error';
+  if (judgementResult27.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult27Title = computed(() => {
-  if (judgementResult27.value.required === true) {
-    return '【消防用水】設置義務あり';
-  }
-  if (judgementResult27.value.required === 'warning') {
-    return '【消防用水】要確認';
-  }
+  if (judgementResult27.value.required === true) return '【消防用水】設置義務あり';
+  if (judgementResult27.value.required === 'warning') return '【消防用水】要確認';
   return '【消防用水】設置義務なし';
 });
 
 const judgementResult28Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult28.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult28.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult28.value.required === true) return 'error';
+  if (judgementResult28.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult28Title = computed(() => {
-  if (judgementResult28.value.required === true) {
-    return '【排煙設備】設置義務あり';
-  }
-  if (judgementResult28.value.required === 'warning') {
-    return '【排煙設備】要確認';
-  }
+  if (judgementResult28.value.required === true) return '【排煙設備】設置義務あり';
+  if (judgementResult28.value.required === 'warning') return '【排煙設備】要確認';
   return '【排煙設備】設置義務なし';
 });
 
@@ -618,22 +481,14 @@ const { judgementResult: judgementResult29 } = Article29Logic({
 });
 
 const judgementResult29Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult29.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult29.value.required === true) return 'error';
+  if (judgementResult29.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult29Title = computed(() => {
-  if (judgementResult29.value.required === true) {
-    return '【連結送水管】設置義務あり';
-  }
-  if (judgementResult29.value.required === 'warning') {
-    return '【連結送水管】要確認';
-  }
+  if (judgementResult29.value.required === true) return '【連結送水管】設置義務あり';
+  if (judgementResult29.value.required === 'warning') return '【連結送水管】要確認';
   return '【連結送水管】設置義務なし';
 });
 
@@ -644,22 +499,14 @@ const { judgementResult: judgementResult29_2 } = Article29_2Logic({
 });
 
 const judgementResult29_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29_2.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult29_2.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult29_2.value.required === true) return 'error';
+  if (judgementResult29_2.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult29_2Title = computed(() => {
-  if (judgementResult29_2.value.required === true) {
-    return '【非常コンセント設備】設置義務あり';
-  }
-  if (judgementResult29_2.value.required === 'warning') {
-    return '【非常コンセント設備】要確認';
-  }
+  if (judgementResult29_2.value.required === true) return '【非常コンセント設備】設置義務あり';
+  if (judgementResult29_2.value.required === 'warning') return '【非常コンセント設備】要確認';
   return '【非常コンセント設備】設置義務なし';
 });
 
@@ -675,47 +522,29 @@ const { judgementResult: judgementResult28_2 } = Article28_2Logic({
 });
 
 const judgementResult29_3Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29_3.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult29_3.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult29_3.value.required === true) return 'error';
+  if (judgementResult29_3.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult29_3Title = computed(() => {
-  if (judgementResult29_3.value.required === true) {
-    return '【無線通信補助設備】設置義務あり';
-  }
-  if (judgementResult29_3.value.required === 'warning') {
-    return '【無線通信補助設備】要確認';
-  }
+  if (judgementResult29_3.value.required === true) return '【無線通信補助設備】設置義務あり';
+  if (judgementResult29_3.value.required === 'warning') return '【無線通信補助設備】要確認';
   return '【無線通信補助設備】設置義務なし';
 });
 
 const judgementResult28_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult28_2.value.required === true) {
-    return 'error';
-  }
-  if (judgementResult28_2.value.required === 'warning') {
-    return 'warning';
-  }
+  if (judgementResult28_2.value.required === true) return 'error';
+  if (judgementResult28_2.value.required === 'warning') return 'warning';
   return 'success';
 });
 
 const judgementResult28_2Title = computed(() => {
-  if (judgementResult28_2.value.required === true) {
-    return '【連結散水設備】設置義務あり';
-  }
-  if (judgementResult28_2.value.required === 'warning') {
-    return '【連結散水設備】要確認';
-  }
+  if (judgementResult28_2.value.required === true) return '【連結散水設備】設置義務あり';
+  if (judgementResult28_2.value.required === 'warning') return '【連結散水設備】要確認';
   return '【連結散水設備】設置義務なし';
 });
 
-
-// 初期状態で1階建てのフォームを表示
 generateFloors();
 </script>
 
@@ -821,15 +650,9 @@ generateFloors();
               :judgementResult24="judgementResult24"
               :judgementResult24Type="judgementResult24Type"
               :judgementResult24Title="judgementResult24Title"
-              :judgementResult26="judgementResult26"
-              :judgementResult26_exitType="judgementResult26_exitType"
-              :judgementResult26_exitTitle="judgementResult26_exitTitle"
-              :judgementResult26_corridorType="judgementResult26_corridorType"
-              :judgementResult26_corridorTitle="judgementResult26_corridorTitle"
-              :judgementResult26_auditoriumType="judgementResult26_auditoriumType"
-              :judgementResult26_auditoriumTitle="judgementResult26_auditoriumTitle"
-              :judgementResult26_signType="judgementResult26_signType"
-              :judgementResult26_signTitle="judgementResult26_signTitle"
+              :article26Result="article26Result"
+              :article26ResultType="article26ResultType"
+              :article26ResultTitle="article26ResultTitle"
               :judgementResult27="judgementResult27"
               :judgementResult27Type="judgementResult27Type"
               :judgementResult27Title="judgementResult27Title"
