@@ -20,6 +20,7 @@ import { useArticle28Logic } from '@/composables/article28Logic';
 import { Article29Logic } from '@/composables/article29Logic';
 import { Article29_2Logic } from '@/composables/article29-2Logic';
 import { Article29_3Logic } from '@/composables/article29-3Logic';
+import { Article28_2Logic } from '@/composables/article28-2Logic';
 
 const currentStep = ref(1);
 
@@ -667,6 +668,12 @@ const { judgementResult: judgementResult29_3 } = Article29_3Logic({
   totalFloorAreaInput,
 });
 
+const { judgementResult: judgementResult28_2 } = Article28_2Logic({
+  buildingUse,
+  totalFloorAreaInput,
+  floors,
+});
+
 const judgementResult29_3Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
   if (judgementResult29_3.value.required === true) {
     return 'error';
@@ -685,6 +692,26 @@ const judgementResult29_3Title = computed(() => {
     return '【無線通信補助設備】要確認';
   }
   return '【無線通信補助設備】設置義務なし';
+});
+
+const judgementResult28_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult28_2.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult28_2.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult28_2Title = computed(() => {
+  if (judgementResult28_2.value.required === true) {
+    return '【連結散水設備】設置義務あり';
+  }
+  if (judgementResult28_2.value.required === 'warning') {
+    return '【連結散水設備】要確認';
+  }
+  return '【連結散水設備】設置義務なし';
 });
 
 
@@ -818,6 +845,9 @@ generateFloors();
               :judgementResult29_3="judgementResult29_3"
               :judgementResult29_3Type="judgementResult29_3Type"
               :judgementResult29_3Title="judgementResult29_3Title"
+              :judgementResult28_2="judgementResult28_2"
+              :judgementResult28_2Type="judgementResult28_2Type"
+              :judgementResult28_2Title="judgementResult28_2Title"
             />
           </v-col>
         </v-row>
