@@ -17,8 +17,11 @@ import { useArticle24Logic } from '@/composables/article24Logic';
 import { useArticle26Logic } from '@/composables/article26Logic';
 import { useArticle27Logic } from '@/composables/article27Logic';
 import { useArticle28Logic } from '@/composables/article28Logic';
+import { Article29Logic } from '@/composables/article29Logic';
 
 const currentStep = ref(1);
+
+
 
 const groundFloorsInput = ref<number>(1);
 const basementFloorsInput = ref<number>(0);
@@ -604,6 +607,33 @@ const judgementResult28Title = computed(() => {
   return '【排煙設備】設置義務なし';
 });
 
+const { judgementResult: judgementResult29 } = Article29Logic({
+  buildingUse,
+  totalFloorAreaInput,
+  floors,
+  hasRoadPart,
+});
+
+const judgementResult29Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult29.value.required === true) {
+    return 'error';
+  }
+  if (judgementResult29.value.required === 'warning') {
+    return 'warning';
+  }
+  return 'success';
+});
+
+const judgementResult29Title = computed(() => {
+  if (judgementResult29.value.required === true) {
+    return '【連結送水管】設置義務あり';
+  }
+  if (judgementResult29.value.required === 'warning') {
+    return '【連結送水管】要確認';
+  }
+  return '【連結送水管】設置義務なし';
+});
+
 
 // 初期状態で1階建てのフォームを表示
 generateFloors();
@@ -726,6 +756,9 @@ generateFloors();
               :judgementResult28="judgementResult28"
               :judgementResult28Type="judgementResult28Type"
               :judgementResult28Title="judgementResult28Title"
+              :judgementResult29="judgementResult29"
+              :judgementResult29Type="judgementResult29Type"
+              :judgementResult29Title="judgementResult29Title"
             />
           </v-col>
         </v-row>

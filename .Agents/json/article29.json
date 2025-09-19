@@ -103,8 +103,8 @@
         ],
         "target_type": "防火対象物",
         "area_requirement": "面積要件なし",
-        "description": "自動車車庫等（面積規模によらず全て）",
-        "rationale": "自動車火災の特殊性と消火の困難性"
+        "description": "延長50メートル以上のアーケード",
+        "rationale": "アーケードは火災時に煙が充満しやすく、避難や消火活動が困難になるため"
       },
       {
         "item_number": "五",

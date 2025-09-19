@@ -7,6 +7,7 @@ export interface BuildingData {
   usesFireEquipment: Ref<boolean>;
   storesMinorHazardousMaterials: Ref<boolean>;
   storesDesignatedCombustibles: Ref<boolean>;
+  hasRoadPart: Ref<boolean>;
 }
 
 export interface Floor {
