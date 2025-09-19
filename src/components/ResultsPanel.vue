@@ -271,8 +271,9 @@ defineProps({
       <v-alert
         :type="judgementResult10.required ? 'error' : 'success'"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           【消火器】{{ judgementResult10.required ? '設置義務あり' : '設置義務なし' }}
@@ -285,8 +286,9 @@ defineProps({
       <v-alert
         :type="judgementResult11.required ? 'error' : 'success'"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           【屋内消火栓設備】{{ judgementResult11.required ? '設置義務あり' : '設置義務なし' }}
@@ -299,8 +301,9 @@ defineProps({
       <v-alert
         :type="judgementResult12Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult12Title }}
@@ -313,7 +316,9 @@ defineProps({
       <v-alert
         :type="article21ResultType"
         variant="tonal"
+        density="compact"
         prominent
+        class="mb-2"
       >
         <div class="text-h6">
           {{ article21ResultTitle }}
@@ -326,8 +331,9 @@ defineProps({
       <v-alert
         :type="article22ResultType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ article22ResultTitle }}
@@ -340,8 +346,9 @@ defineProps({
       <v-alert
         :type="article21_2ResultType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ article21_2ResultTitle }}
@@ -354,8 +361,9 @@ defineProps({
       <v-alert
         :type="article23ResultType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ article23ResultTitle }}
@@ -368,8 +376,9 @@ defineProps({
       <v-alert
         :type="article25ResultType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ article25ResultTitle }}
@@ -382,8 +391,9 @@ defineProps({
       <v-alert
         :type="judgementResult13Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult13Title }}
@@ -396,8 +406,9 @@ defineProps({
       <v-alert
         :type="judgementResult19Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult19Title }}
@@ -410,8 +421,9 @@ defineProps({
       <v-alert
         :type="judgementResult24Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult24Title }}
@@ -427,8 +439,9 @@ defineProps({
       <v-alert
         :type="judgementResult26_exitType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult26_exitTitle }}
@@ -441,8 +454,9 @@ defineProps({
       <v-alert
         :type="judgementResult26_corridorType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult26_corridorTitle }}
@@ -455,8 +469,9 @@ defineProps({
       <v-alert
         :type="judgementResult26_auditoriumType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult26_auditoriumTitle }}
@@ -469,8 +484,9 @@ defineProps({
       <v-alert
         :type="judgementResult26_signType"
         variant="tonal"
+        density="compact"
         prominent
-        class="mb-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult26_signTitle }}
@@ -483,8 +499,9 @@ defineProps({
       <v-alert
         :type="judgementResult27Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult27Title }}
@@ -497,8 +514,9 @@ defineProps({
       <v-alert
         :type="judgementResult28Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult28Title }}
@@ -511,8 +529,9 @@ defineProps({
       <v-alert
         :type="judgementResult29Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult29Title }}
@@ -525,8 +544,9 @@ defineProps({
       <v-alert
         :type="judgementResult29_2Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult29_2Title }}
@@ -539,8 +559,9 @@ defineProps({
       <v-alert
         :type="judgementResult29_3Type"
         variant="tonal"
+        density="compact"
         prominent
-        class="mt-4"
+        class="mb-2"
       >
         <div class="text-h6">
           {{ judgementResult29_3Title }}

@@ -698,9 +698,9 @@ generateFloors();
       <v-toolbar-title>消防用設備 規制チェッカー</v-toolbar-title>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
-        <v-row>
-          <v-col cols="12" md="7">
+      <v-container fluid class="fill-height pa-0">
+        <v-row no-gutters class="fill-height">
+          <v-col cols="12" md="6" class="scrollable-content">
             <BuildingInputStepper
               v-model:currentStep="currentStep"
               v-model:buildingUse="buildingUse"
@@ -759,7 +759,7 @@ generateFloors();
             />
           </v-col>
 
-          <v-col cols="12" md="5">
+          <v-col cols="12" md="6" class="scrollable-content">
             <ResultsPanel
               :totalFloorAreaInput="totalFloorAreaInput"
               :calculatedFloorArea="calculatedFloorArea"
@@ -825,3 +825,9 @@ generateFloors();
     </v-main>
   </v-app>
 </template>
+<style scoped>
+.scrollable-content {
+  height: 90vh;
+  overflow-y: auto;
+}
+</style>
