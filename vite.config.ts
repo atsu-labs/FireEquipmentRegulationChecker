@@ -15,6 +15,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
+    deps: {
+      inline: ['vuetify'],
+    },
   },
   resolve: {
     alias: {
