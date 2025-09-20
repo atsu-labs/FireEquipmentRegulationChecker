@@ -1,22 +1,7 @@
-import { computed, type Ref } from 'vue';
-import type { Floor, JudgementResult } from '@/types';
+import { computed} from 'vue';
+import type { JudgementResult, Article21UserInput } from '@/types';
 import { getUseDisplayName, useCodeMatches } from '@/composables/utils';
 
-export interface Article21UserInput {
-  buildingUse: Ref<string | null>;
-  totalArea: Ref<number | null>;
-  hasLodging: Ref<boolean>;
-  floors: Ref<Floor[]>;
-  isSpecifiedOneStaircase: Ref<boolean>;
-  storesCombustiblesOver500x: Ref<boolean>;
-  hasRoadPart: Ref<boolean>;
-  roadPartRooftopArea: Ref<number | null>;
-  roadPartOtherArea: Ref<number | null>;
-  hasParkingPart: Ref<boolean>;
-  parkingPartArea: Ref<number | null>;
-  canAllVehiclesExitSimultaneously: Ref<boolean>;
-  hasTelecomRoomOver500sqm: Ref<boolean>;
-}
 
 export function useArticle21Logic(userInput: Article21UserInput) {
   const regulationResult = computed((): JudgementResult => {

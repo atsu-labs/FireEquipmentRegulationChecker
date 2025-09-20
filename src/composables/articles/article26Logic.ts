@@ -5,7 +5,7 @@ import type { JudgementResult, Article26UserInput } from '@/types';
 
 // このファイル内で使用する個別の判定結果
 interface IndividualResult {
-  required: boolean | 'warning';
+  required: boolean | 'warning' | 'info';
   message: string;
   basis: string;
 }

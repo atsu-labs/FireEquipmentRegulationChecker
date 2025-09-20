@@ -1,13 +1,8 @@
-import { computed, type Ref } from 'vue';
-import type { JudgementResult } from '@/types';
+import { computed} from 'vue';
+import type { JudgementResult ,Article22UserInput} from '@/types';
 import { useCodeMatches, getUseDisplayName } from '@/composables/utils';
 
-export interface Article22UserInput {
-  buildingUse: Ref<string | null>;
-  totalArea: Ref<number | null>;
-  hasSpecialCombustibleStructure: Ref<boolean>;
-  contractedCurrentCapacity: Ref<number | null>;
-}
+
 
 export function useArticle22Logic(userInput: Article22UserInput) {
   const regulationResult = computed((): JudgementResult => {

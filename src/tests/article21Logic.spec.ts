@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
-import { useArticle21Logic, type Article21UserInput } from '../composables/articles/article21Logic';
-import type { Floor } from '../types';
+import { useArticle21Logic} from '../composables/articles/article21Logic';
+import type { Floor, Article21UserInput } from '../types';
 
 describe('useArticle21Logic', () => {
   const createMockUserInput = (overrides: Partial<Article21UserInput>): Article21UserInput => {
