@@ -23,8 +23,24 @@ defineProps({
     type: Object as PropType<JudgementResult>,
     required: true,
   },
+  judgementResult10Type: {
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
+    required: true,
+  },
+  judgementResult10Title: {
+    type: String,
+    required: true,
+  },
   judgementResult11: {
     type: Object as PropType<JudgementResult>,
+    required: true,
+  },
+  judgementResult11Type: {
+    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
+    required: true,
+  },
+  judgementResult11Title: {
+    type: String,
     required: true,
   },
   judgementResult12: {
@@ -256,278 +272,281 @@ defineProps({
 
     <v-card-title>判定結果</v-card-title>
     <v-card-text>
-      <v-alert
-        :type="judgementResult10.required ? 'error' : 'success'"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          【消火器】{{ judgementResult10.required ? '設置義務あり' : '設置義務なし' }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult10.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult10.basis }}</p>
-      </v-alert>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-alert
+            :type="judgementResult10Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult10Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult10.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult10.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult11.required ? 'error' : 'success'"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          【屋内消火栓設備】{{ judgementResult11.required ? '設置義務あり' : '設置義務なし' }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult11.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult11.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult11Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult11Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult11.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult11.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult12Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult12Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult12.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult12.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult12Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult12Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult12.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult12.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article21ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article21ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article21Result.message }}</p>
-        <p><b>根拠:</b> {{ article21Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult13Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult13Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult13.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult13.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article22ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article22ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article22Result.message }}</p>
-        <p><b>根拠:</b> {{ article22Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult19Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult19Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult19.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult19.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article21_2ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article21_2ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article21_2Result.message }}</p>
-        <p><b>根拠:</b> {{ article21_2Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="article21ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article21ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article21Result.message }}</p>
+            <p><b>根拠:</b> {{ article21Result.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article23ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article23ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article23Result.message }}</p>
-        <p><b>根拠:</b> {{ article23Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="article21_2ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article21_2ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article21_2Result.message }}</p>
+            <p><b>根拠:</b> {{ article21_2Result.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article25ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article25ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article25Result.message }}</p>
-        <p><b>根拠:</b> {{ article25Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="article22ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article22ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article22Result.message }}</p>
+            <p><b>根拠:</b> {{ article22Result.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult13Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult13Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult13.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult13.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="article23ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article23ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article23Result.message }}</p>
+            <p><b>根拠:</b> {{ article23Result.basis }}</p>
+          </v-alert>
+        </v-col>
 
-      <v-alert
-        :type="judgementResult19Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult19Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult19.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult19.basis }}</p>
-      </v-alert>
+        <v-col cols="12" md="6">
+          <v-alert
+            :type="judgementResult24Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult24Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult24.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult24.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult24Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult24Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult24.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult24.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="article25ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article25ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article25Result.message }}</p>
+            <p><b>根拠:</b> {{ article25Result.basis }}</p>
+          </v-alert>
 
-      <v-divider class="my-4"></v-divider>
-      <p class="text-h5 mb-2">令第26条 誘導灯・誘導標識</p>
+          <v-alert
+            :type="article26ResultType"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ article26ResultTitle }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ article26Result.message }}</p>
+            <p><b>根拠:</b> {{ article26Result.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="article26ResultType"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ article26ResultTitle }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ article26Result.message }}</p>
-        <p><b>根拠:</b> {{ article26Result.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult27Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult27Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult27.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult27.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult27Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult27Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult27.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult27.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult28Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult28Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult28.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult28.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult28Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult28Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult28.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult28.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult28_2Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult28_2Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult28_2.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult28_2.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult29Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult29Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult29.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult29.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult29Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult29Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult29.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult29.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult29_2Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult29_2Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult29_2.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult29_2.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult29_2Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult29_2Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult29_2.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult29_2.basis }}</p>
+          </v-alert>
 
-      <v-alert
-        :type="judgementResult29_3Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult29_3Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult29_3.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult29_3.basis }}</p>
-      </v-alert>
-
-      <v-alert
-        :type="judgementResult28_2Type"
-        variant="tonal"
-        density="compact"
-        prominent
-        class="mb-2"
-      >
-        <div class="text-h6">
-          {{ judgementResult28_2Title }}
-        </div>
-        <v-divider class="my-2"></v-divider>
-        <p><b>理由:</b> {{ judgementResult28_2.message }}</p>
-        <p><b>根拠:</b> {{ judgementResult28_2.basis }}</p>
-      </v-alert>
+          <v-alert
+            :type="judgementResult29_3Type"
+            variant="tonal"
+            density="compact"
+            prominent
+            class="mb-2"
+          >
+            <div class="text-h6">
+              {{ judgementResult29_3Title }}
+            </div>
+            <v-divider class="my-2"></v-divider>
+            <p><b>理由:</b> {{ judgementResult29_3.message }}</p>
+            <p><b>根拠:</b> {{ judgementResult29_3.basis }}</p>
+          </v-alert>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>

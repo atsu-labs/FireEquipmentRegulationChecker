@@ -191,6 +191,18 @@ const { regulationResult: judgementResult10 } = useArticle10Logic({
   storesDesignatedCombustibles,
 });
 
+const judgementResult10Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult10.value.required === true) return 'error';
+  if (judgementResult10.value.required === 'warning') return 'warning';
+  return 'success';
+});
+
+const judgementResult10Title = computed(() => {
+  if (judgementResult10.value.required === true) return '【消火器】設置義務あり';
+  if (judgementResult10.value.required === 'warning') return '【消火器】要確認';
+  return '【消火器】設置義務なし';
+});
+
 const article11TotalArea = computed(() => totalFloorAreaInput.value);
 const hasBasement = computed(() => basementFloorsInput.value > 0);
 const basementArea = computed(() => floors.value.filter((f: Floor) => f.type === 'basement').reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
@@ -212,6 +224,18 @@ const { regulationResult: judgementResult11 } = useArticle11Logic({
   isFlammableItemsAmountOver750,
   structureType,
   finishType,
+});
+
+const judgementResult11Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
+  if (judgementResult11.value.required === true) return 'error';
+  if (judgementResult11.value.required === 'warning') return 'warning';
+  return 'success';
+});
+
+const judgementResult11Title = computed(() => {
+  if (judgementResult11.value.required === true) return '【屋内消火栓設備】設置義務あり';
+  if (judgementResult11.value.required === 'warning') return '【屋内消火栓設備】要確認';
+  return '【屋内消火栓設備】設置義務なし';
 });
 
 const { regulationResult: judgementResult12 } = useArticle12Logic({
@@ -556,7 +580,7 @@ generateFloors();
     <v-main>
       <v-container fluid class="fill-height pa-0">
         <v-row no-gutters class="fill-height">
-          <v-col cols="12" md="6" class="scrollable-content">
+          <v-col cols="12" md="5" class="scrollable-content">
             <BuildingInputStepper
               v-model:currentStep="currentStep"
               v-model:buildingUse="buildingUse"
@@ -615,14 +639,18 @@ generateFloors();
             />
           </v-col>
 
-          <v-col cols="12" md="6" class="scrollable-content">
+          <v-col cols="12" md="7" class="scrollable-content">
             <ResultsPanel
               :totalFloorAreaInput="totalFloorAreaInput"
               :calculatedFloorArea="calculatedFloorArea"
               :floorAreaMismatch="floorAreaMismatch"
               :windowlessFloors="windowlessFloors"
               :judgementResult10="judgementResult10"
+              :judgementResult10Type="judgementResult10Type"
+              :judgementResult10Title="judgementResult10Title"
               :judgementResult11="judgementResult11"
+              :judgementResult11Type="judgementResult11Type"
+              :judgementResult11Title="judgementResult11Title"
               :judgementResult12="judgementResult12"
               :judgementResult12Type="judgementResult12Type"
               :judgementResult12Title="judgementResult12Title"
