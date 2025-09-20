@@ -1,6 +1,15 @@
 
 import type { Ref } from 'vue';
 
+// Article10UserInput
+export interface Article10UserInput {
+  buildingUse: Ref<string | null>;
+  totalFloorAreaInput: Ref<number | null>;
+  floors: Ref<Floor[]>;
+  usesFireEquipment: Ref<boolean>;
+  storesMinorHazardousMaterials: Ref<boolean>;
+  storesDesignatedCombustibles: Ref<boolean>;
+}
 // Article11UserInput
 export interface Article11UserInput {
   buildingUse: Ref<string | null>;
@@ -140,16 +149,35 @@ export interface Article28UserInput {
   floors: Ref<Floor[]>;
 }
 
-// その他型定義
-export interface BuildingData {
+// Article28_2UserInput
+export interface Article28_2UserInput {
   buildingUse: Ref<string | null>;
   totalFloorAreaInput: Ref<number | null>;
   floors: Ref<Floor[]>;
-  usesFireEquipment: Ref<boolean>;
-  storesMinorHazardousMaterials: Ref<boolean>;
-  storesDesignatedCombustibles: Ref<boolean>;
+}
+
+// Article29UserInput
+export interface Article29UserInput {
+  buildingUse: Ref<string | null>;
+  totalFloorAreaInput: Ref<number | null>;
+  floors: Ref<Floor[]>;
   hasRoadPart: Ref<boolean>;
 }
+
+// Article29_2UserInput
+export interface Article29_2UserInput {
+  buildingUse: Ref<string | null>;
+  totalFloorAreaInput: Ref<number | null>;
+  floors: Ref<Floor[]>;
+}
+
+// Article29_3UserInput
+export interface Article29_3UserInput {
+  buildingUse: Ref<string | null>;
+  totalFloorAreaInput: Ref<number | null>;
+}
+
+// その他型定義
 
 export interface Floor {
   level: number;

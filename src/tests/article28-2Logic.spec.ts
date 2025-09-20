@@ -2,25 +2,21 @@
 import { describe, it, expect } from 'vitest';
 import { ref, type Ref } from 'vue';
 import { useArticle28_2Logic } from '../composables/articles/article28-2Logic';
-import type { BuildingData, Floor } from '@/types';
+import type { Article28_2UserInput, Floor } from '@/types';
 
 // テストデータ生成のヘルパー関数
-const createMockUserInput = (overrides: Partial<BuildingData> = {}): BuildingData => {
-  const defaults: BuildingData = {
+const createMockUserInput = (overrides: Partial<Article28_2UserInput> = {}): Article28_2UserInput => {
+  const defaults: Article28_2UserInput = {
     buildingUse: ref(null),
     totalFloorAreaInput: ref(0),
     floors: ref([]),
-    // 他のプロパティは今回のロジックでは不要なため省略
-    usesFireEquipment: ref(false),
-    storesMinorHazardousMaterials: ref(false),
-    storesDesignatedCombustibles: ref(false),
-    hasRoadPart: ref(false),
+
   };
 
-  const merged: BuildingData = { ...defaults };
+  const merged: Article28_2UserInput = { ...defaults };
   for (const key in overrides) {
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
-      const k = key as keyof BuildingData;
+      const k = key as keyof Article28_2UserInput;
       if (merged[k] && 'value' in merged[k]) {
         (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }

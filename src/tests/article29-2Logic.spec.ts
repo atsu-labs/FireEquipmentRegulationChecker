@@ -1,24 +1,21 @@
 import { describe, it, expect } from 'vitest';
 import { ref, type Ref } from 'vue';
 import { useArticle29_2Logic } from '../composables/articles/article29-2Logic';
-import type { BuildingData, Floor } from '@/types';
+import type { Article29_2UserInput, Floor } from '@/types';
 
 // テストデータ生成のヘルパー関数
-const createMockUserInput = (overrides: Partial<BuildingData> = {}): BuildingData => {
-  const defaults: BuildingData = {
+const createMockUserInput = (overrides: Partial<Article29_2UserInput> = {}): Article29_2UserInput => {
+  const defaults: Article29_2UserInput = {
     buildingUse: ref(null),
     totalFloorAreaInput: ref(0),
     floors: ref([]),
-    usesFireEquipment: ref(false),
-    storesMinorHazardousMaterials: ref(false),
-    storesDesignatedCombustibles: ref(false),
-    hasRoadPart: ref(false),
+
   };
 
-  const merged: BuildingData = { ...defaults };
+  const merged: Article29_2UserInput = { ...defaults };
   for (const key in overrides) {
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
-      const k = key as keyof BuildingData;
+      const k = key as keyof Article29_2UserInput;
       if (merged[k] && 'value' in merged[k]) {
         (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }
@@ -104,7 +101,6 @@ describe('useArticle29_2Logic', () => {
       buildingUse: ref('item01_i'),
       totalFloorAreaInput: ref(100),
       floors: floors,
-      hasRoadPart: ref(false),
     });
     const { regulationResult } = useArticle29_2Logic(userInput);
     expect(regulationResult.value.required).toBe(false);

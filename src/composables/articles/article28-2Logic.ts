@@ -1,6 +1,6 @@
 
 import { computed } from 'vue';
-import type { BuildingData, JudgementResult } from '@/types';
+import type { Article28_2UserInput ,JudgementResult } from '@/types';
 import { useCodeMatches } from '@/composables/utils';
 import { getUseDisplayName } from '@/composables/utils';
 
@@ -25,7 +25,7 @@ const TARGET_USE_CODES = [
   'item17', // (17)項
 ];
 
-export function useArticle28_2Logic(userInput: BuildingData) {
+export function useArticle28_2Logic(userInput: Article28_2UserInput) {
   const regulationResult = computed((): JudgementResult => {
     const { buildingUse, totalFloorAreaInput, floors } = userInput;
     const useCode = buildingUse.value;

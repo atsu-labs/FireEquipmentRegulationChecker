@@ -2,25 +2,25 @@
 import { ref, computed, watch } from 'vue';
 import BuildingInputStepper from '@/components/BuildingInputStepper.vue';
 import ResultsPanel from '@/components/ResultsPanel.vue';
-import { Article10Logic } from '@/composables/article10Logic';
+import { useArticle10Logic } from '@/composables/articles/article10Logic';
 import type { Floor } from '@/types';
-import { useArticle11Logic } from '@/composables/article11Logic';
-import { useArticle12Logic } from '@/composables/article12Logic';
-import { useArticle21Logic } from '@/composables/article21Logic';
-import { useArticle22Logic } from '@/composables/article22Logic';
-import { useArticle21_2Logic } from '@/composables/article21-2Logic';
-import { useArticle23Logic } from '@/composables/article23Logic';
-import { useArticle25Logic } from '@/composables/article25Logic';
-import { useArticle13Logic } from '@/composables/article13Logic';
-import { useArticle19Logic } from '@/composables/article19Logic';
-import { useArticle24Logic } from '@/composables/article24Logic';
-import { useArticle26Logic } from '@/composables/article26Logic';
-import { useArticle27Logic } from '@/composables/article27Logic';
-import { useArticle28Logic } from '@/composables/article28Logic';
-import { Article29Logic } from '@/composables/article29Logic';
-import { Article29_2Logic } from '@/composables/article29-2Logic';
-import { Article29_3Logic } from '@/composables/article29-3Logic';
-import { Article28_2Logic } from '@/composables/article28-2Logic';
+import { useArticle11Logic } from '@/composables/articles/article11Logic';
+import { useArticle12Logic } from '@/composables/articles/article12Logic';
+import { useArticle21Logic } from '@/composables/articles/article21Logic';
+import { useArticle22Logic } from '@/composables/articles/article22Logic';
+import { useArticle21_2Logic } from '@/composables/articles/article21-2Logic';
+import { useArticle23Logic } from '@/composables/articles/article23Logic';
+import { useArticle25Logic } from '@/composables/articles/article25Logic';
+import { useArticle13Logic } from '@/composables/articles/article13Logic';
+import { useArticle19Logic } from '@/composables/articles/article19Logic';
+import { useArticle24Logic } from '@/composables/articles/article24Logic';
+import { useArticle26Logic } from '@/composables/articles/article26Logic';
+import { useArticle27Logic } from '@/composables/articles/article27Logic';
+import { useArticle28Logic } from '@/composables/articles/article28Logic';
+import { useArticle29Logic } from '@/composables/articles/article29Logic';
+import { useArticle29_2Logic } from '@/composables/articles/article29-2Logic';
+import { useArticle29_3Logic } from '@/composables/articles/article29-3Logic';
+import { useArticle28_2Logic } from '@/composables/articles/article28-2Logic';
 
 const currentStep = ref(1);
 
@@ -182,7 +182,7 @@ const windowlessFloors = computed(() => {
     .map((floor: Floor) => `地上 ${floor.level} 階`);
 });
 
-const { judgementResult: judgementResult10 } = Article10Logic({
+const { regulationResult: judgementResult10 } = useArticle10Logic({
   buildingUse,
   totalFloorAreaInput,
   floors,
@@ -278,7 +278,7 @@ const { regulationResult: judgementResult24 } = useArticle24Logic({
   floors,
 });
 
-const { result: article21Result } = useArticle21Logic({
+const { regulationResult: article21Result } = useArticle21Logic({
   buildingUse: buildingUse,
   totalArea: totalFloorAreaInput,
   hasLodging,
@@ -318,7 +318,7 @@ const article21ResultTitle = computed(() => {
   return '【自動火災報知設備】設置義務なし';
 });
 
-const { result: article22Result } = useArticle22Logic({
+const { regulationResult: article22Result } = useArticle22Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
   hasSpecialCombustibleStructure,
@@ -337,7 +337,7 @@ const article22ResultTitle = computed(() => {
   return '【漏電火災警報器】設置義務なし';
 });
 
-const { result: article21_2Result } = useArticle21_2Logic({
+const { regulationResult: article21_2Result } = useArticle21_2Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
   floors,
@@ -357,7 +357,7 @@ const article21_2ResultTitle = computed(() => {
   return '【ガス漏れ火災警報設備】設置義務なし';
 });
 
-const { result: article23Result } = useArticle23Logic({
+const { regulationResult: article23Result } = useArticle23Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
 });
@@ -374,7 +374,7 @@ const article23ResultTitle = computed(() => {
   return '【消防機関へ通報する火災報知設備】設置義務なし';
 });
 
-const { result: article25Result } = useArticle25Logic({
+const { regulationResult: article25Result } = useArticle25Logic({
   buildingUse,
   floors,
 });
@@ -473,7 +473,7 @@ const judgementResult28Title = computed(() => {
   return '【排煙設備】設置義務なし';
 });
 
-const { judgementResult: judgementResult29 } = Article29Logic({
+const { regulationResult: judgementResult29 } = useArticle29Logic({
   buildingUse,
   totalFloorAreaInput,
   floors,
@@ -492,7 +492,7 @@ const judgementResult29Title = computed(() => {
   return '【連結送水管】設置義務なし';
 });
 
-const { judgementResult: judgementResult29_2 } = Article29_2Logic({
+const { regulationResult: judgementResult29_2 } = useArticle29_2Logic({
   buildingUse,
   totalFloorAreaInput,
   floors,
@@ -510,12 +510,12 @@ const judgementResult29_2Title = computed(() => {
   return '【非常コンセント設備】設置義務なし';
 });
 
-const { judgementResult: judgementResult29_3 } = Article29_3Logic({
+const { regulationResult: judgementResult29_3 } = useArticle29_3Logic({
   buildingUse,
   totalFloorAreaInput,
 });
 
-const { judgementResult: judgementResult28_2 } = Article28_2Logic({
+const { regulationResult: judgementResult28_2 } = useArticle28_2Logic({
   buildingUse,
   totalFloorAreaInput,
   floors,

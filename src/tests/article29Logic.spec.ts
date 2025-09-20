@@ -1,25 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { ref, type Ref } from 'vue';
 import { useArticle29Logic } from '../composables/articles/article29Logic';
-import type { BuildingData, Floor } from '@/types';
+import type { Article29UserInput, Floor } from '@/types';
 
 // テストデータ生成のヘルパー関数
-const createMockUserInput = (overrides: Partial<BuildingData> = {}): BuildingData => {
-  const defaults: BuildingData = {
+const createMockUserInput = (overrides: Partial<Article29UserInput> = {}): Article29UserInput => {
+  const defaults: Article29UserInput = {
     buildingUse: ref(null),
     totalFloorAreaInput: ref(0),
     floors: ref([]),
-    usesFireEquipment: ref(false), // useArticle10Logicからコピーしたが、useArticle29Logicでは使用しない
-    storesMinorHazardousMaterials: ref(false), // useArticle10Logicからコピーしたが、useArticle29Logicでは使用しない
-    storesDesignatedCombustibles: ref(false), // useArticle10Logicからコピーしたが、useArticle29Logicでは使用しない
     hasRoadPart: ref(false), // useArticle29Logicで追加したプロパティ
   };
 
   // refオブジェクトを直接上書きするのではなく、.valueを上書きする
-  const merged: BuildingData = { ...defaults };
+  const merged: Article29UserInput = { ...defaults };
   for (const key in overrides) {
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
-      const k = key as keyof BuildingData;
+      const k = key as keyof Article29UserInput;
       if (merged[k] && 'value' in merged[k]) {
         (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }

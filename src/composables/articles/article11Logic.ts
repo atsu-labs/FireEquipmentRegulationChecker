@@ -1,18 +1,9 @@
 import { computed } from 'vue';
 import type { Article11UserInput, JudgementResult } from '@/types';
-import { buildingUses } from '@/data/buildingUses';
+import { getUseDisplayName, useCodeMatches } from '@/composables/utils';
 
-// 用途コードから表示名を取得する関数
-function getUseDisplay(code: string | null): string {
-  if (!code) return '未選択';
-  const found = buildingUses.find(u => u.annexedCode === code);
-  return found ? found.annexedName : code;
-}
 
-// 用途コードが指定された項番グループに属するかチェック
-function checkUseGroup(useCode: string, groups: string[]): boolean {
-    return groups.some(group => useCode.startsWith(group));
-}
+
 
 // Composable関数
 export function useArticle11Logic(userInput: Article11UserInput) {
@@ -22,7 +13,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
       return { required: false, message: '建物の用途を選択してください。', basis: '-' };
     }
 
-    const useDisplay = getUseDisplay(buildingUse);
+  const useDisplay = getUseDisplayName(buildingUse);
 
     // --- 令第11条第2項: 面積要件の緩和係数 ---
     let areaMultiplier = 1;
@@ -46,7 +37,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     const group2 = ['item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item10', 'item12', 'item14'];
 
     // 一号: (1)項 → 延べ面積 500㎡以上
-    if (checkUseGroup(buildingUse, ['item01'])) {
+  if (useCodeMatches(buildingUse, ['item01'])) {
       const requiredArea = 500 * areaMultiplier;
       totalAreaRuleInfo = { requiredArea, basis: '令第11条第1項第1号' };
       if (currentTotalArea >= requiredArea) {
@@ -60,7 +51,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     }
     // 二号: (2)～(10)項, (12)項, (14)項 → 延べ面積 700㎡以上
     //TODO: 第十二条第一項第一号に掲げる防火対象物{(6)イ(1),(2),(6)ロ}の２倍または３倍と1000㎡のいずれか小さい数値とするの処理を追加
-    else if (checkUseGroup(buildingUse, group2)) {
+  else if (useCodeMatches(buildingUse, group2)) {
         const requiredArea = 700 * areaMultiplier;
         totalAreaRuleInfo = { requiredArea, basis: '令第11条第1項第2号' };
         if (currentTotalArea >= requiredArea) {
@@ -73,7 +64,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
         }
     }
     // 三号: (11)項, (15)項 → 延べ面積 1000㎡以上
-    else if (checkUseGroup(buildingUse, ['item11', 'item15'])) {
+  else if (useCodeMatches(buildingUse, ['item11', 'item15'])) {
         const requiredArea = 1000 * areaMultiplier;
         totalAreaRuleInfo = { requiredArea, basis: '令第11条第1項第3号' };
         if (currentTotalArea >= requiredArea) {
@@ -86,7 +77,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
         }
     }
     // 四号: (16の2)項 → 延べ面積 150㎡以上
-    else if (checkUseGroup(buildingUse, ['item16_2'])) {
+  else if (useCodeMatches(buildingUse, ['item16_2'])) {
         const requiredArea = 150 * areaMultiplier;
         totalAreaRuleInfo = { requiredArea, basis: '令第11条第1項第4号' };
         if (currentTotalArea >= requiredArea) {
@@ -112,11 +103,11 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     if (!isAlreadyApplicable) {
         let requiredFloorArea = 0;
         
-        if (checkUseGroup(buildingUse, ['item01'])) {
+  if (useCodeMatches(buildingUse, ['item01'])) {
             requiredFloorArea = 100 * areaMultiplier;
-        } else if (checkUseGroup(buildingUse, group2)) { // group2は二号と同じ
+  } else if (useCodeMatches(buildingUse, group2)) { // group2は二号と同じ
             requiredFloorArea = 150 * areaMultiplier;
-        } else if (checkUseGroup(buildingUse, ['item11', 'item15'])) {
+  } else if (useCodeMatches(buildingUse, ['item11', 'item15'])) {
             requiredFloorArea = 200 * areaMultiplier;
         }
 

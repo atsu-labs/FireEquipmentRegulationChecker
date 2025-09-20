@@ -1,14 +1,8 @@
 import { computed } from 'vue';
-import type { BuildingData, JudgementResult } from '@/types';
-import { buildingUses } from '@/data/buildingUses';
+import type { Article29_3UserInput, JudgementResult } from '@/types';
+import { getUseDisplayName } from '@/composables/utils';
 
-// 用途コードから表示名を取得する関数
-function getUseDisplay(code: string): string {
-  const found = buildingUses.find(u => u.annexedCode === code);
-  return found ? found.annexedName : code;
-}
-
-export function useArticle29_3Logic(userInput: BuildingData) {
+export function useArticle29_3Logic(userInput: Article29_3UserInput) {
   const regulationResult = computed((): JudgementResult => {
     const {
       buildingUse,
@@ -22,7 +16,7 @@ export function useArticle29_3Logic(userInput: BuildingData) {
       return { required: false, message: '建物の用途を選択してください。', basis: '－' };
     }
 
-    const useDisplay = getUseDisplay(useCode);
+  const useDisplay = getUseDisplayName(useCode);
 
     // --- 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの ---
     if (useCode === 'item16_2' && totalArea >= 1000) {

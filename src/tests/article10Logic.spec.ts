@@ -1,25 +1,24 @@
 import { describe, it, expect } from 'vitest';
 import { ref, type Ref } from 'vue';
 import { useArticle10Logic } from '../composables/articles/article10Logic';
-import type { BuildingData, Floor } from '@/types';
+import type { Article10UserInput, Floor } from '@/types';
 
 // テストデータ生成のヘルパー関数 (createMockUserInput)
-const createMockUserInput = (overrides: Partial<BuildingData> = {}): BuildingData => {
-  const defaults: BuildingData = {
+const createMockUserInput = (overrides: Partial<Article10UserInput> = {}): Article10UserInput => {
+  const defaults: Article10UserInput = {
     buildingUse: ref(null),
     totalFloorAreaInput: ref(0),
     floors: ref([]),
     usesFireEquipment: ref(false),
     storesMinorHazardousMaterials: ref(false),
     storesDesignatedCombustibles: ref(false),
-    hasRoadPart: ref(false),
   };
 
   // refオブジェクトを直接上書きするのではなく、.valueを上書きする
-  const merged: BuildingData = { ...defaults };
+  const merged: Article10UserInput = { ...defaults };
   for (const key in overrides) {
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
-      const k = key as keyof BuildingData;
+      const k = key as keyof Article10UserInput;
       if (merged[k] && 'value' in merged[k]) {
         (merged[k] as Ref<unknown>).value = (overrides[k] as Ref<unknown>).value;
       }

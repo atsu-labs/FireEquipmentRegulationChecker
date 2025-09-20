@@ -1,15 +1,10 @@
-import { computed } from 'vue';
-import type { BuildingData, JudgementResult } from '@/types';
-import { buildingUses } from '@/data/buildingUses';
 
-// 用途コードから表示名を取得する関数
-function getUseDisplay(code: string): string {
-  const found = buildingUses.find(u => u.annexedCode === code);
-  return found ? found.annexedName : code;
-}
+import { computed } from 'vue';
+import type { Article10UserInput, JudgementResult } from '@/types';
+import { getUseDisplayName, useCodeMatches } from '@/composables/utils';
 
 // Composable関数としてロジックをエクスポート
-export function useArticle10Logic(userInput: BuildingData) {
+export function useArticle10Logic(userInput: Article10UserInput) {
   const regulationResult = computed((): JudgementResult => {
     const {
       buildingUse,
@@ -26,59 +21,41 @@ export function useArticle10Logic(userInput: BuildingData) {
       return { required: false, message: '建物の用途を選択してください。', basis: '－' };
     }
     
-    const useDisplay = getUseDisplay(useCode);
+  const useDisplay = getUseDisplayName(useCode);
     const totalArea = totalFloorAreaInput.value || 0;
 
     // --- 第一号 ---
     // イ: (1)項イ, (2)項, (6)項イ(1)~(3), (6)項ロ, (16の2)項, (17)項, (20)項
-    const isItem1_i = 
-      useCode === 'item01_i' ||
-      useCode.startsWith('item02') ||
-      ['item06_i_1', 'item06_i_2', 'item06_i_3'].includes(useCode) ||
-      useCode.startsWith('item06_ro') ||
-      useCode === 'item16_2' ||
-      useCode === 'item17' ||
-      useCode === 'item20';
-    if (isItem1_i) {
+    const item1Codes = [
+      'item01_i', 'item02', 'item06_i_1', 'item06_i_2', 'item06_i_3', 'item06_ro', 'item16_2', 'item17', 'item20'
+    ];
+    if (useCodeMatches(useCode, item1Codes)) {
       return { required: true, message: `用途（${useDisplay}）により、消火器の設置が必要です。`, basis: '令第十条第一項一号イ' };
     }
-    // ロ: (3)項で火気設備あり
-    if (useCode.startsWith('item03') && usesFireEquipment.value) {
+  // ロ: (3)項で火気設備あり
+  if (useCodeMatches(useCode, ['item03']) && usesFireEquipment.value) {
       return { required: true, message: '（3）項の防火対象物で火気設備等があるため、消火器の設置が必要です。', basis: '令第十条第一項一号ロ' };
     }
 
     // --- 第二号 --- (延べ面積150㎡以上)
     if (totalArea >= 150) {
       // イ: (1)項ロ, (4)項, (5)項, (6)項イ(4), (6)項ハ, (6)項ニ, (9)項, (12)項~(14)項
-      const isItem2_i = 
-        useCode === 'item01_ro' ||
-        useCode === 'item04' ||
-        useCode.startsWith('item05') ||
-        useCode === 'item06_i_4' ||
-        useCode.startsWith('item06_ha') ||
-        useCode === 'item06_ni' ||
-        useCode.startsWith('item09') ||
-        useCode.startsWith('item12') ||
-        useCode.startsWith('item13') ||
-        useCode === 'item14';
-      if (isItem2_i) {
+      const item2Codes = [
+        'item01_ro', 'item04', 'item05', 'item06_i_4', 'item06_ha', 'item06_ni', 'item09', 'item12', 'item13', 'item14'
+      ];
+      if (useCodeMatches(useCode, item2Codes)) {
         return { required: true, message: `延べ面積150㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項二号イ' };
       }
-      // ロ: (3)項で火気設備なし
-      if (useCode.startsWith('item03') && !usesFireEquipment.value) {
+  // ロ: (3)項で火気設備なし
+  if (useCodeMatches(useCode, ['item03']) && !usesFireEquipment.value) {
         return { required: true, message: '延べ面積150㎡以上の（3）項の防火対象物（火気設備等がない場合）のため、消火器の設置が必要です。', basis: '令第十条第一項二号ロ' };
       }
     }
 
     // --- 第三号 --- (延べ面積300㎡以上)
     if (totalArea >= 300) {
-      const isItem3 = 
-        useCode === 'item07' ||
-        useCode === 'item08' ||
-        useCode === 'item10' ||
-        useCode === 'item11' ||
-        useCode === 'item15';
-      if (isItem3) {
+      const item3Codes = ['item07', 'item08', 'item10', 'item11', 'item15'];
+      if (useCodeMatches(useCode, item3Codes)) {
         return { required: true, message: `延べ面積300㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項三号' };
       }
     }
