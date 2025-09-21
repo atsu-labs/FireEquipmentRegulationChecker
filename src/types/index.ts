@@ -54,7 +54,8 @@ export interface Article13UserInput {
   hasHelicopterLandingZone: Ref<boolean>;
   hasHighFireUsageArea: Ref<boolean>;
   hasElectricalEquipmentArea: Ref<boolean>;
-  hasCommunicationEquipmentRoom: Ref<boolean>;
+  // 通信機器室は面積基準(500㎡以上)で判定するため、共通プロパティを使用
+  hasTelecomRoomOver500sqm: Ref<boolean>;
   hasRoadwayPart: Ref<boolean>;
 }
 

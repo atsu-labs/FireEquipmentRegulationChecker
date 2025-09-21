@@ -63,7 +63,6 @@ describe('BuildingInputStepper.vue', () => {
     article13_hasHelicopterLandingZone: boolean;
     article13_hasHighFireUsageArea: boolean;
     article13_hasElectricalEquipmentArea: boolean;
-    article13_hasCommunicationEquipmentRoom: boolean;
     article13_hasRoadwayPart: boolean;
     buildingStructure: 'fire-resistant' | 'quasi-fire-resistant' | 'other' | null;
     hasMultipleBuildingsOnSite: boolean;
@@ -121,7 +120,6 @@ describe('BuildingInputStepper.vue', () => {
     article13_hasHelicopterLandingZone: false,
     article13_hasHighFireUsageArea: false,
     article13_hasElectricalEquipmentArea: false,
-    article13_hasCommunicationEquipmentRoom: false,
     article13_hasRoadwayPart: false,
     buildingStructure: null,
     hasMultipleBuildingsOnSite: false,

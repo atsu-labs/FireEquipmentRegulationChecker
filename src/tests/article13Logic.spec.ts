@@ -16,16 +16,17 @@ const createMockInput = (overrides: Partial<{[K in keyof Article13UserInput]: Ar
     hasHelicopterLandingZone: ref(false),
     hasHighFireUsageArea: ref(false),
     hasElectricalEquipmentArea: ref(false),
-    hasCommunicationEquipmentRoom: ref(false),
+    hasTelecomRoomOver500sqm: ref(false),
     hasRoadwayPart: ref(false),
   };
 
   const refs = { ...defaults };
   for (const key in overrides) {
     if (Object.prototype.hasOwnProperty.call(overrides, key)) {
+  // ...existing code...
       const k = key as keyof Article13UserInput;
       if (refs[k]) {
-        (refs[k] as Ref<unknown>).value = overrides[k];
+        (refs[k] as Ref<unknown>).value = (overrides as any)[key];
       }
     }
   }
@@ -113,7 +114,7 @@ describe('useArticle13Logic', () => {
   });
 
   it('8号: 通信機器室がある場合、警告を返す', () => {
-    const input = createMockInput({ buildingUse: 'item01_i_ro', hasCommunicationEquipmentRoom: true });
+    const input = createMockInput({ buildingUse: 'item01_i_ro', hasTelecomRoomOver500sqm: true });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe('warning');
     expect(regulationResult.value.basis).toBe('令第13条第1項第8号');

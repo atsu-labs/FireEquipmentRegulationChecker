@@ -57,7 +57,6 @@ const props = defineProps({
   article13_hasHelicopterLandingZone: { type: Boolean, required: true },
   article13_hasHighFireUsageArea: { type: Boolean, required: true },
   article13_hasElectricalEquipmentArea: { type: Boolean, required: true },
-  article13_hasCommunicationEquipmentRoom: { type: Boolean, required: true },
   article13_hasRoadwayPart: { type: Boolean, required: true },
 
   // Article 19
@@ -122,7 +121,6 @@ const emit = defineEmits([
   'update:article13_hasHelicopterLandingZone',
   'update:article13_hasHighFireUsageArea',
   'update:article13_hasElectricalEquipmentArea',
-  'update:article13_hasCommunicationEquipmentRoom',
   'update:article13_hasRoadwayPart',
   'update:buildingStructure',
   'update:hasMultipleBuildingsOnSite',
@@ -705,12 +703,8 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
               label="変圧器など電気設備がある"
               hide-details
             ></v-checkbox>
-            <v-checkbox
-              :model-value="article13_hasCommunicationEquipmentRoom"
-              @update:model-value="emit('update:article13_hasCommunicationEquipmentRoom', $event)"
-              label="通信機器室がある"
-              hide-details
-            ></v-checkbox>
+            <!-- 通信機器室は App.vue 側で `hasTelecomRoomOver500sqm` と共有 -->
+            <!-- チェックボックスは統一されているため、こちらでは表示しない -->
             <v-checkbox
               :model-value="article13_hasRoadwayPart"
               @update:model-value="emit('update:article13_hasRoadwayPart', $event)"

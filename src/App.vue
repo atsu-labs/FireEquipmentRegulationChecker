@@ -78,7 +78,7 @@ const article13_hasCarRepairArea = ref(false);
 const article13_hasHelicopterLandingZone = ref(false);
 const article13_hasHighFireUsageArea = ref(false);
 const article13_hasElectricalEquipmentArea = ref(false);
-const article13_hasCommunicationEquipmentRoom = ref(false);
+// `hasTelecomRoomOver500sqm` を単一のソースオブスとして使用します
 const article13_hasRoadwayPart = ref(false);
 
 // 令19条
@@ -264,7 +264,8 @@ const { regulationResult: judgementResult13 } = useArticle13Logic({
   hasHelicopterLandingZone: article13_hasHelicopterLandingZone,
   hasHighFireUsageArea: article13_hasHighFireUsageArea,
   hasElectricalEquipmentArea: article13_hasElectricalEquipmentArea,
-  hasCommunicationEquipmentRoom: article13_hasCommunicationEquipmentRoom,
+  // 直接 hasTelecomRoomOver500sqm を参照する
+  hasTelecomRoomOver500sqm,
   hasRoadwayPart: article13_hasRoadwayPart,
 });
 
@@ -626,7 +627,6 @@ generateFloors();
               v-model:article13_hasHelicopterLandingZone="article13_hasHelicopterLandingZone"
               v-model:article13_hasHighFireUsageArea="article13_hasHighFireUsageArea"
               v-model:article13_hasElectricalEquipmentArea="article13_hasElectricalEquipmentArea"
-              v-model:article13_hasCommunicationEquipmentRoom="article13_hasCommunicationEquipmentRoom"
               v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
               v-model:buildingStructure="buildingStructure"
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"

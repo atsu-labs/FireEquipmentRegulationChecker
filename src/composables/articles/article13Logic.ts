@@ -15,7 +15,7 @@ export function useArticle13Logic(userInput: Article13UserInput) {
       hasHelicopterLandingZone,
       hasHighFireUsageArea,
       hasElectricalEquipmentArea,
-      hasCommunicationEquipmentRoom,
+      hasTelecomRoomOver500sqm,
       hasRoadwayPart,
     } = userInput;
 
@@ -103,8 +103,8 @@ export function useArticle13Logic(userInput: Article13UserInput) {
       };
     }
 
-    // 8. 通信機器室
-    if (hasCommunicationEquipmentRoom.value) {
+    // 8. 通信機器室（500㎡以上）
+    if (hasTelecomRoomOver500sqm.value) {
       return {
         required: 'warning',
         message: '【要確認】通信機器室で、面積が500㎡以上の場合は、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。',
