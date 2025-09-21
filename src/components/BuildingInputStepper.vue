@@ -172,13 +172,13 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
           <v-card-text>
             <v-row>
               <v-row>
-                <v-col cols="12" sm="3">
+                <v-col cols="12" sm="4">
                   <BuildingUseSelector
                     :model-value="buildingUse === null ? undefined : buildingUse"
                     @update:model-value="emit('update:buildingUse', $event)"
                   />
                 </v-col>
-                <v-col cols="12" sm="3">
+                <v-col cols="12" sm="4">
                   <v-text-field
                     label="延床面積"
                     :model-value="totalFloorAreaInput"
@@ -190,7 +190,7 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
                     hide-details
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="3">
+                <v-col cols="12" sm="4">
                   <v-text-field
                     label="全体の収容人員"
                     :model-value="capacityInput"
@@ -204,6 +204,67 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
                 </v-col>
               </v-row>
               <v-row align="center">
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    label="地上階"
+                    :model-value="groundFloorsInput"
+                    @update:model-value="emit('update:groundFloorsInput', Number($event))"
+                    type="number"
+                    min="0"
+                    suffix="階"
+                    dense
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    label="地下階"
+                    :model-value="basementFloorsInput"
+                    @update:model-value="emit('update:basementFloorsInput', Number($event))"
+                    type="number"
+                    min="0"
+                    suffix="階"
+                    dense
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-checkbox
+                    :model-value="hasNonFloorArea"
+                    @update:model-value="emit('update:hasNonFloorArea', $event)"
+                    label="階に該当しない部分"
+                    dense
+                    hide-details
+                  ></v-checkbox>
+                </v-col>
+              </v-row>
+              
+            <v-row class="mt-4">
+              <v-col cols="12" md="6">
+                <p class="mb-2">建物の構造</p>
+                <v-radio-group
+                  :model-value="structureType"
+                  @update:model-value="emit('update:structureType', $event)"
+                  hide-details
+                >
+                  <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
+                  <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
+                  <v-radio label="その他" value="C"></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col cols="12" md="6">
+                <p class="mb-2">壁・天井の仕上げ</p>
+                <v-radio-group
+                  :model-value="finishType"
+                  @update:model-value="emit('update:finishType', $event)"
+                  hide-details
+                >
+                  <v-radio label="難燃材料" value="flammable"></v-radio>
+                  <v-radio label="その他" value="other"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row align="center">
                 <v-col cols="12" sm="3">
                   <v-text-field
                     label="敷地面積"
@@ -238,6 +299,8 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
                     <v-radio label="準耐火建築物" value="quasi-fire-resistant"></v-radio>
                     <v-radio label="その他" value="other"></v-radio>
                   </v-radio-group>
+                </v-col>
+                <v-col cols="12" sm="3">
                   <v-checkbox
                     :model-value="hasMultipleBuildingsOnSite"
                     @update:model-value="emit('update:hasMultipleBuildingsOnSite', $event)"
@@ -248,66 +311,7 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
                 </v-col>
               </v-row>
             </v-row>
-            <v-row align="center">
-              <v-col cols="12" sm="3">
-                <v-text-field
-                  label="地上階"
-                  :model-value="groundFloorsInput"
-                  @update:model-value="emit('update:groundFloorsInput', Number($event))"
-                  type="number"
-                  min="0"
-                  suffix="階"
-                  dense
-                  hide-details
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="3">
-                <v-text-field
-                  label="地下階"
-                  :model-value="basementFloorsInput"
-                  @update:model-value="emit('update:basementFloorsInput', Number($event))"
-                  type="number"
-                  min="0"
-                  suffix="階"
-                  dense
-                  hide-details
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-checkbox
-                  :model-value="hasNonFloorArea"
-                  @update:model-value="emit('update:hasNonFloorArea', $event)"
-                  label="階に該当しない部分"
-                  dense
-                  hide-details
-                ></v-checkbox>
-              </v-col>
-            </v-row>
-            <v-row class="mt-4">
-              <v-col cols="12" md="6">
-                <p class="mb-2">建物の構造</p>
-                <v-radio-group
-                  :model-value="structureType"
-                  @update:model-value="emit('update:structureType', $event)"
-                  hide-details
-                >
-                  <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
-                  <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
-                  <v-radio label="その他" value="C"></v-radio>
-                </v-radio-group>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="mb-2">壁・天井の仕上げ</p>
-                <v-radio-group
-                  :model-value="finishType"
-                  @update:model-value="emit('update:finishType', $event)"
-                  hide-details
-                >
-                  <v-radio label="難燃材料" value="flammable"></v-radio>
-                  <v-radio label="その他" value="other"></v-radio>
-                </v-radio-group>
-              </v-col>
-            </v-row>
+            
           </v-card-text>
         </v-card>
       </v-stepper-window-item>
