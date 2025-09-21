@@ -356,7 +356,7 @@ watch(() => props.buildingUse, (newBuildingUse: string | null) => {
             :color="floor.type === 'ground' ? 'grey-lighten-3' : 'brown-lighten-2'"
             variant="flat"
           >
-            <v-card-text>
+            <v-card-text class="py-2">
               <v-row align="center" class="py-2">
                 <v-col cols="12" md="2" class="font-weight-bold text-md-center">
                   {{ floor.type === 'ground' ? `地上 ${floor.level} 階` : `地下 ${floor.level} 階` }}

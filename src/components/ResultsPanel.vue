@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { PropType } from 'vue';
 import type { JudgementResult } from '@/types';
 
-defineProps({
+const props = defineProps({
   totalFloorAreaInput: {
     type: [Number, null] as PropType<number | null>,
     default: null,
@@ -19,222 +20,85 @@ defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-  judgementResult10: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult10Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult10Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult11: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult11Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult11Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult12: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult12Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult12Title: {
-    type: String,
-    required: true,
-  },
-  article21Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article21ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article21ResultTitle: {
-    type: String,
-    required: true,
-  },
-  article22Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article22ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article22ResultTitle: {
-    type: String,
-    required: true,
-  },
-  article21_2Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article21_2ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article21_2ResultTitle: {
-    type: String,
-    required: true,
-  },
-  article23Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article23ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article23ResultTitle: {
-    type: String,
-    required: true,
-  },
-  article25Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article25ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article25ResultTitle: {
-    type: String,
-    required: true,
-  },
-  judgementResult13: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult13Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult13Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult19: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult19Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult19Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult24: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult24Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult24Title: {
-    type: String,
-    required: true,
-  },
-  article26Result: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  article26ResultType: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  article26ResultTitle: {
-    type: String,
-    required: true,
-  },
-  judgementResult27: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult27Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult27Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult28: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult28Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult28Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult29: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult29Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult29Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult29_2: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult29_2Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult29_2Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult29_3: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult29_3Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult29_3Title: {
-    type: String,
-    required: true,
-  },
-  judgementResult28_2: {
-    type: Object as PropType<JudgementResult>,
-    required: true,
-  },
-  judgementResult28_2Type: {
-    type: String as PropType<'error' | 'warning' | 'success' | 'info'>,
-    required: true,
-  },
-  judgementResult28_2Title: {
-    type: String,
-    required: true,
-  },
+  judgementResult10: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult10Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult10Title: { type: String, required: true },
+  judgementResult11: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult11Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult11Title: { type: String, required: true },
+  judgementResult12: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult12Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult12Title: { type: String, required: true },
+  article21Result: { type: Object as PropType<JudgementResult>, required: true },
+  article21ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article21ResultTitle: { type: String, required: true },
+  article22Result: { type: Object as PropType<JudgementResult>, required: true },
+  article22ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article22ResultTitle: { type: String, required: true },
+  article21_2Result: { type: Object as PropType<JudgementResult>, required: true },
+  article21_2ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article21_2ResultTitle: { type: String, required: true },
+  article23Result: { type: Object as PropType<JudgementResult>, required: true },
+  article23ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article23ResultTitle: { type: String, required: true },
+  article25Result: { type: Object as PropType<JudgementResult>, required: true },
+  article25ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article25ResultTitle: { type: String, required: true },
+  judgementResult13: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult13Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult13Title: { type: String, required: true },
+  judgementResult19: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult19Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult19Title: { type: String, required: true },
+  judgementResult24: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult24Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult24Title: { type: String, required: true },
+  article26Result: { type: Object as PropType<JudgementResult>, required: true },
+  article26ResultType: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  article26ResultTitle: { type: String, required: true },
+  judgementResult27: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult27Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult27Title: { type: String, required: true },
+  judgementResult28: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult28Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult28Title: { type: String, required: true },
+  judgementResult29: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult29Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult29Title: { type: String, required: true },
+  judgementResult29_2: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult29_2Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult29_2Title: { type: String, required: true },
+  judgementResult29_3: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult29_3Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult29_3Title: { type: String, required: true },
+  judgementResult28_2: { type: Object as PropType<JudgementResult>, required: true },
+  judgementResult28_2Type: { type: String as PropType<'error' | 'warning' | 'success' | 'info'>, required: true },
+  judgementResult28_2Title: { type: String, required: true },
+});
+
+const results = computed(() => {
+  const arr = [
+    { title: props.judgementResult10Title, type: props.judgementResult10Type, ...props.judgementResult10 },
+    { title: props.judgementResult11Title, type: props.judgementResult11Type, ...props.judgementResult11 },
+    { title: props.judgementResult12Title, type: props.judgementResult12Type, ...props.judgementResult12 },
+    { title: props.judgementResult13Title, type: props.judgementResult13Type, ...props.judgementResult13 },
+    { title: props.judgementResult19Title, type: props.judgementResult19Type, ...props.judgementResult19 },
+    { title: props.article21ResultTitle, type: props.article21ResultType, ...props.article21Result },
+    { title: props.article21_2ResultTitle, type: props.article21_2ResultType, ...props.article21_2Result },
+    { title: props.article22ResultTitle, type: props.article22ResultType, ...props.article22Result },
+    { title: props.article23ResultTitle, type: props.article23ResultType, ...props.article23Result },
+    { title: props.judgementResult24Title, type: props.judgementResult24Type, ...props.judgementResult24 },
+    { title: props.article25ResultTitle, type: props.article25ResultType, ...props.article25Result },
+    { title: props.article26ResultTitle, type: props.article26ResultType, ...props.article26Result },
+    { title: props.judgementResult27Title, type: props.judgementResult27Type, ...props.judgementResult27 },
+    { title: props.judgementResult28Title, type: props.judgementResult28Type, ...props.judgementResult28 },
+    { title: props.judgementResult28_2Title, type: props.judgementResult28_2Type, ...props.judgementResult28_2 },
+    { title: props.judgementResult29Title, type: props.judgementResult29Type, ...props.judgementResult29 },
+    { title: props.judgementResult29_2Title, type: props.judgementResult29_2Type, ...props.judgementResult29_2 },
+    { title: props.judgementResult29_3Title, type: props.judgementResult29_3Type, ...props.judgementResult29_3 },
+  ];
+  const typeOrder = { error: 0, warning: 1, info: 2, success: 3 };
+  return arr.sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
 });
 </script>
 
@@ -272,281 +136,34 @@ defineProps({
 
     <v-card-title>判定結果</v-card-title>
     <v-card-text>
-      <v-row>
-        <v-col cols="12" md="6">
-          <v-alert
-            :type="judgementResult10Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult10Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult10.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult10.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult11Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult11Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult11.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult11.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult12Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult12Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult12.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult12.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult13Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult13Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult13.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult13.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult19Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult19Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult19.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult19.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article21ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article21ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article21Result.message }}</p>
-            <p><b>根拠:</b> {{ article21Result.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article21_2ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article21_2ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article21_2Result.message }}</p>
-            <p><b>根拠:</b> {{ article21_2Result.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article22ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article22ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article22Result.message }}</p>
-            <p><b>根拠:</b> {{ article22Result.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article23ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article23ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article23Result.message }}</p>
-            <p><b>根拠:</b> {{ article23Result.basis }}</p>
-          </v-alert>
-        </v-col>
-
-        <v-col cols="12" md="6">
-          <v-alert
-            :type="judgementResult24Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult24Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult24.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult24.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article25ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article25ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article25Result.message }}</p>
-            <p><b>根拠:</b> {{ article25Result.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="article26ResultType"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ article26ResultTitle }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ article26Result.message }}</p>
-            <p><b>根拠:</b> {{ article26Result.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult27Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult27Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult27.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult27.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult28Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult28Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult28.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult28.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult28_2Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult28_2Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult28_2.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult28_2.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult29Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult29Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult29.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult29.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult29_2Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult29_2Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult29_2.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult29_2.basis }}</p>
-          </v-alert>
-
-          <v-alert
-            :type="judgementResult29_3Type"
-            variant="tonal"
-            density="compact"
-            prominent
-            class="mb-2"
-          >
-            <div class="text-h6">
-              {{ judgementResult29_3Title }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-            <p><b>理由:</b> {{ judgementResult29_3.message }}</p>
-            <p><b>根拠:</b> {{ judgementResult29_3.basis }}</p>
-          </v-alert>
-        </v-col>
-      </v-row>
+      <v-expansion-panels multiple>
+        <v-expansion-panel
+          v-for="(item, idx) in results"
+          :key="idx"
+          :class="item.type === 'error' ? 'obligation-panel' : ''"
+        >
+          <v-expansion-panel-title>
+            <v-icon :color="item.type === 'error' ? 'red' : item.type === 'warning' ? 'orange' : item.type === 'success' ? 'green' : 'blue'">
+              {{ item.type === 'error' ? 'mdi-alert' : item.type === 'warning' ? 'mdi-alert-outline' : item.type === 'success' ? 'mdi-check-circle' : 'mdi-information' }}
+            </v-icon>
+            {{ item.title }}
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <p><b>理由:</b> {{ item.message }}</p>
+            <p><b>根拠:</b> {{ item.basis }}</p>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-card-text>
   </v-card>
-</template>
+  </template>
+  <style scoped>
+  .obligation-panel {
+    background-color: #ffe0e0 !important;
+  }
+  .obligation-panel ::v-deep(.v-expansion-panel-title),
+  .obligation-panel ::v-deep(.v-expansion-panel-text) {
+    background-color: #ffe0e0 !important;
+  }
+  </style>
+

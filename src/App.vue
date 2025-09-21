@@ -580,7 +580,7 @@ generateFloors();
     <v-main>
       <v-container fluid class="fill-height pa-0">
         <v-row no-gutters class="fill-height">
-          <v-col cols="12" md="5" class="scrollable-content">
+          <v-col cols="12" md="6" class="scrollable-content">
             <BuildingInputStepper
               v-model:currentStep="currentStep"
               v-model:buildingUse="buildingUse"
@@ -639,7 +639,7 @@ generateFloors();
             />
           </v-col>
 
-          <v-col cols="12" md="7" class="scrollable-content">
+          <v-col cols="12" md="6" class="scrollable-content">
             <ResultsPanel
               :totalFloorAreaInput="totalFloorAreaInput"
               :calculatedFloorArea="calculatedFloorArea"
