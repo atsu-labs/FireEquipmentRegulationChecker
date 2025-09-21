@@ -73,10 +73,22 @@ export function useArticle11Logic(userInput: Article11UserInput) {
       }
     }
     // 二号: (2)～(10)項, (12)項, (14)項 → 延べ面積 700㎡以上
-    //TODO: 第十二条第一項第一号に掲げる防火対象物{(6)イ(1),(2),(6)ロ}の２倍または３倍と1000㎡のいずれか小さい数値とするの処理を追加
+    // 第十二条第一項第一号に掲げる防火対象物{(6)イ(1),(2),(6)ロ}の２倍または３倍と1000㎡のいずれか小さい数値とする
     else if (useCodeMatches(buildingUse, group2)) {
-      const requiredArea = 700 * areaMultiplier;
-      totalAreaRuleInfo = { requiredArea, basis: "令第11条第1項第2号" };
+      // 特殊な防火対象物コード
+      const specialCodes = ["item06_i_1", "item06_i_2", "item06_ro"];
+      let requiredArea = 700 * areaMultiplier;
+      let basis = "令第11条第1項第2号";
+
+      if (useCodeMatches(buildingUse, specialCodes)) {
+        // 2倍または3倍と1000㎡のいずれか小さい数値
+        const multipliedArea = 700 * areaMultiplier;
+        requiredArea = Math.min(multipliedArea, 1000);
+        basis +=
+          "（第十二条第一項第一号該当: ２倍または３倍と1000㎡のいずれか小さい数値）";
+      }
+
+      totalAreaRuleInfo = { requiredArea, basis };
       if (currentTotalArea >= requiredArea) {
         isAlreadyApplicable = true;
         return {
@@ -84,7 +96,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
           message: `用途（${useDisplay}）が（2）～（10）項等のいずれかに該当し、延べ面積が${currentTotalArea.toFixed(
             2
           )}㎡（≧ ${requiredArea}㎡）のため、設置が必要です。${multiplierDescription}`,
-          basis: `令第11条第1項第2号`,
+          basis: basis,
         };
       }
     }
