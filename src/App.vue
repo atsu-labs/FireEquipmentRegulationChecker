@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import BuildingInputStepper from '@/components/BuildingInputStepper.vue';
-import ResultsPanel from '@/components/ResultsPanel.vue';
-import { useArticle10Logic } from '@/composables/articles/article10Logic';
-import type { Floor } from '@/types';
-import { useArticle11Logic } from '@/composables/articles/article11Logic';
-import { useArticle12Logic } from '@/composables/articles/article12Logic';
-import { useArticle21Logic } from '@/composables/articles/article21Logic';
-import { useArticle22Logic } from '@/composables/articles/article22Logic';
-import { useArticle21_2Logic } from '@/composables/articles/article21-2Logic';
-import { useArticle23Logic } from '@/composables/articles/article23Logic';
-import { useArticle25Logic } from '@/composables/articles/article25Logic';
-import { useArticle13Logic } from '@/composables/articles/article13Logic';
-import { useArticle19Logic } from '@/composables/articles/article19Logic';
-import { useArticle24Logic } from '@/composables/articles/article24Logic';
-import { useArticle26Logic } from '@/composables/articles/article26Logic';
-import { useArticle27Logic } from '@/composables/articles/article27Logic';
-import { useArticle28Logic } from '@/composables/articles/article28Logic';
-import { useArticle29Logic } from '@/composables/articles/article29Logic';
-import { useArticle29_2Logic } from '@/composables/articles/article29-2Logic';
-import { useArticle29_3Logic } from '@/composables/articles/article29-3Logic';
-import { useArticle28_2Logic } from '@/composables/articles/article28-2Logic';
+import { ref, computed, watch } from "vue";
+import BuildingInputStepper from "@/components/BuildingInputStepper.vue";
+import ResultsPanel from "@/components/ResultsPanel.vue";
+import { useArticle10Logic } from "@/composables/articles/article10Logic";
+import type { Floor } from "@/types";
+import { useArticle11Logic } from "@/composables/articles/article11Logic";
+import { useArticle12Logic } from "@/composables/articles/article12Logic";
+import { useArticle21Logic } from "@/composables/articles/article21Logic";
+import { useArticle22Logic } from "@/composables/articles/article22Logic";
+import { useArticle21_2Logic } from "@/composables/articles/article21-2Logic";
+import { useArticle23Logic } from "@/composables/articles/article23Logic";
+import { useArticle25Logic } from "@/composables/articles/article25Logic";
+import { useArticle13Logic } from "@/composables/articles/article13Logic";
+import { useArticle19Logic } from "@/composables/articles/article19Logic";
+import { useArticle24Logic } from "@/composables/articles/article24Logic";
+import { useArticle26Logic } from "@/composables/articles/article26Logic";
+import { useArticle27Logic } from "@/composables/articles/article27Logic";
+import { useArticle28Logic } from "@/composables/articles/article28Logic";
+import { useArticle29Logic } from "@/composables/articles/article29Logic";
+import { useArticle29_2Logic } from "@/composables/articles/article29-2Logic";
+import { useArticle29_3Logic } from "@/composables/articles/article29-3Logic";
+import { useArticle28_2Logic } from "@/composables/articles/article28-2Logic";
 
 const currentStep = ref(1);
 
@@ -37,9 +37,9 @@ const nonFloorAreaValue = ref<number | null>(null);
 const usesFireEquipment = ref(false);
 const storesMinorHazardousMaterials = ref(false);
 const storesDesignatedCombustibles = ref(false);
-const isFlammableItemsAmountOver750 = ref(false);
-const structureType = ref<'A' | 'B' | 'C' | null>(null);
-const finishType = ref<'flammable' | 'other' | null>(null);
+const storesDesignatedCombustiblesOver750x = ref(false);
+const structureType = ref<"A" | "B" | "C" | null>(null);
+const finishType = ref<"flammable" | "other" | null>(null);
 const hasLodging = ref(false); // 令21条用
 const isSpecifiedOneStaircase = ref(false); // 令21条7号用
 
@@ -50,10 +50,10 @@ const stageFloorLevel = ref<string | null>(null);
 const stageArea = ref<number | null>(null);
 const isRackWarehouse = ref(false);
 const ceilingHeight = ref<number | null>(null);
-const isCombustiblesAmountOver1000 = ref(false);
+const storesDesignatedCombustiblesOver1000x = ref(false);
 const hasFireSuppressingStructure = ref(false);
 const hasBeds = ref(false);
-const storesCombustiblesOver500x = ref(false); // 令21条8号用
+const storesDesignatedCombustiblesOver500x = ref(false); // 令21条8号用
 const hasRoadPart = ref(false); // 令21条12号用
 const roadPartRooftopArea = ref<number | null>(null);
 const roadPartOtherArea = ref<number | null>(null);
@@ -82,7 +82,9 @@ const article13_hasElectricalEquipmentArea = ref(false);
 const article13_hasRoadwayPart = ref(false);
 
 // 令19条
-const buildingStructure = ref<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>(null);
+const buildingStructure = ref<
+  "fire-resistant" | "quasi-fire-resistant" | "other" | null
+>(null);
 const hasMultipleBuildingsOnSite = ref(false);
 
 // 令27条
@@ -91,8 +93,17 @@ const buildingHeight = ref<number | null>(null);
 
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
-  const targetUses = ['item01', 'item02', 'item03', 'item04', 'item05_i', 'item06', 'item09_i', 'item16_i'];
-  return targetUses.some(use => buildingUse.value!.startsWith(use));
+  const targetUses = [
+    "item01",
+    "item02",
+    "item03",
+    "item04",
+    "item05_i",
+    "item06",
+    "item09_i",
+    "item16_i",
+  ];
+  return targetUses.some((use) => buildingUse.value!.startsWith(use));
 });
 
 watch(hasNonFloorArea, (newValue) => {
@@ -117,7 +128,7 @@ const generateFloors = () => {
     } else {
       newFloors.push({
         level: i,
-        type: 'ground',
+        type: "ground",
         floorArea: null,
         capacity: null,
         isWindowless: false,
@@ -133,7 +144,7 @@ const generateFloors = () => {
     } else {
       newFloors.push({
         level: i,
-        type: 'basement',
+        type: "basement",
         floorArea: null,
         capacity: null,
         isWindowless: false,
@@ -165,7 +176,7 @@ const calculatedFloorArea = computed(() => {
   const floorsArea = floors.value.reduce((total: number, floor: Floor) => {
     return total + (floor.floorArea || 0);
   }, 0);
-  const extraArea = hasNonFloorArea.value ? (nonFloorAreaValue.value || 0) : 0;
+  const extraArea = hasNonFloorArea.value ? nonFloorAreaValue.value || 0 : 0;
   return floorsArea + extraArea;
 });
 
@@ -173,12 +184,15 @@ const floorAreaMismatch = computed(() => {
   if (totalFloorAreaInput.value === null || totalFloorAreaInput.value === 0) {
     return false;
   }
-  return (Number(totalFloorAreaInput.value) || 0).toFixed(2) !== calculatedFloorArea.value.toFixed(2);
+  return (
+    (Number(totalFloorAreaInput.value) || 0).toFixed(2) !==
+    calculatedFloorArea.value.toFixed(2)
+  );
 });
 
 const windowlessFloors = computed(() => {
   return floors.value
-    .filter((floor: Floor) => floor.isWindowless && floor.type === 'ground')
+    .filter((floor: Floor) => floor.isWindowless && floor.type === "ground")
     .map((floor: Floor) => `地上 ${floor.level} 階`);
 });
 
@@ -191,25 +205,42 @@ const { regulationResult: judgementResult10 } = useArticle10Logic({
   storesDesignatedCombustibles,
 });
 
-const judgementResult10Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult10.value.required === true) return 'error';
-  if (judgementResult10.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult10Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult10.value.required === true) return "error";
+    if (judgementResult10.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult10Title = computed(() => {
-  if (judgementResult10.value.required === true) return '【消火器】設置義務あり';
-  if (judgementResult10.value.required === 'warning') return '【消火器】要確認';
-  return '【消火器】設置義務なし';
+  if (judgementResult10.value.required === true)
+    return "【消火器】設置義務あり";
+  if (judgementResult10.value.required === "warning") return "【消火器】要確認";
+  return "【消火器】設置義務なし";
 });
 
 const article11TotalArea = computed(() => totalFloorAreaInput.value);
 const hasBasement = computed(() => basementFloorsInput.value > 0);
-const basementArea = computed(() => floors.value.filter((f: Floor) => f.type === 'basement').reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
-const hasNoWindowFloor = computed(() => floors.value.some((f: Floor) => f.isWindowless));
-const noWindowFloorArea = computed(() => floors.value.filter((f: Floor) => f.isWindowless).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
+const basementArea = computed(() =>
+  floors.value
+    .filter((f: Floor) => f.type === "basement")
+    .reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0)
+);
+const hasNoWindowFloor = computed(() =>
+  floors.value.some((f: Floor) => f.isWindowless)
+);
+const noWindowFloorArea = computed(() =>
+  floors.value
+    .filter((f: Floor) => f.isWindowless)
+    .reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0)
+);
 const hasUpperFloors = computed(() => groundFloorsInput.value >= 4);
-const upperFloorsArea = computed(() => floors.value.filter((f: Floor) => f.type === 'ground' && f.level >= 4).reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0));
+const upperFloorsArea = computed(() =>
+  floors.value
+    .filter((f: Floor) => f.type === "ground" && f.level >= 4)
+    .reduce((sum: number, f: Floor) => sum + (f.floorArea || 0), 0)
+);
 
 const { regulationResult: judgementResult11 } = useArticle11Logic({
   buildingUse,
@@ -221,21 +252,25 @@ const { regulationResult: judgementResult11 } = useArticle11Logic({
   hasUpperFloors,
   upperFloorsArea,
   storesFlammableItems: storesDesignatedCombustibles,
-  isFlammableItemsAmountOver750,
+  storesDesignatedCombustiblesOver750x: storesDesignatedCombustiblesOver750x,
   structureType,
   finishType,
 });
 
-const judgementResult11Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult11.value.required === true) return 'error';
-  if (judgementResult11.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult11Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult11.value.required === true) return "error";
+    if (judgementResult11.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult11Title = computed(() => {
-  if (judgementResult11.value.required === true) return '【屋内消火栓設備】設置義務あり';
-  if (judgementResult11.value.required === 'warning') return '【屋内消火栓設備】要確認';
-  return '【屋内消火栓設備】設置義務なし';
+  if (judgementResult11.value.required === true)
+    return "【屋内消火栓設備】設置義務あり";
+  if (judgementResult11.value.required === "warning")
+    return "【屋内消火栓設備】要確認";
+  return "【屋内消火栓設備】設置義務なし";
 });
 
 const { regulationResult: judgementResult12 } = useArticle12Logic({
@@ -249,14 +284,14 @@ const { regulationResult: judgementResult12 } = useArticle12Logic({
   stageArea,
   isRackWarehouse,
   ceilingHeight,
-  isCombustiblesAmountOver1000,
+  storesDesignatedCombustiblesOver1000x: storesDesignatedCombustiblesOver1000x,
   hasFireSuppressingStructure,
   hasBeds,
 });
 
 const { regulationResult: judgementResult13 } = useArticle13Logic({
   buildingUse,
-  isCombustiblesAmountOver1000,
+  storesDesignatedCombustiblesOver1000x: storesDesignatedCombustiblesOver1000x,
   hasParkingArea: article13_hasParkingArea,
   hasMechanicalParking: article13_hasMechanicalParking,
   mechanicalParkingCapacity: article13_mechanicalParkingCapacity,
@@ -309,7 +344,7 @@ const { regulationResult: article21Result } = useArticle21Logic({
   hasLodging,
   floors,
   isSpecifiedOneStaircase,
-  storesCombustiblesOver500x,
+  storesDesignatedCombustiblesOver500x: storesDesignatedCombustiblesOver500x,
   hasRoadPart,
   roadPartRooftopArea,
   roadPartOtherArea,
@@ -319,28 +354,36 @@ const { regulationResult: article21Result } = useArticle21Logic({
   hasTelecomRoomOver500sqm,
 });
 
-const judgementResult12Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult12.value.required === true) return 'error';
-  if (judgementResult12.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult12Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult12.value.required === true) return "error";
+    if (judgementResult12.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult12Title = computed(() => {
-  if (judgementResult12.value.required === true) return '【スプリンクラー設備】設置義務あり';
-  if (judgementResult12.value.required === 'warning') return '【スプリンクラー設備】要確認';
-  return '【スプリンクラー設備】設置義務なし';
+  if (judgementResult12.value.required === true)
+    return "【スプリンクラー設備】設置義務あり";
+  if (judgementResult12.value.required === "warning")
+    return "【スプリンクラー設備】要確認";
+  return "【スプリンクラー設備】設置義務なし";
 });
 
-const article21ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article21Result.value.required === true) return 'error';
-  if (article21Result.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const article21ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article21Result.value.required === true) return "error";
+    if (article21Result.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const article21ResultTitle = computed(() => {
-  if (article21Result.value.required === true) return '【自動火災報知設備】設置義務あり';
-  if (article21Result.value.required === 'warning') return '【自動火災報知設備】要確認';
-  return '【自動火災報知設備】設置義務なし';
+  if (article21Result.value.required === true)
+    return "【自動火災報知設備】設置義務あり";
+  if (article21Result.value.required === "warning")
+    return "【自動火災報知設備】要確認";
+  return "【自動火災報知設備】設置義務なし";
 });
 
 const { regulationResult: article22Result } = useArticle22Logic({
@@ -350,16 +393,20 @@ const { regulationResult: article22Result } = useArticle22Logic({
   contractedCurrentCapacity,
 });
 
-const article22ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article22Result.value.required === true) return 'error';
-  if (article22Result.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const article22ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article22Result.value.required === true) return "error";
+    if (article22Result.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const article22ResultTitle = computed(() => {
-  if (article22Result.value.required === true) return '【漏電火災警報器】設置義務あり';
-  if (article22Result.value.required === 'warning') return '【漏電火災警報器】要確認';
-  return '【漏電火災警報器】設置義務なし';
+  if (article22Result.value.required === true)
+    return "【漏電火災警報器】設置義務あり";
+  if (article22Result.value.required === "warning")
+    return "【漏電火災警報器】要確認";
+  return "【漏電火災警報器】設置義務なし";
 });
 
 const { regulationResult: article21_2Result } = useArticle21_2Logic({
@@ -370,16 +417,20 @@ const { regulationResult: article21_2Result } = useArticle21_2Logic({
   isHotSpringFacilityConfirmed,
 });
 
-const article21_2ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article21_2Result.value.required === true) return 'error';
-  if (article21_2Result.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const article21_2ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article21_2Result.value.required === true) return "error";
+    if (article21_2Result.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const article21_2ResultTitle = computed(() => {
-  if (article21_2Result.value.required === true) return '【ガス漏れ火災警報設備】設置義務あり';
-  if (article21_2Result.value.required === 'warning') return '【ガス漏れ火災警報設備】要確認';
-  return '【ガス漏れ火災警報設備】設置義務なし';
+  if (article21_2Result.value.required === true)
+    return "【ガス漏れ火災警報設備】設置義務あり";
+  if (article21_2Result.value.required === "warning")
+    return "【ガス漏れ火災警報設備】要確認";
+  return "【ガス漏れ火災警報設備】設置義務なし";
 });
 
 const { regulationResult: article23Result } = useArticle23Logic({
@@ -387,16 +438,20 @@ const { regulationResult: article23Result } = useArticle23Logic({
   totalArea: totalFloorAreaInput,
 });
 
-const article23ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article23Result.value.required === true) return 'error';
-  if (article23Result.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const article23ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article23Result.value.required === true) return "error";
+    if (article23Result.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const article23ResultTitle = computed(() => {
-  if (article23Result.value.required === true) return '【消防機関へ通報する火災報知設備】設置義務あり';
-  if (article23Result.value.required === 'warning') return '【消防機関へ通報する火災報知設備】要確認';
-  return '【消防機関へ通報する火災報知設備】設置義務なし';
+  if (article23Result.value.required === true)
+    return "【消防機関へ通報する火災報知設備】設置義務あり";
+  if (article23Result.value.required === "warning")
+    return "【消防機関へ通報する火災報知設備】要確認";
+  return "【消防機関へ通報する火災報知設備】設置義務なし";
 });
 
 const { regulationResult: article25Result } = useArticle25Logic({
@@ -404,52 +459,67 @@ const { regulationResult: article25Result } = useArticle25Logic({
   floors,
 });
 
-const article25ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article25Result.value.required === true) return 'error';
-  if (article25Result.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const article25ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article25Result.value.required === true) return "error";
+    if (article25Result.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const article25ResultTitle = computed(() => {
-  if (article25Result.value.required === true) return '【避難器具】設置義務あり';
-  if (article25Result.value.required === 'warning') return '【避難器具】要確認';
-  return '【避難器具】設置義務なし';
+  if (article25Result.value.required === true)
+    return "【避難器具】設置義務あり";
+  if (article25Result.value.required === "warning") return "【避難器具】要確認";
+  return "【避難器具】設置義務なし";
 });
 
-const judgementResult13Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult13.value.required === true) return 'error';
-  if (judgementResult13.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult13Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult13.value.required === true) return "error";
+    if (judgementResult13.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult13Title = computed(() => {
-  if (judgementResult13.value.required === true) return '【水噴霧消火設備等】設置義務あり';
-  if (judgementResult13.value.required === 'warning') return '【水噴霧消火設備等】要確認';
-  return '【水噴霧消火設備等】設置義務なし';
+  if (judgementResult13.value.required === true)
+    return "【水噴霧消火設備等】設置義務あり";
+  if (judgementResult13.value.required === "warning")
+    return "【水噴霧消火設備等】要確認";
+  return "【水噴霧消火設備等】設置義務なし";
 });
 
-const judgementResult19Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult19.value.required === true) return 'error';
-  if (judgementResult19.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult19Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult19.value.required === true) return "error";
+    if (judgementResult19.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult19Title = computed(() => {
-  if (judgementResult19.value.required === true) return '【屋外消火栓設備】設置義務あり';
-  if (judgementResult19.value.required === 'warning') return '【屋外消火栓設備】要確認';
-  return '【屋外消火栓設備】設置義務なし';
+  if (judgementResult19.value.required === true)
+    return "【屋外消火栓設備】設置義務あり";
+  if (judgementResult19.value.required === "warning")
+    return "【屋外消火栓設備】要確認";
+  return "【屋外消火栓設備】設置義務なし";
 });
 
-const judgementResult24Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult24.value.required === true) return 'error';
-  if (judgementResult24.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult24Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult24.value.required === true) return "error";
+    if (judgementResult24.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult24Title = computed(() => {
-  if (judgementResult24.value.required === true) return '【非常警報器具・設備】設置義務あり';
-  if (judgementResult24.value.required === 'warning') return '【非常警報器具・設備】要確認';
-  return '【非常警報器具・設備】設置義務なし';
+  if (judgementResult24.value.required === true)
+    return "【非常警報器具・設備】設置義務あり";
+  if (judgementResult24.value.required === "warning")
+    return "【非常警報器具・設備】要確認";
+  return "【非常警報器具・設備】設置義務なし";
 });
 
 const { regulationResult: article26Result } = useArticle26Logic({
@@ -458,44 +528,54 @@ const { regulationResult: article26Result } = useArticle26Logic({
   floors,
 });
 
-const article26ResultType = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (article26Result.value.required === 'warning') return 'warning';
-  if (article26Result.value.required === 'info') return 'info';
-  return article26Result.value.required ? 'error' : 'success';
-});
+const article26ResultType = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (article26Result.value.required === "warning") return "warning";
+    if (article26Result.value.required === "info") return "info";
+    return article26Result.value.required ? "error" : "success";
+  }
+);
 
 const article26ResultTitle = computed(() => {
   if (!article26Result.value.required) {
-    return '【誘導灯・誘導標識】設置義務なし';
+    return "【誘導灯・誘導標識】設置義務なし";
   }
-  if (article26Result.value.basis.includes('第4号')) {
-    return '【誘導標識】設置義務あり';
+  if (article26Result.value.basis.includes("第4号")) {
+    return "【誘導標識】設置義務あり";
   }
-  return '【誘導灯】設置義務あり';
+  return "【誘導灯】設置義務あり";
 });
 
-const judgementResult27Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult27.value.required === true) return 'error';
-  if (judgementResult27.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult27Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult27.value.required === true) return "error";
+    if (judgementResult27.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult27Title = computed(() => {
-  if (judgementResult27.value.required === true) return '【消防用水】設置義務あり';
-  if (judgementResult27.value.required === 'warning') return '【消防用水】要確認';
-  return '【消防用水】設置義務なし';
+  if (judgementResult27.value.required === true)
+    return "【消防用水】設置義務あり";
+  if (judgementResult27.value.required === "warning")
+    return "【消防用水】要確認";
+  return "【消防用水】設置義務なし";
 });
 
-const judgementResult28Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult28.value.required === true) return 'error';
-  if (judgementResult28.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult28Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult28.value.required === true) return "error";
+    if (judgementResult28.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult28Title = computed(() => {
-  if (judgementResult28.value.required === true) return '【排煙設備】設置義務あり';
-  if (judgementResult28.value.required === 'warning') return '【排煙設備】要確認';
-  return '【排煙設備】設置義務なし';
+  if (judgementResult28.value.required === true)
+    return "【排煙設備】設置義務あり";
+  if (judgementResult28.value.required === "warning")
+    return "【排煙設備】要確認";
+  return "【排煙設備】設置義務なし";
 });
 
 const { regulationResult: judgementResult29 } = useArticle29Logic({
@@ -505,16 +585,20 @@ const { regulationResult: judgementResult29 } = useArticle29Logic({
   hasRoadPart,
 });
 
-const judgementResult29Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29.value.required === true) return 'error';
-  if (judgementResult29.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult29Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult29.value.required === true) return "error";
+    if (judgementResult29.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult29Title = computed(() => {
-  if (judgementResult29.value.required === true) return '【連結送水管】設置義務あり';
-  if (judgementResult29.value.required === 'warning') return '【連結送水管】要確認';
-  return '【連結送水管】設置義務なし';
+  if (judgementResult29.value.required === true)
+    return "【連結送水管】設置義務あり";
+  if (judgementResult29.value.required === "warning")
+    return "【連結送水管】要確認";
+  return "【連結送水管】設置義務なし";
 });
 
 const { regulationResult: judgementResult29_2 } = useArticle29_2Logic({
@@ -523,16 +607,20 @@ const { regulationResult: judgementResult29_2 } = useArticle29_2Logic({
   floors,
 });
 
-const judgementResult29_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29_2.value.required === true) return 'error';
-  if (judgementResult29_2.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult29_2Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult29_2.value.required === true) return "error";
+    if (judgementResult29_2.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult29_2Title = computed(() => {
-  if (judgementResult29_2.value.required === true) return '【非常コンセント設備】設置義務あり';
-  if (judgementResult29_2.value.required === 'warning') return '【非常コンセント設備】要確認';
-  return '【非常コンセント設備】設置義務なし';
+  if (judgementResult29_2.value.required === true)
+    return "【非常コンセント設備】設置義務あり";
+  if (judgementResult29_2.value.required === "warning")
+    return "【非常コンセント設備】要確認";
+  return "【非常コンセント設備】設置義務なし";
 });
 
 const { regulationResult: judgementResult29_3 } = useArticle29_3Logic({
@@ -546,31 +634,41 @@ const { regulationResult: judgementResult28_2 } = useArticle28_2Logic({
   floors,
 });
 
-const judgementResult29_3Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult29_3.value.required === true) return 'error';
-  if (judgementResult29_3.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult29_3Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult29_3.value.required === true) return "error";
+    if (judgementResult29_3.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult29_3Title = computed(() => {
-  if (judgementResult29_3.value.required === true) return '【無線通信補助設備】設置義務あり';
-  if (judgementResult29_3.value.required === 'warning') return '【無線通信補助設備】要確認';
-  return '【無線通信補助設備】設置義務なし';
+  if (judgementResult29_3.value.required === true)
+    return "【無線通信補助設備】設置義務あり";
+  if (judgementResult29_3.value.required === "warning")
+    return "【無線通信補助設備】要確認";
+  return "【無線通信補助設備】設置義務なし";
 });
 
-const judgementResult28_2Type = computed((): 'error' | 'warning' | 'success' | 'info' => {
-  if (judgementResult28_2.value.required === true) return 'error';
-  if (judgementResult28_2.value.required === 'warning') return 'warning';
-  return 'success';
-});
+const judgementResult28_2Type = computed(
+  (): "error" | "warning" | "success" | "info" => {
+    if (judgementResult28_2.value.required === true) return "error";
+    if (judgementResult28_2.value.required === "warning") return "warning";
+    return "success";
+  }
+);
 
 const judgementResult28_2Title = computed(() => {
-  if (judgementResult28_2.value.required === true) return '【連結散水設備】設置義務あり';
-  if (judgementResult28_2.value.required === 'warning') return '【連結散水設備】要確認';
-  return '【連結散水設備】設置義務なし';
+  if (judgementResult28_2.value.required === true)
+    return "【連結散水設備】設置義務あり";
+  if (judgementResult28_2.value.required === "warning")
+    return "【連結散水設備】要確認";
+  return "【連結散水設備】設置義務なし";
 });
 
 generateFloors();
+
+// 互換エイリアスは不要になったため削除しました。
 </script>
 
 <template>
@@ -594,11 +692,19 @@ generateFloors();
               v-model:structureType="structureType"
               v-model:finishType="finishType"
               v-model:usesFireEquipment="usesFireEquipment"
-              v-model:storesMinorHazardousMaterials="storesMinorHazardousMaterials"
-              v-model:storesDesignatedCombustibles="storesDesignatedCombustibles"
-              v-model:isFlammableItemsAmountOver750="isFlammableItemsAmountOver750"
+              v-model:storesMinorHazardousMaterials="
+                storesMinorHazardousMaterials
+              "
+              v-model:storesDesignatedCombustibles="
+                storesDesignatedCombustibles
+              "
+              v-model:storesDesignatedCombustiblesOver750x="
+                storesDesignatedCombustiblesOver750x
+              "
               v-model:hasFireSuppressingStructure="hasFireSuppressingStructure"
-              v-model:isCombustiblesAmountOver1000="isCombustiblesAmountOver1000"
+              v-model:storesDesignatedCombustiblesOver1000x="
+                storesDesignatedCombustiblesOver1000x
+              "
               v-model:isCareDependentOccupancy="isCareDependentOccupancy"
               v-model:hasBeds="hasBeds"
               v-model:hasStageArea="hasStageArea"
@@ -608,25 +714,43 @@ generateFloors();
               v-model:ceilingHeight="ceilingHeight"
               v-model:hasLodging="hasLodging"
               v-model:isSpecifiedOneStaircase="isSpecifiedOneStaircase"
-              v-model:storesCombustiblesOver500x="storesCombustiblesOver500x"
+              v-model:storesDesignatedCombustiblesOver500x="
+                storesDesignatedCombustiblesOver500x
+              "
               v-model:hasRoadPart="hasRoadPart"
               v-model:roadPartRooftopArea="roadPartRooftopArea"
               v-model:roadPartOtherArea="roadPartOtherArea"
               v-model:hasParkingPart="hasParkingPart"
               v-model:parkingPartArea="parkingPartArea"
-              v-model:canAllVehiclesExitSimultaneously="canAllVehiclesExitSimultaneously"
+              v-model:canAllVehiclesExitSimultaneously="
+                canAllVehiclesExitSimultaneously
+              "
               v-model:hasTelecomRoomOver500sqm="hasTelecomRoomOver500sqm"
-              v-model:hasSpecialCombustibleStructure="hasSpecialCombustibleStructure"
+              v-model:hasSpecialCombustibleStructure="
+                hasSpecialCombustibleStructure
+              "
               v-model:contractedCurrentCapacity="contractedCurrentCapacity"
               v-model:hasHotSpringFacility="hasHotSpringFacility"
-              v-model:isHotSpringFacilityConfirmed="isHotSpringFacilityConfirmed"
+              v-model:isHotSpringFacilityConfirmed="
+                isHotSpringFacilityConfirmed
+              "
               v-model:article13_hasParkingArea="article13_hasParkingArea"
-              v-model:article13_hasMechanicalParking="article13_hasMechanicalParking"
-              v-model:article13_mechanicalParkingCapacity="article13_mechanicalParkingCapacity"
+              v-model:article13_hasMechanicalParking="
+                article13_hasMechanicalParking
+              "
+              v-model:article13_mechanicalParkingCapacity="
+                article13_mechanicalParkingCapacity
+              "
               v-model:article13_hasCarRepairArea="article13_hasCarRepairArea"
-              v-model:article13_hasHelicopterLandingZone="article13_hasHelicopterLandingZone"
-              v-model:article13_hasHighFireUsageArea="article13_hasHighFireUsageArea"
-              v-model:article13_hasElectricalEquipmentArea="article13_hasElectricalEquipmentArea"
+              v-model:article13_hasHelicopterLandingZone="
+                article13_hasHelicopterLandingZone
+              "
+              v-model:article13_hasHighFireUsageArea="
+                article13_hasHighFireUsageArea
+              "
+              v-model:article13_hasElectricalEquipmentArea="
+                article13_hasElectricalEquipmentArea
+              "
               v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
               v-model:buildingStructure="buildingStructure"
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"

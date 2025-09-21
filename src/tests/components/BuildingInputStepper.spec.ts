@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { mount, VueWrapper } from '@vue/test-utils';
-import BuildingInputStepper from '@/components/BuildingInputStepper.vue';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-
+import { describe, it, expect, beforeEach } from "vitest";
+import { mount, VueWrapper } from "@vue/test-utils";
+import BuildingInputStepper from "@/components/BuildingInputStepper.vue";
+import { createVuetify } from "vuetify";
+import ResizeObserverPolyfill from "resize-observer-polyfill";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
 
 // Vuetifyのセットアップ
 const vuetify = createVuetify({
@@ -13,10 +13,10 @@ const vuetify = createVuetify({
 });
 
 // グローバルにVuetifyを適用
-global.ResizeObserver = require('resize-observer-polyfill');
+global.ResizeObserver = ResizeObserverPolyfill;
 
-describe('BuildingInputStepper.vue', () => {
-  let wrapper: VueWrapper<any>;
+describe("BuildingInputStepper.vue", () => {
+  let wrapper: VueWrapper<unknown>;
 
   type BuildingInputStepperProps = {
     currentStep: number;
@@ -27,14 +27,14 @@ describe('BuildingInputStepper.vue', () => {
     basementFloorsInput: number;
     hasNonFloorArea: boolean;
     nonFloorAreaValue: number | null | undefined;
-    structureType: 'A' | 'B' | 'C' | null;
-    finishType: 'flammable' | 'other' | null;
+    structureType: "A" | "B" | "C" | null;
+    finishType: "flammable" | "other" | null;
     usesFireEquipment: boolean;
     storesMinorHazardousMaterials: boolean;
     storesDesignatedCombustibles: boolean;
-    isFlammableItemsAmountOver750: boolean;
+    storesDesignatedCombustiblesOver750x: boolean;
     hasFireSuppressingStructure: boolean;
-    isCombustiblesAmountOver1000: boolean;
+    storesDesignatedCombustiblesOver1000x: boolean;
     isCareDependentOccupancy: boolean;
     hasBeds: boolean;
     hasStageArea: boolean;
@@ -44,7 +44,7 @@ describe('BuildingInputStepper.vue', () => {
     ceilingHeight: number | null;
     hasLodging: boolean;
     isSpecifiedOneStaircase: boolean;
-    storesCombustiblesOver500x: boolean;
+    storesDesignatedCombustiblesOver500x: boolean;
     hasRoadPart: boolean;
     roadPartRooftopArea: number | null;
     roadPartOtherArea: number | null;
@@ -64,11 +64,15 @@ describe('BuildingInputStepper.vue', () => {
     article13_hasHighFireUsageArea: boolean;
     article13_hasElectricalEquipmentArea: boolean;
     article13_hasRoadwayPart: boolean;
-    buildingStructure: 'fire-resistant' | 'quasi-fire-resistant' | 'other' | null;
+    buildingStructure:
+      | "fire-resistant"
+      | "quasi-fire-resistant"
+      | "other"
+      | null;
     hasMultipleBuildingsOnSite: boolean;
     siteArea: number | null;
     buildingHeight: number | null;
-    floors: any[]; // Floor[]
+    floors: unknown[]; // Floor[]
     showArticle21Item7Checkbox: boolean;
     nextStep: () => void;
     prevStep: () => void;
@@ -89,9 +93,9 @@ describe('BuildingInputStepper.vue', () => {
     usesFireEquipment: false,
     storesMinorHazardousMaterials: false,
     storesDesignatedCombustibles: false,
-    isFlammableItemsAmountOver750: false,
+    storesDesignatedCombustiblesOver750x: false,
     hasFireSuppressingStructure: false,
-    isCombustiblesAmountOver1000: false,
+    storesDesignatedCombustiblesOver1000x: false,
     isCareDependentOccupancy: false,
     hasBeds: false,
     hasStageArea: false,
@@ -101,7 +105,7 @@ describe('BuildingInputStepper.vue', () => {
     ceilingHeight: null,
     hasLodging: false,
     isSpecifiedOneStaircase: false,
-    storesCombustiblesOver500x: false,
+    storesDesignatedCombustiblesOver500x: false,
     hasRoadPart: false,
     roadPartRooftopArea: null,
     roadPartOtherArea: null,
@@ -144,37 +148,36 @@ describe('BuildingInputStepper.vue', () => {
   // =================================================================
   // 1. 初期表示のテスト
   // =================================================================
-  it('正しくマウントされ、最初のステップが表示される', () => {
+  it("正しくマウントされ、最初のステップが表示される", () => {
     // コンポーネントが存在することを確認
     expect(wrapper.exists()).toBe(true);
     // ステップ1のタイトルが表示されていることを確認
-    expect(wrapper.text()).toContain('建物情報を入力してください');
+    expect(wrapper.text()).toContain("建物情報を入力してください");
   });
 
   // =================================================================
   // 2. ユーザー入力とイベント発行のテスト
   // =================================================================
-  it('延床面積を入力すると、update:totalFloorAreaInput イベントが発行される', async () => {
+  it("延床面積を入力すると、update:totalFloorAreaInput イベントが発行される", async () => {
     // v-text-field を見つけて値を設定
     const areaInput = wrapper.find('input[type="number"]'); // より具体的にセレクタを指定する方が良い
     await areaInput.setValue(1500);
 
     // イベントが発行されたか確認
-    expect(wrapper.emitted('update:totalFloorAreaInput')).toBeTruthy();
+    expect(wrapper.emitted("update:totalFloorAreaInput")).toBeTruthy();
     // イベントのペイロード（データ）が正しいか確認
-    expect(wrapper.emitted('update:totalFloorAreaInput')![0]).toEqual([1500]);
+    expect(wrapper.emitted("update:totalFloorAreaInput")![0]).toEqual([1500]);
   });
 
-  it('「建物の主な用途」を選択すると、update:buildingUse イベントが発行される', async () => {
+  it("「建物の主な用途」を選択すると、update:buildingUse イベントが発行される", async () => {
     // v-select を見つけて値を設定（v-selectのテストは少し複雑になる場合があります）
     // この例では、v-selectの内部構造に依存しない方法を試みます
-  wrapper.vm.$emit('update:buildingUse', 'item01_i');
-  await wrapper.vm.$nextTick();
-  // イベントが発行されたか確認
-  expect(wrapper.emitted('update:buildingUse')).toBeTruthy();
-  expect(wrapper.emitted('update:buildingUse')![0]).toEqual(['item01_i']);
+    wrapper.vm.$emit("update:buildingUse", "item01_i");
+    await wrapper.vm.$nextTick();
+    // イベントが発行されたか確認
+    expect(wrapper.emitted("update:buildingUse")).toBeTruthy();
+    expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["item01_i"]);
   });
-
 
   // =================================================================
   // 3. 動的なUIの表示/非表示テスト（今後の機能追加用）
@@ -228,27 +231,33 @@ describe('BuildingInputStepper.vue', () => {
   // =================================================================
   // 4. 用途が3項の時に「火を使用する設備又は器具がある（簡易なものを除く）」チェックボックスが表示されるかどうかのテスト
   // =================================================================
-  it('用途が3項の時に「火を使用する設備又は器具がある（簡易なものを除く）」チェックボックスが表示される', async () => {
+  it("用途が3項の時に「火を使用する設備又は器具がある（簡易なものを除く）」チェックボックスが表示される", async () => {
     // --- 初期状態の確認 ---
-    let fireEquipmentCheckbox = wrapper.find('[data-testid="uses-fire-equipment-checkbox"]');
+    let fireEquipmentCheckbox = wrapper.find(
+      '[data-testid="uses-fire-equipment-checkbox"]'
+    );
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
-    await wrapper.setProps({ buildingUse: 'item03_i', currentStep: 3 });
+    await wrapper.setProps({ buildingUse: "item03_i", currentStep: 3 });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     // --- UIが更新されたことを確認 ---
-    fireEquipmentCheckbox = wrapper.find('[data-testid="uses-fire-equipment-checkbox"]');
+    fireEquipmentCheckbox = wrapper.find(
+      '[data-testid="uses-fire-equipment-checkbox"]'
+    );
     expect(fireEquipmentCheckbox.exists()).toBe(true);
 
     // --- 用途を3項以外に変更して非表示になることを確認 ---
-    await wrapper.setProps({ buildingUse: 'item01_1' });
+    await wrapper.setProps({ buildingUse: "item01_1" });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    await new Promise(resolve => setTimeout(resolve, 0));
-    fireEquipmentCheckbox = wrapper.find('[data-testid="uses-fire-equipment-checkbox"]');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    fireEquipmentCheckbox = wrapper.find(
+      '[data-testid="uses-fire-equipment-checkbox"]'
+    );
     expect(fireEquipmentCheckbox.exists()).toBe(false);
   });
 });

@@ -21,7 +21,7 @@ export interface Article11UserInput {
   hasUpperFloors: Ref<boolean>;
   upperFloorsArea: Ref<number>;
   storesFlammableItems: Ref<boolean>;
-  isFlammableItemsAmountOver750: Ref<boolean>;
+  storesDesignatedCombustiblesOver750x: Ref<boolean>;
   structureType: Ref<'A' | 'B' | 'C' | null>;
   finishType: Ref<'flammable' | 'other' | null>;
 }
@@ -38,7 +38,7 @@ export interface Article12UserInput {
   stageArea: Ref<number | null>;
   isRackWarehouse: Ref<boolean>;
   ceilingHeight: Ref<number | null>;
-  isCombustiblesAmountOver1000: Ref<boolean>;
+  storesDesignatedCombustiblesOver1000x: Ref<boolean>;
   hasFireSuppressingStructure: Ref<boolean>;
   hasBeds: Ref<boolean>;
 }
@@ -46,7 +46,7 @@ export interface Article12UserInput {
 // Article13UserInput
 export interface Article13UserInput {
   buildingUse: Ref<string | null>;
-  isCombustiblesAmountOver1000: Ref<boolean>;
+  storesDesignatedCombustiblesOver1000x: Ref<boolean>;
   hasParkingArea: Ref<boolean>;
   hasMechanicalParking: Ref<boolean>;
   mechanicalParkingCapacity: Ref<number | null>;
@@ -75,7 +75,7 @@ export interface Article21UserInput {
   hasLodging: Ref<boolean>;
   floors: Ref<Floor[]>;
   isSpecifiedOneStaircase: Ref<boolean>;
-  storesCombustiblesOver500x: Ref<boolean>;
+  storesDesignatedCombustiblesOver500x: Ref<boolean>;
   hasRoadPart: Ref<boolean>;
   roadPartRooftopArea: Ref<number | null>;
   roadPartOtherArea: Ref<number | null>;
