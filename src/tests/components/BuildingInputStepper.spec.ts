@@ -141,8 +141,8 @@ describe("BuildingInputStepper.vue", () => {
       global: {
         plugins: [vuetify],
       },
-      // defaultProps is a strongly-typed object; cast to any to satisfy mount() typings
-      props: defaultProps as any,
+      // defaultProps is a strongly-typed object matching BuildingInputStepperProps
+      props: defaultProps,
     });
   });
 
