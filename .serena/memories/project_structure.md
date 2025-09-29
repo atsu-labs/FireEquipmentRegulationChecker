@@ -1,0 +1,11 @@
+# ディレクトリ構成
+- src/components: UIコンポーネント
+- src/composables: 判定ロジック
+- src/composables/articles: 条文ごとのロジック
+- src/data: 用途データ
+- src/tests: テスト
+- types: 型定義
+- public: 静的ファイル
+- .Agents/json: 条文JSON
+- App.vue: ルートコンポーネント
+- main.ts: エントリーポイント
