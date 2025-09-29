@@ -141,8 +141,12 @@ describe("BuildingInputStepper.vue", () => {
       global: {
         plugins: [vuetify],
       },
-      // defaultProps is a strongly-typed object; cast to any to satisfy mount() typings
-      props: defaultProps as any,
+      // defaultProps is strongly-typed; cast to the mount options' props type to avoid `any`
+      props: defaultProps as unknown as Parameters<typeof mount>[1] extends {
+        props?: infer P;
+      }
+        ? P
+        : Record<string, unknown>,
     });
   });
 
