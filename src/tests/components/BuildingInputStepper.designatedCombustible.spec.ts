@@ -42,7 +42,6 @@ describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", ()
     roadPartRooftopArea: null,
     roadPartOtherArea: null,
     hasParkingPart: false,
-    parkingPartArea: null,
     canAllVehiclesExitSimultaneously: false,
     hasTelecomRoomOver500sqm: false,
     hasSpecialCombustibleStructure: false,
@@ -68,7 +67,8 @@ describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", ()
   });
 
   it("over1000 を選択すると over750 と over500 も true になる", async () => {
-    const props = baseProps();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const props: any = baseProps();
     const vuetify = createVuetify({
       components,
       directives,

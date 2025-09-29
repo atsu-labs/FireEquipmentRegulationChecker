@@ -57,9 +57,6 @@ const storesDesignatedCombustiblesOver500x = ref(false); // 令21条8号用
 const hasRoadPart = ref(false); // 令21条12号用
 const roadPartRooftopArea = ref<number | null>(null);
 const roadPartOtherArea = ref<number | null>(null);
-const hasParkingPart = ref(false); // 令21条13号用
-const parkingPartArea = ref<number | null>(null);
-const canAllVehiclesExitSimultaneously = ref(false);
 const hasTelecomRoomOver500sqm = ref(false); // 令21条15号用
 
 // 令22条
@@ -70,16 +67,30 @@ const contractedCurrentCapacity = ref<number | null>(null);
 const hasHotSpringFacility = ref(false);
 const isHotSpringFacilityConfirmed = ref(false);
 
-// 令13条
-const article13_hasParkingArea = ref(false);
-const article13_hasMechanicalParking = ref(false);
-const article13_mechanicalParkingCapacity = ref<number | null>(null);
+// 令13条: parking を使用し、その他フラグは個別に保持
 const article13_hasCarRepairArea = ref(false);
 const article13_hasHelicopterLandingZone = ref(false);
 const article13_hasHighFireUsageArea = ref(false);
 const article13_hasElectricalEquipmentArea = ref(false);
 // `hasTelecomRoomOver500sqm` を単一のソースオブスとして使用します
 const article13_hasRoadwayPart = ref(false);
+
+// 中期移行用: 共通パーキング state を導入（親のシングルソース）
+import type { Parking } from "@/types";
+const parking = ref<Parking>({
+  exists: false,
+  // new split area fields
+  rooftopArea: null,
+  basementOrUpperArea: null,
+  firstFloorArea: null,
+  canAllVehiclesExitSimultaneously: false,
+  mechanical: {
+    present: false,
+    capacity: null,
+  },
+});
+
+// parking は単一のシングルソースとして使用します（プロキシは不要になりました）
 
 // 令19条
 const buildingStructure = ref<
@@ -292,9 +303,7 @@ const { regulationResult: judgementResult12 } = useArticle12Logic({
 const { regulationResult: judgementResult13 } = useArticle13Logic({
   buildingUse,
   storesDesignatedCombustiblesOver1000x: storesDesignatedCombustiblesOver1000x,
-  hasParkingArea: article13_hasParkingArea,
-  hasMechanicalParking: article13_hasMechanicalParking,
-  mechanicalParkingCapacity: article13_mechanicalParkingCapacity,
+  parking,
   hasCarRepairArea: article13_hasCarRepairArea,
   hasHelicopterLandingZone: article13_hasHelicopterLandingZone,
   hasHighFireUsageArea: article13_hasHighFireUsageArea,
@@ -348,9 +357,8 @@ const { regulationResult: article21Result } = useArticle21Logic({
   hasRoadPart,
   roadPartRooftopArea,
   roadPartOtherArea,
-  hasParkingPart,
-  parkingPartArea,
-  canAllVehiclesExitSimultaneously,
+  // Use new parking single-source model
+  parking,
   hasTelecomRoomOver500sqm,
 });
 
@@ -720,11 +728,7 @@ generateFloors();
               v-model:hasRoadPart="hasRoadPart"
               v-model:roadPartRooftopArea="roadPartRooftopArea"
               v-model:roadPartOtherArea="roadPartOtherArea"
-              v-model:hasParkingPart="hasParkingPart"
-              v-model:parkingPartArea="parkingPartArea"
-              v-model:canAllVehiclesExitSimultaneously="
-                canAllVehiclesExitSimultaneously
-              "
+              v-model:parking="parking"
               v-model:hasTelecomRoomOver500sqm="hasTelecomRoomOver500sqm"
               v-model:hasSpecialCombustibleStructure="
                 hasSpecialCombustibleStructure
@@ -733,13 +737,6 @@ generateFloors();
               v-model:hasHotSpringFacility="hasHotSpringFacility"
               v-model:isHotSpringFacilityConfirmed="
                 isHotSpringFacilityConfirmed
-              "
-              v-model:article13_hasParkingArea="article13_hasParkingArea"
-              v-model:article13_hasMechanicalParking="
-                article13_hasMechanicalParking
-              "
-              v-model:article13_mechanicalParkingCapacity="
-                article13_mechanicalParkingCapacity
               "
               v-model:article13_hasCarRepairArea="article13_hasCarRepairArea"
               v-model:article13_hasHelicopterLandingZone="

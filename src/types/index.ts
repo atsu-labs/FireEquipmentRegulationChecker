@@ -1,5 +1,4 @@
-
-import type { Ref } from 'vue';
+import type { Ref } from "vue";
 
 // Article10UserInput
 export interface Article10UserInput {
@@ -22,8 +21,8 @@ export interface Article11UserInput {
   upperFloorsArea: Ref<number>;
   storesFlammableItems: Ref<boolean>;
   storesDesignatedCombustiblesOver750x: Ref<boolean>;
-  structureType: Ref<'A' | 'B' | 'C' | null>;
-  finishType: Ref<'flammable' | 'other' | null>;
+  structureType: Ref<"A" | "B" | "C" | null>;
+  finishType: Ref<"flammable" | "other" | null>;
 }
 
 // Article12UserInput
@@ -47,9 +46,8 @@ export interface Article12UserInput {
 export interface Article13UserInput {
   buildingUse: Ref<string | null>;
   storesDesignatedCombustiblesOver1000x: Ref<boolean>;
-  hasParkingArea: Ref<boolean>;
-  hasMechanicalParking: Ref<boolean>;
-  mechanicalParkingCapacity: Ref<number | null>;
+  // 共有パーキング情報に移行
+  parking: Ref<Parking>;
   hasCarRepairArea: Ref<boolean>;
   hasHelicopterLandingZone: Ref<boolean>;
   hasHighFireUsageArea: Ref<boolean>;
@@ -64,7 +62,9 @@ export interface Article19UserInput {
   buildingUse: Ref<string | null>;
   groundFloors: Ref<number>;
   floors: Ref<Floor[]>;
-  buildingStructure: Ref<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>;
+  buildingStructure: Ref<
+    "fire-resistant" | "quasi-fire-resistant" | "other" | null
+  >;
   hasMultipleBuildingsOnSite: Ref<boolean>;
 }
 
@@ -79,9 +79,8 @@ export interface Article21UserInput {
   hasRoadPart: Ref<boolean>;
   roadPartRooftopArea: Ref<number | null>;
   roadPartOtherArea: Ref<number | null>;
-  hasParkingPart: Ref<boolean>;
-  parkingPartArea: Ref<number | null>;
-  canAllVehiclesExitSimultaneously: Ref<boolean>;
+  // 共有パーキング情報を使用
+  parking: Ref<Parking>;
   hasTelecomRoomOver500sqm: Ref<boolean>;
 }
 
@@ -138,7 +137,9 @@ export interface Article27UserInput {
   totalArea: Ref<number | null>;
   groundFloors: Ref<number>;
   floors: Ref<Floor[]>;
-  buildingStructure: Ref<'fire-resistant' | 'quasi-fire-resistant' | 'other' | null>;
+  buildingStructure: Ref<
+    "fire-resistant" | "quasi-fire-resistant" | "other" | null
+  >;
 }
 
 // Article28UserInput
@@ -182,16 +183,33 @@ export interface Article29_3UserInput {
 
 export interface Floor {
   level: number;
-  type: 'ground' | 'basement';
+  type: "ground" | "basement";
   floorArea: number | null;
   capacity: number | null;
   isWindowless: boolean;
 }
 
 export interface JudgementResult {
-  required: boolean | 'warning' | 'info';
+  required: boolean | "warning" | "info";
   message: string;
   basis: string;
+}
+
+// 共通パーキング情報（中期移行用）
+export interface Parking {
+  exists: boolean;
+  // New split areas to represent parking parts by location
+  // 屋上部分
+  rooftopArea: number | null;
+  // 地階又は二階以上の階にある駐車部分の床面積合計
+  basementOrUpperArea: number | null;
+  // 一階の駐車部分の床面積
+  firstFloorArea: number | null;
+  canAllVehiclesExitSimultaneously: boolean;
+  mechanical: {
+    present: boolean;
+    capacity: number | null;
+  };
 }
 
 export interface Article26Result {

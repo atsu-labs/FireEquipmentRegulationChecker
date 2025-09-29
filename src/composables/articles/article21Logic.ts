@@ -15,11 +15,13 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     const hasRoadPart = userInput.hasRoadPart.value;
     const roadPartRooftopArea = userInput.roadPartRooftopArea.value || 0;
     const roadPartOtherArea = userInput.roadPartOtherArea.value || 0;
-    const hasParkingPart = userInput.hasParkingPart.value;
-    const parkingPartArea = userInput.parkingPartArea.value || 0;
-    const canAllVehiclesExitSimultaneously =
-      userInput.canAllVehiclesExitSimultaneously.value;
     const hasTelecomRoomOver500sqm = userInput.hasTelecomRoomOver500sqm.value;
+
+    // Use new parking model provided by parent (App.vue)
+    const parking = (userInput as Article21UserInput).parking;
+    const parkingExists = parking?.value?.exists ?? false;
+    const canAllExit =
+      parking?.value?.canAllVehiclesExitSimultaneously ?? false;
 
     // --- 第1号 ---
     const item1_i_codes = [
@@ -194,6 +196,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
         basis: "令第21条第1項第10号",
       };
     }
+
     // --- 第11号 ---
     const applicableFloor11 = floors.find((floor) => {
       const area = floor.floorArea || 0;
@@ -232,8 +235,17 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第13号 ---
-    if (hasParkingPart) {
-      if (parkingPartArea >= 200 && !canAllVehiclesExitSimultaneously) {
+    if (parkingExists) {
+      // For Article21第13号, the clause applies to 地階又は二階以上の階の駐車部分で、当該部分の床面積が200㎡以上のもの
+      // Therefore, we only consider basementOrUpperArea here (not firstFloorArea or rooftopArea).
+      // Allow legacy single-area field to act as basementOrUpperArea if specific field is not provided
+      const basementOrUpperArea = parking
+        ? parking.value.basementOrUpperArea ?? 0
+        : 0;
+      const canAllExitParking = canAllExit;
+
+      // If the basement/upper parking area >= 200 and the structure is NOT the "同時に屋外に出られる構造" exemption, require equipment
+      if ((basementOrUpperArea || 0) >= 200 && !canAllExitParking) {
         return {
           required: true,
           message:

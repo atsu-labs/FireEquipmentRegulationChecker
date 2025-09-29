@@ -4,19 +4,34 @@ import type { JudgementResult, Article13UserInput } from "@/types";
 
 export function useArticle13Logic(userInput: Article13UserInput) {
   const regulationResult = computed((): JudgementResult => {
-    const {
-      buildingUse,
-      storesDesignatedCombustiblesOver1000x,
-      hasParkingArea,
-      hasMechanicalParking,
-      mechanicalParkingCapacity,
-      hasCarRepairArea,
-      hasHelicopterLandingZone,
-      hasHighFireUsageArea,
-      hasElectricalEquipmentArea,
-      hasTelecomRoomOver500sqm,
-      hasRoadwayPart,
-    } = userInput;
+    const buildingUse = userInput.buildingUse;
+    const storesDesignatedCombustiblesOver1000x =
+      userInput.storesDesignatedCombustiblesOver1000x;
+    const parking = userInput.parking;
+    const hasCarRepairArea = userInput.hasCarRepairArea;
+    const hasHelicopterLandingZone = userInput.hasHelicopterLandingZone;
+    const hasHighFireUsageArea = userInput.hasHighFireUsageArea;
+    const hasElectricalEquipmentArea = userInput.hasElectricalEquipmentArea;
+    const hasTelecomRoomOver500sqm = userInput.hasTelecomRoomOver500sqm;
+    const hasRoadwayPart = userInput.hasRoadwayPart;
+    // Legacy optional properties (kept for compatibility in some callers/tests)
+    type BoolRef = { value: boolean };
+    type NumRef = { value: number | null };
+    const maybeHasParkingArea = (
+      userInput as unknown as {
+        hasParkingArea?: BoolRef;
+      }
+    ).hasParkingArea;
+    const maybeHasMechanicalParking = (
+      userInput as unknown as {
+        hasMechanicalParking?: BoolRef;
+      }
+    ).hasMechanicalParking;
+    const maybeMechanicalParkingCapacity = (
+      userInput as unknown as {
+        mechanicalParkingCapacity?: NumRef;
+      }
+    ).mechanicalParkingCapacity;
 
     const use = buildingUse.value;
     if (!use) {
@@ -68,7 +83,39 @@ export function useArticle13Logic(userInput: Article13UserInput) {
     }
 
     // 5. 駐車場
-    if (hasParkingArea.value) {
+    // 駐車部分（共通 parking モデル）。未定義なら legacy の hasParkingArea を参照
+    const parkingExists = parking
+      ? parking.value.exists
+      : Boolean(maybeHasParkingArea && maybeHasParkingArea.value);
+
+    if (parkingExists) {
+      // Determine area-based thresholds per Article13 table:
+      // - 屋上部分: 300㎡以上
+      // - 地階または2階以上の階: 200㎡以上
+      // - 1階: 500㎡以上
+      // Exclusion: 階が「駐車するすべての車両が同時に屋外に出ることができる構造の階」である場合は当該階を除く
+      const rooftopArea = parking?.value.rooftopArea ?? 0;
+      const basementOrUpperArea = parking?.value.basementOrUpperArea ?? 0;
+      const firstFloorArea = parking?.value.firstFloorArea ?? 0;
+      const canAllExit =
+        parking?.value.canAllVehiclesExitSimultaneously ?? false;
+
+      // If parking floors are designed so all vehicles can exit simultaneously, those floors are excluded.
+      const rooftopApplies = !canAllExit && (rooftopArea || 0) >= 300;
+      const basementOrUpperApplies =
+        !canAllExit && (basementOrUpperArea || 0) >= 200;
+      const firstFloorApplies = !canAllExit && (firstFloorArea || 0) >= 500;
+
+      if (rooftopApplies || basementOrUpperApplies || firstFloorApplies) {
+        return {
+          required: true,
+          message:
+            "駐車の用に供される部分があり、階や面積が該当するため、水噴霧、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+          basis: "令第13条第1項第5号イ",
+        };
+      }
+
+      // If parking exists but no (non-exempt) area reaches threshold, return warning to review details
       return {
         required: "warning",
         message:
@@ -76,8 +123,18 @@ export function useArticle13Logic(userInput: Article13UserInput) {
         basis: "令第13条第1項第5号イ",
       };
     }
-    if (hasMechanicalParking.value) {
-      const capacity = mechanicalParkingCapacity.value ?? 0;
+    // mechanical parking: prefer new parking model, fallback to legacy fields
+    const mechanicalPresent = parking
+      ? parking.value.mechanical.present
+      : Boolean(maybeHasMechanicalParking && maybeHasMechanicalParking.value);
+    const mechanicalCapacity = parking
+      ? parking.value.mechanical.capacity ?? 0
+      : (maybeMechanicalParkingCapacity &&
+          maybeMechanicalParkingCapacity.value) ||
+        0;
+
+    if (mechanicalPresent) {
+      const capacity = mechanicalCapacity;
       if (capacity >= 10) {
         return {
           required: true,

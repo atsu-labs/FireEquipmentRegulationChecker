@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
 import { ref, type Ref } from "vue";
 import { useArticle13Logic } from "../composables/articles/article13Logic";
@@ -12,9 +13,11 @@ const createMockInput = (
   const defaults: Article13UserInput = {
     buildingUse: ref(null),
     storesDesignatedCombustiblesOver1000x: ref(false),
-    hasParkingArea: ref(false),
-    hasMechanicalParking: ref(false),
-    mechanicalParkingCapacity: ref(null),
+    parking: ref({
+      exists: false,
+      canAllVehiclesExitSimultaneously: false,
+      mechanical: { present: false, capacity: null },
+    } as any),
     hasCarRepairArea: ref(false),
     hasHelicopterLandingZone: ref(false),
     hasHighFireUsageArea: ref(false),
@@ -96,7 +99,7 @@ describe("useArticle13Logic", () => {
   it("5号イ: 駐車場がある場合、警告を返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasParkingArea: true,
+      parking: { ...(null as any), exists: true },
     });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe("warning");
@@ -106,8 +109,7 @@ describe("useArticle13Logic", () => {
   it("5号ロ: 機械式駐車場で収容台数10台未満の場合、警告を返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasMechanicalParking: true,
-      mechanicalParkingCapacity: 9,
+      parking: { ...(null as any), mechanical: { present: true, capacity: 9 } },
     });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe("warning");
@@ -117,8 +119,10 @@ describe("useArticle13Logic", () => {
   it("5号ロ: 機械式駐車場で収容台数10台以上の場合、設置義務あり", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasMechanicalParking: true,
-      mechanicalParkingCapacity: 10,
+      parking: {
+        ...(null as any),
+        mechanical: { present: true, capacity: 10 },
+      },
     });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe(true);

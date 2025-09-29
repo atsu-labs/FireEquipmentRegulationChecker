@@ -51,7 +51,6 @@ describe("BuildingInputStepper.vue", () => {
     roadPartRooftopArea: number | null;
     roadPartOtherArea: number | null;
     hasParkingPart: boolean;
-    parkingPartArea: number | null;
     canAllVehiclesExitSimultaneously: boolean;
     hasTelecomRoomOver500sqm: boolean;
     hasSpecialCombustibleStructure: boolean;
@@ -112,7 +111,6 @@ describe("BuildingInputStepper.vue", () => {
     roadPartRooftopArea: null,
     roadPartOtherArea: null,
     hasParkingPart: false,
-    parkingPartArea: null,
     canAllVehiclesExitSimultaneously: false,
     hasTelecomRoomOver500sqm: false,
     hasSpecialCombustibleStructure: false,
@@ -139,13 +137,14 @@ describe("BuildingInputStepper.vue", () => {
 
   // 各テストの前にコンポーネントをマウントする
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const propsAny: any = defaultProps;
     wrapper = mount(BuildingInputStepper, {
       global: {
         plugins: [vuetify],
       },
       // defaultProps is strongly-typed; cast to `any` for mount to satisfy typings in tests
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      props: defaultProps as any,
+      props: propsAny,
     });
   });
 

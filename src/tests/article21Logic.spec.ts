@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
 import { ref } from "vue";
 import { useArticle21Logic } from "../composables/articles/article21Logic";
@@ -7,7 +8,8 @@ describe("useArticle21Logic", () => {
   const createMockUserInput = (
     overrides: Partial<Article21UserInput>
   ): Article21UserInput => {
-    const defaults: Article21UserInput = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const defaults: any = {
       buildingUse: ref(null),
       totalArea: ref(0),
       hasLodging: ref(false),
@@ -17,12 +19,31 @@ describe("useArticle21Logic", () => {
       hasRoadPart: ref(false),
       roadPartRooftopArea: ref(0),
       roadPartOtherArea: ref(0),
-      hasParkingPart: ref(false),
-      parkingPartArea: ref(0),
-      canAllVehiclesExitSimultaneously: ref(false),
+      parking: ref({
+        exists: false,
+        canAllVehiclesExitSimultaneously: false,
+        mechanical: { present: false, capacity: null },
+      } as any),
       hasTelecomRoomOver500sqm: ref(false),
     };
-    return { ...defaults, ...overrides };
+    // Map legacy overrides (hasParkingPart / parkingPartArea / canAllVehiclesExitSimultaneously)
+    const combined = { ...defaults, ...(overrides as any) };
+    if ((overrides as any).hasParkingPart !== undefined) {
+      combined.parking = {
+        ...(combined.parking || {}),
+        exists: (overrides as any).hasParkingPart.value,
+      };
+    }
+    // Legacy mapping removed; use parking.basementOrUpperArea etc. in overrides when needed.
+    if ((overrides as any).canAllVehiclesExitSimultaneously !== undefined) {
+      combined.parking = {
+        ...(combined.parking || {}),
+        canAllVehiclesExitSimultaneously: (overrides as any)
+          .canAllVehiclesExitSimultaneously.value,
+      };
+    }
+
+    return combined as Article21UserInput;
   };
 
   it("1号イ: (五)項イの建物で設置が必要になる", () => {
@@ -296,9 +317,12 @@ describe("useArticle21Logic", () => {
 
   it("13号: 駐車の用に供する部分が200㎡以上で、同時に屋外に出られない場合", () => {
     const userInput = createMockUserInput({
-      hasParkingPart: ref(true),
-      parkingPartArea: ref(200),
-      canAllVehiclesExitSimultaneously: ref(false),
+      parking: ref({
+        exists: true,
+        basementOrUpperArea: 200,
+        canAllVehiclesExitSimultaneously: false,
+        mechanical: { present: false, capacity: null },
+      } as any),
     });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);

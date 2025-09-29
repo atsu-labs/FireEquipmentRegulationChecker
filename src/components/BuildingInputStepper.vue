@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BuildingUseSelector from "@/components/BuildingUseSelector.vue";
-import type { Floor } from "@/types";
+import type { Floor, Parking } from "@/types";
 import type { PropType } from "vue";
 import { useCodeMatches } from "@/composables/utils";
 import { watch, computed } from "vue";
@@ -81,11 +81,16 @@ const props = defineProps({
   // roadPartOtherArea: 屋上以外の道路部分面積。article21 で使用
   roadPartOtherArea: { type: Number as PropType<number | null>, default: null },
   // hasParkingPart: 駐車部分の有無。article21 / article13 で使用
-  hasParkingPart: { type: Boolean, required: true },
-  // parkingPartArea: 駐車部分の床面積。article21 の判定に使用
-  parkingPartArea: { type: Number as PropType<number | null>, default: null },
-  // canAllVehiclesExitSimultaneously: 全車両同時退出可否。article21 の条件に使用
-  canAllVehiclesExitSimultaneously: { type: Boolean, required: true },
+  // parking: 共通パーキング情報（Ref<Parking>）
+  parking: {
+    type: Object as PropType<Parking>,
+    required: false,
+    default: () => ({
+      exists: false,
+      canAllVehiclesExitSimultaneously: false,
+      mechanical: { present: false, capacity: null },
+    }),
+  },
   // hasTelecomRoomOver500sqm: 通信機器室500㎡以上フラグ。article13, article21 等で使用（App.vue と共有）
   hasTelecomRoomOver500sqm: { type: Boolean, required: true },
 
@@ -104,12 +109,7 @@ const props = defineProps({
 
   // Article 13
   // article13_* 系は article13Logic にそのまま渡される（駐車・機械式駐車・修理場等）
-  article13_hasParkingArea: { type: Boolean, required: true },
-  article13_hasMechanicalParking: { type: Boolean, required: true },
-  article13_mechanicalParkingCapacity: {
-    type: Number as PropType<number | null>,
-    default: null,
-  },
+  // Article13 legacy flags removed; use `parking` instead
   article13_hasCarRepairArea: { type: Boolean, required: true },
   article13_hasHelicopterLandingZone: { type: Boolean, required: true },
   article13_hasHighFireUsageArea: { type: Boolean, required: true },
@@ -174,17 +174,13 @@ const emit = defineEmits([
   "update:hasRoadPart",
   "update:roadPartRooftopArea",
   "update:roadPartOtherArea",
-  "update:hasParkingPart",
-  "update:parkingPartArea",
-  "update:canAllVehiclesExitSimultaneously",
+  "update:parking",
   "update:hasTelecomRoomOver500sqm",
   "update:hasSpecialCombustibleStructure",
   "update:contractedCurrentCapacity",
   "update:hasHotSpringFacility",
   "update:isHotSpringFacilityConfirmed",
-  "update:article13_hasParkingArea",
-  "update:article13_hasMechanicalParking",
-  "update:article13_mechanicalParkingCapacity",
+  // article13 legacy updates removed; parking represents the state
   "update:article13_hasCarRepairArea",
   "update:article13_hasHelicopterLandingZone",
   "update:article13_hasHighFireUsageArea",
@@ -243,6 +239,8 @@ const selectedDesignatedCombustibleLevel = computed({
     }
   },
 });
+
+// 駐車情報は親の `parking` を単一のソースとして使用します
 </script>
 
 <template>
@@ -275,311 +273,324 @@ const selectedDesignatedCombustibleLevel = computed({
         <v-card class="mb-4">
           <v-card-title>建物情報を入力してください</v-card-title>
           <v-card-text>
-              <v-row>
-                <v-col cols="12" sm="4" md="4" lg="4">
-                  <BuildingUseSelector
-                    :model-value="
-                      buildingUse === null ? undefined : buildingUse
-                    "
-                    @update:model-value="emit('update:buildingUse', $event)"
-                  />
-                </v-col>
-                <v-col cols="12" sm="4" md="4" lg="4">
-                  <v-text-field
-                    label="延床面積"
-                    :model-value="totalFloorAreaInput"
-                    @update:model-value="
-                      emit(
-                        'update:totalFloorAreaInput',
-                        $event === '' ? null : Number($event)
-                      )
-                    "
-                    type="number"
-                    min="0"
-                    suffix="㎡"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="4" md="4" lg="4">
-                  <v-text-field
-                    label="全体の収容人員"
-                    :model-value="capacityInput"
-                    @update:model-value="
-                      emit(
-                        'update:capacityInput',
-                        $event === '' ? null : Number($event)
-                      )
-                    "
-                    type="number"
-                    min="0"
-                    suffix="人"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" sm="12" class="mt-2">
-                  <div v-if="buildingUse && buildingUse.startsWith('item06')" class="mb-2">
-                    <p class="font-weight-bold">（6）項関連の追加情報</p>
-                    <v-checkbox
-                      v-if="useCodeMatches(buildingUse, ['item06_ro_2','item06_ro_4','item06_ro_5'])"
-                      :model-value="isCareDependentOccupancy"
-                      @update:model-value="emit('update:isCareDependentOccupancy', $event)"
-                      label="介助がなければ避難できない者を主として入所させる施設"
-                      hide-details
-                    ></v-checkbox>
-                    <v-checkbox
-                      :model-value="hasBeds"
-                      @update:model-value="emit('update:hasBeds', $event)"
-                      label="診療所にベッドがある"
-                      hide-details
-                    ></v-checkbox>
-                    <!-- hasLodging は 6項ハ の用途コードのときのみ表示 -->
-                    <v-checkbox
-                      v-if="buildingUse && buildingUse.startsWith('item06_ha')"
-                      :model-value="hasLodging"
-                      @update:model-value="emit('update:hasLodging', $event)"
-                      label="宿泊施設、入居施設、または宿泊を伴うサービスがある"
-                      hide-details
-                    ></v-checkbox>
-                  </div>
-
-                  <div v-if="buildingUse && buildingUse.startsWith('item01')" class="mb-2">
-                    <p class="font-weight-bold">（1）項関連の追加情報</p>
-                    <v-checkbox
-                      :model-value="hasStageArea"
-                      @update:model-value="emit('update:hasStageArea', $event)"
-                      label="舞台部がある"
-                      hide-details
-                    ></v-checkbox>
-                    <v-expand-transition>
-                      <div v-if="hasStageArea" class="ml-8">
-                        <v-radio-group
-                          :model-value="stageFloorLevel"
-                          @update:model-value="emit('update:stageFloorLevel', $event)"
-                          label="舞台部のある階"
-                        >
-                          <v-radio
-                            label="地階, 無窓階, 4階以上"
-                            value="basement_windowless_4th_or_higher"
-                          ></v-radio>
-                          <v-radio label="上記以外" value="other"></v-radio>
-                        </v-radio-group>
-                        <v-text-field
-                          label="舞台部の面積"
-                          :model-value="stageArea"
-                          @update:model-value="
-                            emit(
-                              'update:stageArea',
-                              $event === '' ? null : Number($event)
-                            )
-                          "
-                          type="number"
-                          min="0"
-                          suffix="㎡"
-                          dense
-                        ></v-text-field>
-                      </div>
-                    </v-expand-transition>
-                  </div>
-
-                  <div v-if="buildingUse && buildingUse.startsWith('item14')" class="mb-2">
-                    <p class="font-weight-bold">（14）項関連の追加情報</p>
-                    <v-checkbox
-                      :model-value="isRackWarehouse"
-                      @update:model-value="emit('update:isRackWarehouse', $event)"
-                      label="ラック式倉庫である"
-                      hide-details
-                    ></v-checkbox>
-                    <v-expand-transition>
-                      <div v-if="isRackWarehouse" class="ml-8">
-                        <v-text-field
-                          label="天井の高さ"
-                          :model-value="ceilingHeight"
-                          @update:model-value="
-                            emit(
-                              'update:ceilingHeight',
-                              $event === '' ? null : Number($event)
-                            )
-                          "
-                          type="number"
-                          min="0"
-                          suffix="m"
-                          dense
-                        ></v-text-field>
-                      </div>
-                    </v-expand-transition>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row align="center">
-                <v-col cols="12" sm="4">
-                  <v-text-field
-                    label="地上階"
-                    :model-value="groundFloorsInput"
-                    @update:model-value="
-                      emit('update:groundFloorsInput', Number($event))
-                    "
-                    type="number"
-                    min="0"
-                    suffix="階"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="4">
-                  <v-text-field
-                    label="地下階"
-                    :model-value="basementFloorsInput"
-                    @update:model-value="
-                      emit('update:basementFloorsInput', Number($event))
-                    "
-                    type="number"
-                    min="0"
-                    suffix="階"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="4">
+            <v-row>
+              <v-col cols="12" sm="4" md="4" lg="4">
+                <BuildingUseSelector
+                  :model-value="buildingUse === null ? undefined : buildingUse"
+                  @update:model-value="emit('update:buildingUse', $event)"
+                />
+              </v-col>
+              <v-col cols="12" sm="4" md="4" lg="4">
+                <v-text-field
+                  label="延床面積"
+                  :model-value="totalFloorAreaInput"
+                  @update:model-value="
+                    emit(
+                      'update:totalFloorAreaInput',
+                      $event === '' ? null : Number($event)
+                    )
+                  "
+                  type="number"
+                  min="0"
+                  suffix="㎡"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" md="4" lg="4">
+                <v-text-field
+                  label="全体の収容人員"
+                  :model-value="capacityInput"
+                  @update:model-value="
+                    emit(
+                      'update:capacityInput',
+                      $event === '' ? null : Number($event)
+                    )
+                  "
+                  type="number"
+                  min="0"
+                  suffix="人"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12" class="mt-2">
+                <div
+                  v-if="buildingUse && buildingUse.startsWith('item06')"
+                  class="mb-2"
+                >
+                  <p class="font-weight-bold">（6）項関連の追加情報</p>
                   <v-checkbox
-                    :model-value="hasNonFloorArea"
-                    @update:model-value="emit('update:hasNonFloorArea', $event)"
-                    label="階に該当しない部分"
-                    dense
+                    v-if="
+                      useCodeMatches(buildingUse, [
+                        'item06_ro_2',
+                        'item06_ro_4',
+                        'item06_ro_5',
+                      ])
+                    "
+                    :model-value="isCareDependentOccupancy"
+                    @update:model-value="
+                      emit('update:isCareDependentOccupancy', $event)
+                    "
+                    label="介助がなければ避難できない者を主として入所させる施設"
                     hide-details
                   ></v-checkbox>
-                </v-col>
-              </v-row>
+                  <v-checkbox
+                    :model-value="hasBeds"
+                    @update:model-value="emit('update:hasBeds', $event)"
+                    label="診療所にベッドがある"
+                    hide-details
+                  ></v-checkbox>
+                  <!-- hasLodging は 6項ハ の用途コードのときのみ表示 -->
+                  <v-checkbox
+                    v-if="buildingUse && buildingUse.startsWith('item06_ha')"
+                    :model-value="hasLodging"
+                    @update:model-value="emit('update:hasLodging', $event)"
+                    label="宿泊施設、入居施設、または宿泊を伴うサービスがある"
+                    hide-details
+                  ></v-checkbox>
+                </div>
 
-              <v-row class="mt-4">
-                <v-col cols="12" md="6">
-                  <p class="mb-2">建物の構造</p>
-                  <v-radio-group
-                    :model-value="structureType"
-                    @update:model-value="emit('update:structureType', $event)"
-                    hide-details
-                  >
-                    <v-radio
-                      label="特定主要構造部が耐火構造"
-                      value="A"
-                    ></v-radio>
-                    <v-radio
-                      label="その他の耐火構造 or 準耐火構造"
-                      value="B"
-                    ></v-radio>
-                    <v-radio label="その他" value="C"></v-radio>
-                  </v-radio-group>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <p class="mb-2">壁・天井の仕上げ</p>
-                  <v-radio-group
-                    :model-value="finishType"
-                    @update:model-value="emit('update:finishType', $event)"
-                    hide-details
-                  >
-                    <v-radio label="難燃材料" value="flammable"></v-radio>
-                    <v-radio label="その他" value="other"></v-radio>
-                  </v-radio-group>
-                </v-col>
-              </v-row>
-              <v-row align="center">
-                <v-col cols="12" sm="3">
-                  <v-text-field
-                    label="敷地面積"
-                    :model-value="siteArea"
-                    @update:model-value="
-                      emit(
-                        'update:siteArea',
-                        $event === '' ? null : Number($event)
-                      )
-                    "
-                    type="number"
-                    min="0"
-                    suffix="㎡"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="3">
-                  <v-text-field
-                    label="建物の高さ"
-                    :model-value="buildingHeight"
-                    @update:model-value="
-                      emit(
-                        'update:buildingHeight',
-                        $event === '' ? null : Number($event)
-                      )
-                    "
-                    type="number"
-                    min="0"
-                    suffix="m"
-                    dense
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="3">
-                  <v-radio-group
-                    :model-value="buildingStructure"
-                    @update:model-value="
-                      emit('update:buildingStructure', $event)
-                    "
-                    hide-details
-                  >
-                    <v-radio
-                      label="耐火建築物"
-                      value="fire-resistant"
-                    ></v-radio>
-                    <v-radio
-                      label="準耐火建築物"
-                      value="quasi-fire-resistant"
-                    ></v-radio>
-                    <v-radio label="その他" value="other"></v-radio>
-                  </v-radio-group>
-                </v-col>
-                <v-col cols="12" sm="3">
+                <div
+                  v-if="buildingUse && buildingUse.startsWith('item01')"
+                  class="mb-2"
+                >
+                  <p class="font-weight-bold">（1）項関連の追加情報</p>
                   <v-checkbox
-                    :model-value="hasMultipleBuildingsOnSite"
-                    @update:model-value="
-                      emit('update:hasMultipleBuildingsOnSite', $event)
-                    "
-                    label="同一敷地内に複数の建物がある"
-                    hide-details
-                    class="mt-2"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-              <v-row class="mt-4" align="center">
-                <v-col cols="12" sm="6">
-                  <p class="font-weight-bold mb-2">令第22条（漏電火災警報器）関連</p>
-                  <v-checkbox
-                    :model-value="hasSpecialCombustibleStructure"
-                    @update:model-value="emit('update:hasSpecialCombustibleStructure', $event)"
-                    label="鉄網入りの壁・床・天井など、特殊な可燃性構造を有する"
+                    :model-value="hasStageArea"
+                    @update:model-value="emit('update:hasStageArea', $event)"
+                    label="舞台部がある"
                     hide-details
                   ></v-checkbox>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    class="mt-4"
-                    label="契約電流容量"
-                    :model-value="contractedCurrentCapacity"
-                    @update:model-value="
-                      emit(
-                        'update:contractedCurrentCapacity',
-                        $event === '' ? null : Number($event)
-                      )
-                    "
-                    type="number"
-                    min="0"
-                    suffix="A"
-                    dense
-                    style="max-width: 200px"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+                  <v-expand-transition>
+                    <div v-if="hasStageArea" class="ml-8">
+                      <v-radio-group
+                        :model-value="stageFloorLevel"
+                        @update:model-value="
+                          emit('update:stageFloorLevel', $event)
+                        "
+                        label="舞台部のある階"
+                      >
+                        <v-radio
+                          label="地階, 無窓階, 4階以上"
+                          value="basement_windowless_4th_or_higher"
+                        ></v-radio>
+                        <v-radio label="上記以外" value="other"></v-radio>
+                      </v-radio-group>
+                      <v-text-field
+                        label="舞台部の面積"
+                        :model-value="stageArea"
+                        @update:model-value="
+                          emit(
+                            'update:stageArea',
+                            $event === '' ? null : Number($event)
+                          )
+                        "
+                        type="number"
+                        min="0"
+                        suffix="㎡"
+                        dense
+                      ></v-text-field>
+                    </div>
+                  </v-expand-transition>
+                </div>
+
+                <div
+                  v-if="buildingUse && buildingUse.startsWith('item14')"
+                  class="mb-2"
+                >
+                  <p class="font-weight-bold">（14）項関連の追加情報</p>
+                  <v-checkbox
+                    :model-value="isRackWarehouse"
+                    @update:model-value="emit('update:isRackWarehouse', $event)"
+                    label="ラック式倉庫である"
+                    hide-details
+                  ></v-checkbox>
+                  <v-expand-transition>
+                    <div v-if="isRackWarehouse" class="ml-8">
+                      <v-text-field
+                        label="天井の高さ"
+                        :model-value="ceilingHeight"
+                        @update:model-value="
+                          emit(
+                            'update:ceilingHeight',
+                            $event === '' ? null : Number($event)
+                          )
+                        "
+                        type="number"
+                        min="0"
+                        suffix="m"
+                        dense
+                      ></v-text-field>
+                    </div>
+                  </v-expand-transition>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col cols="12" sm="4">
+                <v-text-field
+                  label="地上階"
+                  :model-value="groundFloorsInput"
+                  @update:model-value="
+                    emit('update:groundFloorsInput', Number($event))
+                  "
+                  type="number"
+                  min="0"
+                  suffix="階"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field
+                  label="地下階"
+                  :model-value="basementFloorsInput"
+                  @update:model-value="
+                    emit('update:basementFloorsInput', Number($event))
+                  "
+                  type="number"
+                  min="0"
+                  suffix="階"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-checkbox
+                  :model-value="hasNonFloorArea"
+                  @update:model-value="emit('update:hasNonFloorArea', $event)"
+                  label="階に該当しない部分"
+                  dense
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+            </v-row>
+
+            <v-row class="mt-4">
+              <v-col cols="12" md="6">
+                <p class="mb-2">建物の構造</p>
+                <v-radio-group
+                  :model-value="structureType"
+                  @update:model-value="emit('update:structureType', $event)"
+                  hide-details
+                >
+                  <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
+                  <v-radio
+                    label="その他の耐火構造 or 準耐火構造"
+                    value="B"
+                  ></v-radio>
+                  <v-radio label="その他" value="C"></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col cols="12" md="6">
+                <p class="mb-2">壁・天井の仕上げ</p>
+                <v-radio-group
+                  :model-value="finishType"
+                  @update:model-value="emit('update:finishType', $event)"
+                  hide-details
+                >
+                  <v-radio label="難燃材料" value="flammable"></v-radio>
+                  <v-radio label="その他" value="other"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col cols="12" sm="3">
+                <v-text-field
+                  label="敷地面積"
+                  :model-value="siteArea"
+                  @update:model-value="
+                    emit(
+                      'update:siteArea',
+                      $event === '' ? null : Number($event)
+                    )
+                  "
+                  type="number"
+                  min="0"
+                  suffix="㎡"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="3">
+                <v-text-field
+                  label="建物の高さ"
+                  :model-value="buildingHeight"
+                  @update:model-value="
+                    emit(
+                      'update:buildingHeight',
+                      $event === '' ? null : Number($event)
+                    )
+                  "
+                  type="number"
+                  min="0"
+                  suffix="m"
+                  dense
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="3">
+                <v-radio-group
+                  :model-value="buildingStructure"
+                  @update:model-value="emit('update:buildingStructure', $event)"
+                  hide-details
+                >
+                  <v-radio label="耐火建築物" value="fire-resistant"></v-radio>
+                  <v-radio
+                    label="準耐火建築物"
+                    value="quasi-fire-resistant"
+                  ></v-radio>
+                  <v-radio label="その他" value="other"></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col cols="12" sm="3">
+                <v-checkbox
+                  :model-value="hasMultipleBuildingsOnSite"
+                  @update:model-value="
+                    emit('update:hasMultipleBuildingsOnSite', $event)
+                  "
+                  label="同一敷地内に複数の建物がある"
+                  hide-details
+                  class="mt-2"
+                ></v-checkbox>
+              </v-col>
+            </v-row>
+            <v-row class="mt-4" align="center">
+              <v-col cols="12" sm="6">
+                <p class="font-weight-bold mb-2">
+                  令第22条（漏電火災警報器）関連
+                </p>
+                <v-checkbox
+                  :model-value="hasSpecialCombustibleStructure"
+                  @update:model-value="
+                    emit('update:hasSpecialCombustibleStructure', $event)
+                  "
+                  label="鉄網入りの壁・床・天井など、特殊な可燃性構造を有する"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  class="mt-4"
+                  label="契約電流容量"
+                  :model-value="contractedCurrentCapacity"
+                  @update:model-value="
+                    emit(
+                      'update:contractedCurrentCapacity',
+                      $event === '' ? null : Number($event)
+                    )
+                  "
+                  type="number"
+                  min="0"
+                  suffix="A"
+                  dense
+                  style="max-width: 200px"
+                ></v-text-field>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-stepper-window-item>
@@ -818,21 +829,54 @@ const selectedDesignatedCombustibleLevel = computed({
             </v-expand-transition>
 
             <v-checkbox
-              :model-value="hasParkingPart"
-              @update:model-value="emit('update:hasParkingPart', $event)"
-              label="地階、2階以上に駐車の用に供する部分がある"
+              :model-value="parking.exists"
+              @update:model-value="
+                (val) => emit('update:parking', { ...parking, exists: val })
+              "
+              label="駐車の用に供する部分がある"
               hide-details
             ></v-checkbox>
             <v-expand-transition>
-              <div v-if="hasParkingPart" class="ml-8">
+              <div v-if="parking.exists" class="ml-8">
                 <v-text-field
-                  label="当該部分の床面積"
-                  :model-value="parkingPartArea"
+                  label="屋上部分の床面積"
+                  :model-value="parking.rooftopArea"
                   @update:model-value="
-                    emit(
-                      'update:parkingPartArea',
-                      $event === '' ? null : Number($event)
-                    )
+                    (val) =>
+                      emit('update:parking', {
+                        ...parking,
+                        rooftopArea: val === '' ? null : Number(val),
+                      })
+                  "
+                  type="number"
+                  min="0"
+                  suffix="㎡"
+                  dense
+                ></v-text-field>
+                <v-text-field
+                  label="地階または二階以上にある駐車部分の面積合計"
+                  :model-value="parking.basementOrUpperArea"
+                  @update:model-value="
+                    (val) =>
+                      emit('update:parking', {
+                        ...parking,
+                        basementOrUpperArea: val === '' ? null : Number(val),
+                      })
+                  "
+                  type="number"
+                  min="0"
+                  suffix="㎡"
+                  dense
+                ></v-text-field>
+                <v-text-field
+                  label="一階の駐車部分の床面積"
+                  :model-value="parking.firstFloorArea"
+                  @update:model-value="
+                    (val) =>
+                      emit('update:parking', {
+                        ...parking,
+                        firstFloorArea: val === '' ? null : Number(val),
+                      })
                   "
                   type="number"
                   min="0"
@@ -840,13 +884,20 @@ const selectedDesignatedCombustibleLevel = computed({
                   dense
                 ></v-text-field>
                 <v-checkbox
-                  :model-value="canAllVehiclesExitSimultaneously"
+                  :model-value="parking.canAllVehiclesExitSimultaneously"
                   @update:model-value="
-                    emit('update:canAllVehiclesExitSimultaneously', $event)
+                    (val) =>
+                      emit('update:parking', {
+                        ...parking,
+                        canAllVehiclesExitSimultaneously: val,
+                      })
                   "
                   label="駐車するすべての車両が同時に屋外に出られる構造の階である"
                   hide-details
                 ></v-checkbox>
+                <v-expand-transition>
+                  <!-- legacy single-area field removed -->
+                </v-expand-transition>
               </div>
             </v-expand-transition>
 
@@ -888,32 +939,33 @@ const selectedDesignatedCombustibleLevel = computed({
             <p class="font-weight-bold mb-2">
               令第13条（水噴霧消火設備等）関連
             </p>
+            <!-- Article13: 駐車用部分は Article21 と UI を統合しました -->
             <v-checkbox
-              :model-value="article13_hasParkingArea"
+              :model-value="parking.mechanical.present"
               @update:model-value="
-                emit('update:article13_hasParkingArea', $event)
-              "
-              label="駐車の用に供される部分がある"
-              hide-details
-            ></v-checkbox>
-            <v-checkbox
-              :model-value="article13_hasMechanicalParking"
-              @update:model-value="
-                emit('update:article13_hasMechanicalParking', $event)
+                (val) =>
+                  emit('update:parking', {
+                    ...parking,
+                    mechanical: { ...parking.mechanical, present: val },
+                  })
               "
               label="機械式駐車場がある"
               hide-details
             ></v-checkbox>
             <v-expand-transition>
-              <div v-if="article13_hasMechanicalParking" class="ml-8">
+              <div v-if="parking.mechanical.present" class="ml-8">
                 <v-text-field
                   label="収容台数"
-                  :model-value="article13_mechanicalParkingCapacity"
+                  :model-value="parking.mechanical.capacity"
                   @update:model-value="
-                    emit(
-                      'update:article13_mechanicalParkingCapacity',
-                      $event === '' ? null : Number($event)
-                    )
+                    (val) =>
+                      emit('update:parking', {
+                        ...parking,
+                        mechanical: {
+                          ...parking.mechanical,
+                          capacity: val === '' ? null : Number(val),
+                        },
+                      })
                   "
                   type="number"
                   min="0"
