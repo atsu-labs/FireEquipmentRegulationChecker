@@ -6,6 +6,8 @@ import ResizeObserverPolyfill from "resize-observer-polyfill";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
+// (MountProps type removed; casting to any below for test mount compatibility)
+
 // Vuetifyのセットアップ
 const vuetify = createVuetify({
   components,
@@ -141,12 +143,9 @@ describe("BuildingInputStepper.vue", () => {
       global: {
         plugins: [vuetify],
       },
-      // defaultProps is strongly-typed; cast to the mount options' props type to avoid `any`
-      props: defaultProps as unknown as Parameters<typeof mount>[1] extends {
-        props?: infer P;
-      }
-        ? P
-        : Record<string, unknown>,
+      // defaultProps is strongly-typed; cast to `any` for mount to satisfy typings in tests
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      props: defaultProps as any,
     });
   });
 
