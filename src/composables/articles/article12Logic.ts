@@ -35,7 +35,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
 
     // --- 令第12条第1項 ---
 
-    // 第三号: 11階建て以上
+    // 第三号: 11階建て以上（地階を除く階数が11以上）
     if (groundFloors.value >= 11) {
       const applicableUses = [
         "item01",
@@ -56,19 +56,112 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       }
     }
 
-    // 第十二号: 11階以上の階
-    const hasFloorOver11 = floors.value.some(
-      (f) => f.type === "ground" && f.level >= 11
-    );
-    if (hasFloorOver11) {
+    // 第四号: 大規模な平屋建て以外の建物
+    if (
+      groundFloors.value +
+        (floors.value.some((f) => f.type === "basement") ? 1 : 0) >
+      1
+    ) {
+      // 平屋建てでない
+      const area3000Uses = ["item04", "item06_i_1", "item06_i_2", "item06_i_3"];
+      const area6000Uses = [
+        "item01",
+        "item02",
+        "item03",
+        "item05_i",
+        "item06",
+        "item09_i",
+      ]; // (4)項と(6)項イ(1-3)を除く
+
+      if (useCodeMatches(useCode, area3000Uses) && totalArea >= 3000) {
+        return {
+          required: true,
+          message: `平屋建て以外の建物で、用途（${useDisplay}）が令第12条第1項第4号の特定用途に該当し、床面積の合計が3000㎡以上のため、設置が必要です。`,
+          basis: "令第12条第1項第4号",
+        };
+      }
+      if (
+        useCodeMatches(useCode, area6000Uses) &&
+        !useCodeMatches(useCode, area3000Uses) &&
+        totalArea >= 6000
+      ) {
+        return {
+          required: true,
+          message: `平屋建て以外の建物で、床面積の合計が6000㎡以上のため、設置が必要です。`,
+          basis: "令第12条第1項第4号",
+        };
+      }
+    }
+
+    // 第十号: (16)項イ
+    const isItem16i = useCodeMatches(useCode, ["item16_i"]);
+    if (isItem16i && totalArea >= 3000) {
       return {
-        required: true,
-        message: "11階以上の階が存在するため、その階に設置が必要です。",
-        basis: "令第12条第1項第12号",
+        required: "warning",
+        message:
+          "【要確認】この建物は(16)項イの複合用途建築物です。特定の用途（(1)～(4)項、(5)項イ、(6)項、(9)項イ）に供される部分の床面積の合計が3000㎡以上の場合、その部分が存する階にスプリンクラー設備の設置が必要になる可能性があります。",
+        basis: "令第12条第1項第10号",
       };
     }
 
-    // 第一号: 避難困難施設等
+    // 第二号: 劇場等の舞台部
+    if (useCodeMatches(useCode, ["item01"]) && hasStageArea.value) {
+      const stageArea = stageAreaRef.value || 0;
+      if (
+        stageFloorLevel.value === "basement_windowless_4th_or_higher" &&
+        stageArea >= 300
+      ) {
+        return {
+          required: true,
+          message: `劇場等で、地階・無窓階・4階以上の階にある舞台部の面積が300㎡以上のため、設置が必要です。`,
+          basis: "令第12条第1項第2号",
+        };
+      }
+      if (stageFloorLevel.value === "other" && stageArea >= 500) {
+        return {
+          required: true,
+          message: `劇場等で、舞台部の面積が500㎡以上のため、設置が必要です。`,
+          basis: "令第12条第1項第2号",
+        };
+      }
+    }
+
+    // 第五号: ラック式倉庫
+    if (useCodeMatches(useCode, ["item14"]) && isRackWarehouse.value) {
+      const ceilingHeight = ceilingHeightRef.value || 0;
+      if (ceilingHeight > 10 && totalArea >= 700) {
+        return {
+          required: true,
+          message: `ラック式倉庫で、天井の高さが10mを超え、延べ面積が700㎡以上のため、設置が必要です。`,
+          basis: "令第12条第1項第5号",
+        };
+      }
+    }
+
+    // 第六号: (16の2)項で延べ面積1000㎡以上
+    if (useCodeMatches(useCode, ["item16_2"]) && totalArea >= 1000) {
+      return {
+        required: true,
+        message: `用途（${useDisplay}）が（16の2）項で、延べ面積が1000㎡以上のため、設置が必要です。`,
+        basis: "令第12条第1項第6号",
+      };
+    }
+
+    // 第九号: （未実装の可能性）
+    // article12.json の第九号は (十六の二) 項に掲げる防火対象物の部分に関する規定です。
+    // 現在のロジックでは明確な対応が見られないため、必要ならば追加実装を検討してください。
+
+    // 第八号: 指定可燃物1000倍以上
+    if (storesDesignatedCombustiblesOver1000x.value) {
+      return {
+        required: true,
+        message:
+          "指定可燃物を基準数量の1000倍以上、貯蔵または取り扱っているため、設置が必要です。",
+        basis: "令第12条第1項第8号",
+      };
+    }
+
+    // 第一号: 避難困難施設等（火災発生時の延焼抑制構造でないもの）
     if (!hasFireSuppressingStructure.value) {
       // イ: (6)項イ(1)及び(2)
       if (useCodeMatches(useCode, ["item06_i_1", "item06_i_2"])) {
@@ -111,98 +204,6 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       }
     }
 
-    // 第二号: 劇場等の舞台部
-    if (useCodeMatches(useCode, ["item01"]) && hasStageArea.value) {
-      const stageArea = stageAreaRef.value || 0;
-      if (
-        stageFloorLevel.value === "basement_windowless_4th_or_higher" &&
-        stageArea >= 300
-      ) {
-        return {
-          required: true,
-          message: `劇場等で、地階・無窓階・4階以上の階にある舞台部の面積が300㎡以上のため、設置が必要です。`,
-          basis: "令第12条第1項第2号",
-        };
-      }
-      if (stageFloorLevel.value === "other" && stageArea >= 500) {
-        return {
-          required: true,
-          message: `劇場等で、舞台部の面積が500㎡以上のため、設置が必要です。`,
-          basis: "令第12条第1項第2号",
-        };
-      }
-    }
-
-    // 第四号: 大規模な平屋建て以外の建物
-    if (
-      groundFloors.value +
-        (floors.value.some((f) => f.type === "basement") ? 1 : 0) >
-      1
-    ) {
-      // 平屋建てでない
-      const area3000Uses = ["item04", "item06_i_1", "item06_i_2", "item06_i_3"];
-      const area6000Uses = [
-        "item01",
-        "item02",
-        "item03",
-        "item05_i",
-        "item06",
-        "item09_i",
-      ]; // (4)項と(6)項イ(1-3)を除く
-
-      if (useCodeMatches(useCode, area3000Uses) && totalArea >= 3000) {
-        return {
-          required: true,
-          message: `平屋建て以外の建物で、用途（${useDisplay}）が令第12条第1項第4号の特定用途に該当し、床面積の合計が3000㎡以上のため、設置が必要です。`,
-          basis: "令第12条第1項第4号",
-        };
-      }
-      if (
-        useCodeMatches(useCode, area6000Uses) &&
-        !useCodeMatches(useCode, area3000Uses) &&
-        totalArea >= 6000
-      ) {
-        return {
-          required: true,
-          message: `平屋建て以外の建物で、床面積の合計が6000㎡以上のため、設置が必要です。`,
-          basis: "令第12条第1項第4号",
-        };
-      }
-    }
-
-    // 第五号: ラック式倉庫
-    if (useCodeMatches(useCode, ["item14"]) && isRackWarehouse.value) {
-      const ceilingHeight = ceilingHeightRef.value || 0;
-      if (ceilingHeight > 10 && totalArea >= 700) {
-        return {
-          required: true,
-          message: `ラック式倉庫で、天井の高さが10mを超え、延べ面積が700㎡以上のため、設置が必要です。`,
-          basis: "令第12条第1項第5号",
-        };
-      }
-    }
-
-    // 八号: 指定可燃物1000倍以上
-    if (storesDesignatedCombustiblesOver1000x.value) {
-      return {
-        required: true,
-        message:
-          "指定可燃物を基準数量の1000倍以上、貯蔵または取り扱っているため、設置が必要です。",
-        basis: "令第12条第1項第8号",
-      };
-    }
-
-    // 第六号: (16の2)項で延べ面積1000㎡以上
-    if (useCodeMatches(useCode, ["item16_2"]) && totalArea >= 1000) {
-      return {
-        required: true,
-        message: `用途（${useDisplay}）が（16の2）項で、延べ面積が1000㎡以上のため、設置が必要です。`,
-        basis: "令第12条第1項第6号",
-      };
-    }
-
-    // --- 判定に詳細情報が必要な項目 ---
-
     // 第七号: (16の3)項
     if (useCodeMatches(useCode, ["item16_3"]) && totalArea >= 1000) {
       return {
@@ -210,17 +211,6 @@ export function useArticle12Logic(userInput: Article12UserInput) {
         message:
           "【要確認】この建物は(16の3)項の複合用途建築物で、延べ面積が1000㎡以上です。特定の用途（(1)～(4)項、(5)項イ、(6)項、(9)項イ）に供される部分の床面積の合計が500㎡以上の場合、スプリンクラー設備の設置が必要になる可能性があります。",
         basis: "令第12条第1項第7号",
-      };
-    }
-
-    // 第十号: (16)項イ
-    const isItem16i = useCodeMatches(useCode, ["item16_i"]);
-    if (isItem16i && totalArea >= 3000) {
-      return {
-        required: "warning",
-        message:
-          "【要確認】この建物は(16)項イの複合用途建築物です。特定の用途（(1)～(4)項、(5)項イ、(6)項、(9)項イ）に供される部分の床面積の合計が3000㎡以上の場合、その部分が存する階にスプリンクラー設備の設置が必要になる可能性があります。",
-        basis: "令第12条第1項第10号",
       };
     }
 
@@ -250,6 +240,18 @@ export function useArticle12Logic(userInput: Article12UserInput) {
           basis: "令第12条第1項第11号",
         };
       }
+    }
+
+    // 第十二号: 11階以上の階
+    const hasFloorOver11 = floors.value.some(
+      (f) => f.type === "ground" && f.level >= 11
+    );
+    if (hasFloorOver11) {
+      return {
+        required: true,
+        message: "11階以上の階が存在するため、その階に設置が必要です。",
+        basis: "令第12条第1項第12号",
+      };
     }
 
     return {
