@@ -2,8 +2,7 @@
 import type { Floor } from "@/types";
 import type { PropType } from "vue";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
+defineProps({
   // 「階に該当しない部分」があるか
   hasNonFloorArea: { type: Boolean, required: true },
   // 階に該当しない部分の面積

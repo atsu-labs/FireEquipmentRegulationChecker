@@ -3,8 +3,7 @@ import BuildingUseSelector from "@/components/BuildingUseSelector.vue";
 import type { PropType } from "vue";
 import { useCodeMatches } from "@/composables/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
+defineProps({
   // 建物用途コード
   buildingUse: { type: String as PropType<string | null>, default: null },
   // 延床面積
