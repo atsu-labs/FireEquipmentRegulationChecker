@@ -229,7 +229,7 @@ describe("useArticle13Logic", () => {
     expect(regulationResult.value.basis).toBe("令第13条第1項第5号ロ");
   });
 
-  it("6号: 電気設備室がある場合、警告を返す", () => {
+  it("6号: 電気設備室200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
       hasElectricalEquipmentOver200sqm: true,
