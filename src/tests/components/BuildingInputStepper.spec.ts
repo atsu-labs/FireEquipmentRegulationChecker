@@ -62,9 +62,8 @@ describe("BuildingInputStepper.vue", () => {
     article13_mechanicalParkingCapacity: number | null;
     article13_hasCarRepairArea: boolean;
     article13_hasHelicopterLandingZone: boolean;
-    article13_hasHighFireUsageArea: boolean;
-    article13_hasElectricalEquipmentArea: boolean;
-    article13_hasRoadwayPart: boolean;
+    article13_hasHighFireUsageAreaOver200sqm: boolean;
+    article13_hasElectricalEquipmentOver200sqm: boolean;
     buildingStructure:
       | "fire-resistant"
       | "quasi-fire-resistant"
@@ -122,9 +121,8 @@ describe("BuildingInputStepper.vue", () => {
     article13_mechanicalParkingCapacity: null,
     article13_hasCarRepairArea: false,
     article13_hasHelicopterLandingZone: false,
-    article13_hasHighFireUsageArea: false,
-    article13_hasElectricalEquipmentArea: false,
-    article13_hasRoadwayPart: false,
+    article13_hasHighFireUsageAreaOver200sqm: false,
+    article13_hasElectricalEquipmentOver200sqm: false,
     buildingStructure: null,
     hasMultipleBuildingsOnSite: false,
     siteArea: null,

@@ -49,12 +49,16 @@ export interface Article13UserInput {
   // 共有パーキング情報に移行
   parking: Ref<Parking>;
   hasCarRepairArea: Ref<boolean>;
+  carRepairAreaBasementOrUpper: Ref<number | null>;
+  carRepairAreaFirstFloor: Ref<number | null>;
   hasHelicopterLandingZone: Ref<boolean>;
-  hasHighFireUsageArea: Ref<boolean>;
-  hasElectricalEquipmentArea: Ref<boolean>;
+  hasHighFireUsageAreaOver200sqm: Ref<boolean>;
+  hasElectricalEquipmentOver200sqm: Ref<boolean>;
   // 通信機器室は面積基準(500㎡以上)で判定するため、共通プロパティを使用
   hasTelecomRoomOver500sqm: Ref<boolean>;
-  hasRoadwayPart: Ref<boolean>;
+  hasRoadPart: Ref<boolean>;
+  roadPartRooftopArea: Ref<number | null>;
+  roadPartOtherArea: Ref<number | null>;
 }
 
 // Article19UserInput

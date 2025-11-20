@@ -69,11 +69,12 @@ const isHotSpringFacilityConfirmed = ref(false);
 
 // 令13条: parking を使用し、その他フラグは個別に保持
 const article13_hasCarRepairArea = ref(false);
+const article13_carRepairAreaBasementOrUpper = ref<number | null>(null);
+const article13_carRepairAreaFirstFloor = ref<number | null>(null);
 const article13_hasHelicopterLandingZone = ref(false);
-const article13_hasHighFireUsageArea = ref(false);
-const article13_hasElectricalEquipmentArea = ref(false);
+const article13_hasHighFireUsageAreaOver200sqm = ref(false);
+const article13_hasElectricalEquipmentOver200sqm = ref(false);
 // `hasTelecomRoomOver500sqm` を単一のソースオブスとして使用します
-const article13_hasRoadwayPart = ref(false);
 
 // 中期移行用: 共通パーキング state を導入（親のシングルソース）
 import type { Parking } from "@/types";
@@ -305,12 +306,16 @@ const { regulationResult: judgementResult13 } = useArticle13Logic({
   storesDesignatedCombustiblesOver1000x: storesDesignatedCombustiblesOver1000x,
   parking,
   hasCarRepairArea: article13_hasCarRepairArea,
+  carRepairAreaBasementOrUpper: article13_carRepairAreaBasementOrUpper,
+  carRepairAreaFirstFloor: article13_carRepairAreaFirstFloor,
   hasHelicopterLandingZone: article13_hasHelicopterLandingZone,
-  hasHighFireUsageArea: article13_hasHighFireUsageArea,
-  hasElectricalEquipmentArea: article13_hasElectricalEquipmentArea,
+  hasHighFireUsageAreaOver200sqm: article13_hasHighFireUsageAreaOver200sqm,
+  hasElectricalEquipmentOver200sqm: article13_hasElectricalEquipmentOver200sqm,
   // 直接 hasTelecomRoomOver500sqm を参照する
   hasTelecomRoomOver500sqm,
-  hasRoadwayPart: article13_hasRoadwayPart,
+  hasRoadPart,
+  roadPartRooftopArea,
+  roadPartOtherArea,
 });
 
 const { regulationResult: judgementResult19 } = useArticle19Logic({
@@ -739,16 +744,21 @@ generateFloors();
                 isHotSpringFacilityConfirmed
               "
               v-model:article13_hasCarRepairArea="article13_hasCarRepairArea"
+              v-model:article13_carRepairAreaBasementOrUpper="
+                article13_carRepairAreaBasementOrUpper
+              "
+              v-model:article13_carRepairAreaFirstFloor="
+                article13_carRepairAreaFirstFloor
+              "
               v-model:article13_hasHelicopterLandingZone="
                 article13_hasHelicopterLandingZone
               "
-              v-model:article13_hasHighFireUsageArea="
-                article13_hasHighFireUsageArea
+              v-model:article13_hasHighFireUsageAreaOver200sqm="
+                article13_hasHighFireUsageAreaOver200sqm
               "
-              v-model:article13_hasElectricalEquipmentArea="
-                article13_hasElectricalEquipmentArea
+              v-model:article13_hasElectricalEquipmentOver200sqm="
+                article13_hasElectricalEquipmentOver200sqm
               "
-              v-model:article13_hasRoadwayPart="article13_hasRoadwayPart"
               v-model:buildingStructure="buildingStructure"
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
               v-model:siteArea="siteArea"

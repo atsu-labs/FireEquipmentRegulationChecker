@@ -19,11 +19,15 @@ const createMockInput = (
       mechanical: { present: false, capacity: null },
     } as any),
     hasCarRepairArea: ref(false),
+    carRepairAreaBasementOrUpper: ref(null),
+    carRepairAreaFirstFloor: ref(null),
     hasHelicopterLandingZone: ref(false),
-    hasHighFireUsageArea: ref(false),
-    hasElectricalEquipmentArea: ref(false),
+    hasHighFireUsageAreaOver200sqm: ref(false),
+    hasElectricalEquipmentOver200sqm: ref(false),
     hasTelecomRoomOver500sqm: ref(false),
-    hasRoadwayPart: ref(false),
+    hasRoadPart: ref(false),
+    roadPartRooftopArea: ref(null),
+    roadPartOtherArea: ref(null),
   };
 
   const refs = { ...defaults };
@@ -79,10 +83,58 @@ describe("useArticle13Logic", () => {
   it("3号: 道路の用に供される部分がある場合、警告を返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasRoadwayPart: true,
+      hasRoadPart: true,
     });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.basis).toBe("令第13条第1項第3号");
+  });
+
+  it("3号: 道路の屋上部分が600㎡以上の場合、必須を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasRoadPart: true,
+      roadPartRooftopArea: 600,
+      roadPartOtherArea: 0,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(true);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第3号");
+  });
+
+  it("3号: 道路のその他部分が400㎡以上の場合、必須を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasRoadPart: true,
+      roadPartRooftopArea: 0,
+      roadPartOtherArea: 400,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(true);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第3号");
+  });
+
+  it("3号: 道路の屋上部分が600㎡未満の場合、不要を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasRoadPart: true,
+      roadPartRooftopArea: 599,
+      roadPartOtherArea: 0,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(false);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第3号");
+  });
+
+  it("3号: 道路のその他部分が400㎡未満の場合、不要を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasRoadPart: true,
+      roadPartRooftopArea: 0,
+      roadPartOtherArea: 399,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(false);
     expect(regulationResult.value.basis).toBe("令第13条第1項第3号");
   });
 
@@ -93,6 +145,54 @@ describe("useArticle13Logic", () => {
     });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.basis).toBe("令第13条第1項第4号");
+  });
+
+  it("4号: 自動車修理工場で地階・2階以上が200㎡以上の場合、必須を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasCarRepairArea: true,
+      carRepairAreaBasementOrUpper: 200,
+      carRepairAreaFirstFloor: 0,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(true);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第4号");
+  });
+
+  it("4号: 自動車修理工場で1階が500㎡以上の場合、必須を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasCarRepairArea: true,
+      carRepairAreaBasementOrUpper: 0,
+      carRepairAreaFirstFloor: 500,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(true);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第4号");
+  });
+
+  it("4号: 自動車修理工場で地階・2階以上が199㎡の場合、不要を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasCarRepairArea: true,
+      carRepairAreaBasementOrUpper: 199,
+      carRepairAreaFirstFloor: 0,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(false);
+    expect(regulationResult.value.basis).toBe("令第13条第1項第4号");
+  });
+
+  it("4号: 自動車修理工場で1階が499㎡の場合、不要を返す", () => {
+    const input = createMockInput({
+      buildingUse: "item01_i_ro",
+      hasCarRepairArea: true,
+      carRepairAreaBasementOrUpper: 0,
+      carRepairAreaFirstFloor: 499,
+    });
+    const { regulationResult } = useArticle13Logic(input);
+    expect(regulationResult.value.required).toBe(false);
     expect(regulationResult.value.basis).toBe("令第13条第1項第4号");
   });
 
@@ -129,23 +229,23 @@ describe("useArticle13Logic", () => {
     expect(regulationResult.value.basis).toBe("令第13条第1項第5号ロ");
   });
 
-  it("6号: 電気設備室がある場合、警告を返す", () => {
+  it("6号: 電気設備室200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasElectricalEquipmentArea: true,
+      hasElectricalEquipmentOver200sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
-    expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第13条第1項第6号");
   });
 
-  it("7号: 多量の火気を使用する部分がある場合、警告を返す", () => {
+  it("7号: 多量の火気を使用する部分200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
-      hasHighFireUsageArea: true,
+      hasHighFireUsageAreaOver200sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
-    expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第13条第1項第7号");
   });
 

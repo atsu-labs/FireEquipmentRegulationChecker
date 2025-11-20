@@ -112,10 +112,17 @@ const props = defineProps({
   // article13_* 系は article13Logic にそのまま渡される（駐車・機械式駐車・修理場等）
   // Article13 legacy flags removed; use `parking` instead
   article13_hasCarRepairArea: { type: Boolean, required: true },
+  article13_carRepairAreaBasementOrUpper: {
+    type: Number as PropType<number | null>,
+    default: null,
+  },
+  article13_carRepairAreaFirstFloor: {
+    type: Number as PropType<number | null>,
+    default: null,
+  },
   article13_hasHelicopterLandingZone: { type: Boolean, required: true },
-  article13_hasHighFireUsageArea: { type: Boolean, required: true },
-  article13_hasElectricalEquipmentArea: { type: Boolean, required: true },
-  article13_hasRoadwayPart: { type: Boolean, required: true },
+  article13_hasHighFireUsageAreaOver200sqm: { type: Boolean, required: true },
+  article13_hasElectricalEquipmentOver200sqm: { type: Boolean, required: true },
 
   // Article 19
   // buildingStructure / hasMultipleBuildingsOnSite: article19（屋外消火栓）や article27 等で使用
@@ -183,10 +190,11 @@ const emit = defineEmits([
   "update:isHotSpringFacilityConfirmed",
   // article13 legacy updates removed; parking represents the state
   "update:article13_hasCarRepairArea",
+  "update:article13_carRepairAreaBasementOrUpper",
+  "update:article13_carRepairAreaFirstFloor",
   "update:article13_hasHelicopterLandingZone",
-  "update:article13_hasHighFireUsageArea",
-  "update:article13_hasElectricalEquipmentArea",
-  "update:article13_hasRoadwayPart",
+  "update:article13_hasHighFireUsageAreaOver200sqm",
+  "update:article13_hasElectricalEquipmentOver200sqm",
   "update:buildingStructure",
   "update:hasMultipleBuildingsOnSite",
   "update:siteArea",
@@ -255,18 +263,26 @@ watch(
           :hasSpecialCombustibleStructure="hasSpecialCombustibleStructure"
           :contractedCurrentCapacity="contractedCurrentCapacity"
           @update:buildingUse="emit('update:buildingUse', $event)"
-          @update:totalFloorAreaInput="emit('update:totalFloorAreaInput', $event)"
+          @update:totalFloorAreaInput="
+            emit('update:totalFloorAreaInput', $event)
+          "
           @update:capacityInput="emit('update:capacityInput', $event)"
           @update:groundFloorsInput="emit('update:groundFloorsInput', $event)"
-          @update:basementFloorsInput="emit('update:basementFloorsInput', $event)"
+          @update:basementFloorsInput="
+            emit('update:basementFloorsInput', $event)
+          "
           @update:hasNonFloorArea="emit('update:hasNonFloorArea', $event)"
           @update:structureType="emit('update:structureType', $event)"
           @update:finishType="emit('update:finishType', $event)"
           @update:siteArea="emit('update:siteArea', $event)"
           @update:buildingHeight="emit('update:buildingHeight', $event)"
           @update:buildingStructure="emit('update:buildingStructure', $event)"
-          @update:hasMultipleBuildingsOnSite="emit('update:hasMultipleBuildingsOnSite', $event)"
-          @update:isCareDependentOccupancy="emit('update:isCareDependentOccupancy', $event)"
+          @update:hasMultipleBuildingsOnSite="
+            emit('update:hasMultipleBuildingsOnSite', $event)
+          "
+          @update:isCareDependentOccupancy="
+            emit('update:isCareDependentOccupancy', $event)
+          "
           @update:hasBeds="emit('update:hasBeds', $event)"
           @update:hasLodging="emit('update:hasLodging', $event)"
           @update:hasStageArea="emit('update:hasStageArea', $event)"
@@ -274,8 +290,12 @@ watch(
           @update:stageArea="emit('update:stageArea', $event)"
           @update:isRackWarehouse="emit('update:isRackWarehouse', $event)"
           @update:ceilingHeight="emit('update:ceilingHeight', $event)"
-          @update:hasSpecialCombustibleStructure="emit('update:hasSpecialCombustibleStructure', $event)"
-          @update:contractedCurrentCapacity="emit('update:contractedCurrentCapacity', $event)"
+          @update:hasSpecialCombustibleStructure="
+            emit('update:hasSpecialCombustibleStructure', $event)
+          "
+          @update:contractedCurrentCapacity="
+            emit('update:contractedCurrentCapacity', $event)
+          "
         />
       </v-stepper-window-item>
 
@@ -294,9 +314,15 @@ watch(
           :usesFireEquipment="usesFireEquipment"
           :storesMinorHazardousMaterials="storesMinorHazardousMaterials"
           :storesDesignatedCombustibles="storesDesignatedCombustibles"
-          :storesDesignatedCombustiblesOver500x="storesDesignatedCombustiblesOver500x"
-          :storesDesignatedCombustiblesOver750x="storesDesignatedCombustiblesOver750x"
-          :storesDesignatedCombustiblesOver1000x="storesDesignatedCombustiblesOver1000x"
+          :storesDesignatedCombustiblesOver500x="
+            storesDesignatedCombustiblesOver500x
+          "
+          :storesDesignatedCombustiblesOver750x="
+            storesDesignatedCombustiblesOver750x
+          "
+          :storesDesignatedCombustiblesOver1000x="
+            storesDesignatedCombustiblesOver1000x
+          "
           :hasFireSuppressingStructure="hasFireSuppressingStructure"
           :isSpecifiedOneStaircase="isSpecifiedOneStaircase"
           :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
@@ -308,30 +334,74 @@ watch(
           :hasHotSpringFacility="hasHotSpringFacility"
           :isHotSpringFacilityConfirmed="isHotSpringFacilityConfirmed"
           :article13_hasCarRepairArea="article13_hasCarRepairArea"
-          :article13_hasHelicopterLandingZone="article13_hasHelicopterLandingZone"
-          :article13_hasHighFireUsageArea="article13_hasHighFireUsageArea"
-          :article13_hasElectricalEquipmentArea="article13_hasElectricalEquipmentArea"
-          :article13_hasRoadwayPart="article13_hasRoadwayPart"
+          :article13_carRepairAreaBasementOrUpper="
+            article13_carRepairAreaBasementOrUpper
+          "
+          :article13_carRepairAreaFirstFloor="article13_carRepairAreaFirstFloor"
+          :article13_hasHelicopterLandingZone="
+            article13_hasHelicopterLandingZone
+          "
+          :article13_hasHighFireUsageAreaOver200sqm="
+            article13_hasHighFireUsageAreaOver200sqm
+          "
+          :article13_hasElectricalEquipmentOver200sqm="
+            article13_hasElectricalEquipmentOver200sqm
+          "
           @update:usesFireEquipment="emit('update:usesFireEquipment', $event)"
-          @update:storesMinorHazardousMaterials="emit('update:storesMinorHazardousMaterials', $event)"
-          @update:storesDesignatedCombustibles="emit('update:storesDesignatedCombustibles', $event)"
-          @update:storesDesignatedCombustiblesOver500x="emit('update:storesDesignatedCombustiblesOver500x', $event)"
-          @update:storesDesignatedCombustiblesOver750x="emit('update:storesDesignatedCombustiblesOver750x', $event)"
-          @update:storesDesignatedCombustiblesOver1000x="emit('update:storesDesignatedCombustiblesOver1000x', $event)"
-          @update:hasFireSuppressingStructure="emit('update:hasFireSuppressingStructure', $event)"
-          @update:isSpecifiedOneStaircase="emit('update:isSpecifiedOneStaircase', $event)"
+          @update:storesMinorHazardousMaterials="
+            emit('update:storesMinorHazardousMaterials', $event)
+          "
+          @update:storesDesignatedCombustibles="
+            emit('update:storesDesignatedCombustibles', $event)
+          "
+          @update:storesDesignatedCombustiblesOver500x="
+            emit('update:storesDesignatedCombustiblesOver500x', $event)
+          "
+          @update:storesDesignatedCombustiblesOver750x="
+            emit('update:storesDesignatedCombustiblesOver750x', $event)
+          "
+          @update:storesDesignatedCombustiblesOver1000x="
+            emit('update:storesDesignatedCombustiblesOver1000x', $event)
+          "
+          @update:hasFireSuppressingStructure="
+            emit('update:hasFireSuppressingStructure', $event)
+          "
+          @update:isSpecifiedOneStaircase="
+            emit('update:isSpecifiedOneStaircase', $event)
+          "
           @update:hasRoadPart="emit('update:hasRoadPart', $event)"
-          @update:roadPartRooftopArea="emit('update:roadPartRooftopArea', $event)"
+          @update:roadPartRooftopArea="
+            emit('update:roadPartRooftopArea', $event)
+          "
           @update:roadPartOtherArea="emit('update:roadPartOtherArea', $event)"
           @update:parking="emit('update:parking', $event)"
-          @update:hasTelecomRoomOver500sqm="emit('update:hasTelecomRoomOver500sqm', $event)"
-          @update:hasHotSpringFacility="emit('update:hasHotSpringFacility', $event)"
-          @update:isHotSpringFacilityConfirmed="emit('update:isHotSpringFacilityConfirmed', $event)"
-          @update:article13_hasCarRepairArea="emit('update:article13_hasCarRepairArea', $event)"
-          @update:article13_hasHelicopterLandingZone="emit('update:article13_hasHelicopterLandingZone', $event)"
-          @update:article13_hasHighFireUsageArea="emit('update:article13_hasHighFireUsageArea', $event)"
-          @update:article13_hasElectricalEquipmentArea="emit('update:article13_hasElectricalEquipmentArea', $event)"
-          @update:article13_hasRoadwayPart="emit('update:article13_hasRoadwayPart', $event)"
+          @update:hasTelecomRoomOver500sqm="
+            emit('update:hasTelecomRoomOver500sqm', $event)
+          "
+          @update:hasHotSpringFacility="
+            emit('update:hasHotSpringFacility', $event)
+          "
+          @update:isHotSpringFacilityConfirmed="
+            emit('update:isHotSpringFacilityConfirmed', $event)
+          "
+          @update:article13_hasCarRepairArea="
+            emit('update:article13_hasCarRepairArea', $event)
+          "
+          @update:article13_carRepairAreaBasementOrUpper="
+            emit('update:article13_carRepairAreaBasementOrUpper', $event)
+          "
+          @update:article13_carRepairAreaFirstFloor="
+            emit('update:article13_carRepairAreaFirstFloor', $event)
+          "
+          @update:article13_hasHelicopterLandingZone="
+            emit('update:article13_hasHelicopterLandingZone', $event)
+          "
+          @update:article13_hasHighFireUsageAreaOver200sqm="
+            emit('update:article13_hasHighFireUsageAreaOver200sqm', $event)
+          "
+          @update:article13_hasElectricalEquipmentOver200sqm="
+            emit('update:article13_hasElectricalEquipmentOver200sqm', $event)
+          "
         />
       </v-stepper-window-item>
     </v-stepper-window>
