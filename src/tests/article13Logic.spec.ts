@@ -239,7 +239,7 @@ describe("useArticle13Logic", () => {
     expect(regulationResult.value.basis).toBe("令第13条第1項第6号");
   });
 
-  it("7号: 多量の火気を使用する部分がある場合、警告を返す", () => {
+  it("7号: 多量の火気を使用する部分200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
       buildingUse: "item01_i_ro",
       hasHighFireUsageAreaOver200sqm: true,
