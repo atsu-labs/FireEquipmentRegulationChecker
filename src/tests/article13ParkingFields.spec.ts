@@ -20,11 +20,15 @@ describe("useArticle13Logic - parking split fields", () => {
         ...overrides,
       }),
       hasCarRepairArea: ref(false),
+      carRepairAreaBasementOrUpper: ref(null),
+      carRepairAreaFirstFloor: ref(null),
       hasHelicopterLandingZone: ref(false),
-      hasHighFireUsageArea: ref(false),
-      hasElectricalEquipmentArea: ref(false),
+      hasHighFireUsageAreaOver200sqm: ref(false),
+      hasElectricalEquipmentOver200sqm: ref(false),
       hasTelecomRoomOver500sqm: ref(false),
-      hasRoadwayPart: ref(false),
+      hasRoadPart: ref(false),
+      roadPartRooftopArea: ref(null),
+      roadPartOtherArea: ref(null),
     } as any;
   };
 

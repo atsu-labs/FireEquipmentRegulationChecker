@@ -46,9 +46,8 @@ describe("AdditionalInfoStep.vue", () => {
     isHotSpringFacilityConfirmed: false,
     article13_hasCarRepairArea: false,
     article13_hasHelicopterLandingZone: false,
-    article13_hasHighFireUsageArea: false,
-    article13_hasElectricalEquipmentArea: false,
-    article13_hasRoadwayPart: false,
+    article13_hasHighFireUsageAreaOver200sqm: false,
+    article13_hasElectricalEquipmentOver200sqm: false,
   });
 
   // 各テストの前にコンポーネントをマウントする
@@ -87,7 +86,7 @@ describe("AdditionalInfoStep.vue", () => {
     await nextTick();
 
     const emitted = wrapper.emitted();
-    
+
     // 750倍がtrueになる
     const e750 = emitted["update:storesDesignatedCombustiblesOver750x"] || [];
     expect(e750.length).toBeGreaterThan(0);
@@ -109,26 +108,32 @@ describe("AdditionalInfoStep.vue", () => {
   // =================================================================
   it("3項の建物用途で火を使用する設備のチェックボックスが表示される", async () => {
     // 最初は表示されない
-    let fireEquipmentCheckbox = wrapper.find('[data-testid="uses-fire-equipment-checkbox"]');
+    let fireEquipmentCheckbox = wrapper.find(
+      '[data-testid="uses-fire-equipment-checkbox"]'
+    );
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // 3項の用途に変更すると表示される
     await wrapper.setProps({ buildingUse: "item03_i" });
     await nextTick();
-    
-    fireEquipmentCheckbox = wrapper.find('[data-testid="uses-fire-equipment-checkbox"]');
+
+    fireEquipmentCheckbox = wrapper.find(
+      '[data-testid="uses-fire-equipment-checkbox"]'
+    );
     expect(fireEquipmentCheckbox.exists()).toBe(true);
   });
 
   it("showArticle21Item7Checkboxがtrueの時に特定一階段等のチェックボックスが表示される", async () => {
     // 最初は表示されない
-    let specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
+    let specificCheckbox = wrapper.find(
+      '[data-testid="article21-item7-checkbox"]'
+    );
     expect(specificCheckbox.exists()).toBe(false);
 
     // showArticle21Item7Checkboxをtrueにすると表示される
     await wrapper.setProps({ showArticle21Item7Checkbox: true });
     await nextTick();
-    
+
     specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(true);
     expect(wrapper.text()).toContain("特定一階段等防火対象物に該当する");

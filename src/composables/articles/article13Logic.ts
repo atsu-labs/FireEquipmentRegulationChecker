@@ -9,11 +9,17 @@ export function useArticle13Logic(userInput: Article13UserInput) {
       userInput.storesDesignatedCombustiblesOver1000x;
     const parking = userInput.parking;
     const hasCarRepairArea = userInput.hasCarRepairArea;
+    const carRepairAreaBasementOrUpper = userInput.carRepairAreaBasementOrUpper;
+    const carRepairAreaFirstFloor = userInput.carRepairAreaFirstFloor;
     const hasHelicopterLandingZone = userInput.hasHelicopterLandingZone;
-    const hasHighFireUsageArea = userInput.hasHighFireUsageArea;
-    const hasElectricalEquipmentArea = userInput.hasElectricalEquipmentArea;
+    const hasHighFireUsageAreaOver200sqm =
+      userInput.hasHighFireUsageAreaOver200sqm;
+    const hasElectricalEquipmentOver200sqm =
+      userInput.hasElectricalEquipmentOver200sqm;
     const hasTelecomRoomOver500sqm = userInput.hasTelecomRoomOver500sqm;
-    const hasRoadwayPart = userInput.hasRoadwayPart;
+    const hasRoadPart = userInput.hasRoadPart;
+    const roadPartRooftopArea = userInput.roadPartRooftopArea;
+    const roadPartOtherArea = userInput.roadPartOtherArea;
     // Legacy optional properties (kept for compatibility in some callers/tests)
     type BoolRef = { value: boolean };
     type NumRef = { value: number | null };
@@ -63,21 +69,73 @@ export function useArticle13Logic(userInput: Article13UserInput) {
     }
 
     // 3. 道路の用に供される部分
-    if (hasRoadwayPart.value) {
+    if (hasRoadPart.value) {
+      const rooftopArea = roadPartRooftopArea.value ?? 0;
+      const otherArea = roadPartOtherArea.value ?? 0;
+
+      // 面積が入力されている場合は、その値で判定
+      if (
+        roadPartRooftopArea.value !== null ||
+        roadPartOtherArea.value !== null
+      ) {
+        if (rooftopArea >= 600 || otherArea >= 400) {
+          return {
+            required: true,
+            message:
+              "道路の用に供される部分で、屋上部分が600㎡以上またはその他の部分が400㎡以上のため、水噴霧、泡、不活性ガス、粉末のいずれかの消火設備の設置が必要です。",
+            basis: "令第13条第1項第3号",
+          };
+        }
+        // 面積が入力されていて、条件未満の場合は不要
+        return {
+          required: false,
+          message:
+            "道路の用に供される部分は、面積が条件未満のため、設置義務はありません。",
+          basis: "令第13条第1項第3号",
+        };
+      }
+
+      // 面積が入力されていない場合は警告
       return {
         required: "warning",
         message:
-          "【要確認】道路の用に供される部分がある場合、屋上部分で600㎡以上、その他の部分で400㎡以上の場合は、水噴霧、泡、不活性ガス、粉末のいずれかの消火設備の設置が必要です。",
+          "【要確認】道路の用に供される部分がある場合、屋上部分で600㎡以上、その他の部分で400㎡以上の場合は、水噴霧、泡、不活性ガス、粉末のいずれかの消火設備の設置が必要です。面積を入力してください。",
         basis: "令第13条第1項第3号",
       };
     }
 
     // 4. 自動車の修理・整備工場
     if (hasCarRepairArea.value) {
+      const basementOrUpperArea = carRepairAreaBasementOrUpper.value ?? 0;
+      const firstFloorArea = carRepairAreaFirstFloor.value ?? 0;
+
+      // 面積が入力されている場合は、その値で判定
+      if (
+        carRepairAreaBasementOrUpper.value !== null ||
+        carRepairAreaFirstFloor.value !== null
+      ) {
+        if (basementOrUpperArea >= 200 || firstFloorArea >= 500) {
+          return {
+            required: true,
+            message:
+              "自動車の修理・整備の用に供される部分で、地階・2階以上で200㎡以上またはが1階で500㎡以上のため、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+            basis: "令第13条第1項第4号",
+          };
+        }
+        // 面積が入力されていて、条件未満の場合は不要
+        return {
+          required: false,
+          message:
+            "自動車の修理・整備の用に供される部分は、面積が条件未満のため、設置義務はありません。",
+          basis: "令第13条第1項第4号",
+        };
+      }
+
+      // 面積が入力されていない場合は警告
       return {
         required: "warning",
         message:
-          "【要確認】自動車の修理・整備の用に供される部分がある場合、地階・2階以上で200㎡以上、1階で500㎡以上の場合は、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+          "【要確認】自動車の修理・整備の用に供される部分がある場合、地階・2階以上で200㎡以上、1階で500㎡以上の場合は、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。面積を入力してください。",
         basis: "令第13条第1項第4号",
       };
     }
@@ -150,22 +208,22 @@ export function useArticle13Logic(userInput: Article13UserInput) {
       };
     }
 
-    // 6. 電気設備
-    if (hasElectricalEquipmentArea.value) {
+    // 6. 電気設備（200㎡以上）
+    if (hasElectricalEquipmentOver200sqm.value) {
       return {
-        required: "warning",
+        required: true,
         message:
-          "【要確認】発電機、変圧器等の電気設備が設置されている部分で、面積が200㎡以上の場合は、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+          "発電機、変圧器等の電気設備が設置されている部分で、面積が200㎡以上のため、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
         basis: "令第13条第1項第6号",
       };
     }
 
-    // 7. 多量の火気を使用する部分
-    if (hasHighFireUsageArea.value) {
+    // 7. 多量の火気を使用する部分（200㎡以上）
+    if (hasHighFireUsageAreaOver200sqm.value) {
       return {
-        required: "warning",
+        required: true,
         message:
-          "【要確認】鍛造場、ボイラー室、乾燥室等で、面積が200㎡以上の場合は、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+          "鍛造場、ボイラー室、乾燥室等で、面積が200㎡以上のため、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
         basis: "令第13条第1項第7号",
       };
     }

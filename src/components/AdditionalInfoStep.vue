@@ -51,10 +51,17 @@ const props = defineProps({
   isHotSpringFacilityConfirmed: { type: Boolean, required: true },
   // article13 関連フラグ
   article13_hasCarRepairArea: { type: Boolean, required: true },
+  article13_carRepairAreaBasementOrUpper: {
+    type: Number as PropType<number | null>,
+    default: null,
+  },
+  article13_carRepairAreaFirstFloor: {
+    type: Number as PropType<number | null>,
+    default: null,
+  },
   article13_hasHelicopterLandingZone: { type: Boolean, required: true },
-  article13_hasHighFireUsageArea: { type: Boolean, required: true },
-  article13_hasElectricalEquipmentArea: { type: Boolean, required: true },
-  article13_hasRoadwayPart: { type: Boolean, required: true },
+  article13_hasHighFireUsageAreaOver200sqm: { type: Boolean, required: true },
+  article13_hasElectricalEquipmentOver200sqm: { type: Boolean, required: true },
 });
 
 const emit = defineEmits([
@@ -74,10 +81,11 @@ const emit = defineEmits([
   "update:hasHotSpringFacility",
   "update:isHotSpringFacilityConfirmed",
   "update:article13_hasCarRepairArea",
+  "update:article13_carRepairAreaBasementOrUpper",
+  "update:article13_carRepairAreaFirstFloor",
   "update:article13_hasHelicopterLandingZone",
-  "update:article13_hasHighFireUsageArea",
-  "update:article13_hasElectricalEquipmentArea",
-  "update:article13_hasRoadwayPart",
+  "update:article13_hasHighFireUsageAreaOver200sqm",
+  "update:article13_hasElectricalEquipmentOver200sqm",
 ]);
 
 // 指定可燃物の量を一つのラジオでまとめるための双方向マッピング
@@ -160,44 +168,27 @@ const selectedDesignatedCombustibleLevel = computed({
             hide-details
           >
             <v-radio label="量不明 / 少量" value="present_none"></v-radio>
-            <v-radio
-              label="基準数量の500倍以上"
-              value="over500"
-            ></v-radio>
-            <v-radio
-              label="基準数量の750倍以上"
-              value="over750"
-            ></v-radio>
-            <v-radio
-              label="基準数量の1000倍以上"
-              value="over1000"
-            ></v-radio>
+            <v-radio label="基準数量の500倍以上" value="over500"></v-radio>
+            <v-radio label="基準数量の750倍以上" value="over750"></v-radio>
+            <v-radio label="基準数量の1000倍以上" value="over1000"></v-radio>
           </v-radio-group>
         </div>
       </v-expand-transition>
       <v-divider class="my-4"></v-divider>
-      <p class="font-weight-bold mb-2">
-        令第12条（スプリンクラー設備）関連
-      </p>
+      <p class="font-weight-bold mb-2">令第12条（スプリンクラー設備）関連</p>
       <v-checkbox
         :model-value="hasFireSuppressingStructure"
-        @update:model-value="
-          emit('update:hasFireSuppressingStructure', $event)
-        "
+        @update:model-value="emit('update:hasFireSuppressingStructure', $event)"
         label="延焼抑制構造である（主要構造部が耐火構造＋開口部が防火設備など）"
         hide-details
       ></v-checkbox>
 
       <v-divider class="my-4"></v-divider>
-      <p class="font-weight-bold mb-2">
-        令第21条（自動火災報知設備）関連
-      </p>
+      <p class="font-weight-bold mb-2">令第21条（自動火災報知設備）関連</p>
       <v-checkbox
         v-if="showArticle21Item7Checkbox"
         :model-value="isSpecifiedOneStaircase"
-        @update:model-value="
-          emit('update:isSpecifiedOneStaircase', $event)
-        "
+        @update:model-value="emit('update:isSpecifiedOneStaircase', $event)"
         label="特定一階段等防火対象物に該当する"
         hide-details
         data-testid="article21-item7-checkbox"
@@ -319,9 +310,7 @@ const selectedDesignatedCombustibleLevel = computed({
 
       <v-checkbox
         :model-value="hasTelecomRoomOver500sqm"
-        @update:model-value="
-          emit('update:hasTelecomRoomOver500sqm', $event)
-        "
+        @update:model-value="emit('update:hasTelecomRoomOver500sqm', $event)"
         label="通信機器室500㎡以上"
         hide-details
       ></v-checkbox>
@@ -350,9 +339,7 @@ const selectedDesignatedCombustibleLevel = computed({
       </v-expand-transition>
 
       <v-divider class="my-4"></v-divider>
-      <p class="font-weight-bold mb-2">
-        令第13条（水噴霧消火設備等）関連
-      </p>
+      <p class="font-weight-bold mb-2">令第13条（水噴霧消火設備等）関連</p>
       <v-checkbox
         :model-value="parking.mechanical.present"
         @update:model-value="
@@ -390,12 +377,42 @@ const selectedDesignatedCombustibleLevel = computed({
       </v-expand-transition>
       <v-checkbox
         :model-value="article13_hasCarRepairArea"
-        @update:model-value="
-          emit('update:article13_hasCarRepairArea', $event)
-        "
+        @update:model-value="emit('update:article13_hasCarRepairArea', $event)"
         label="自動車の修理・整備工場がある"
         hide-details
       ></v-checkbox>
+      <v-expand-transition>
+        <div v-if="article13_hasCarRepairArea" class="ml-8">
+          <v-text-field
+            label="地階・2階以上の修理・整備部分の床面積"
+            :model-value="article13_carRepairAreaBasementOrUpper"
+            @update:model-value="
+              emit(
+                'update:article13_carRepairAreaBasementOrUpper',
+                $event === '' ? null : Number($event)
+              )
+            "
+            type="number"
+            min="0"
+            suffix="㎡"
+            dense
+          ></v-text-field>
+          <v-text-field
+            label="1階の修理・整備部分の床面積"
+            :model-value="article13_carRepairAreaFirstFloor"
+            @update:model-value="
+              emit(
+                'update:article13_carRepairAreaFirstFloor',
+                $event === '' ? null : Number($event)
+              )
+            "
+            type="number"
+            min="0"
+            suffix="㎡"
+            dense
+          ></v-text-field>
+        </div>
+      </v-expand-transition>
       <v-checkbox
         :model-value="article13_hasHelicopterLandingZone"
         @update:model-value="
@@ -405,27 +422,19 @@ const selectedDesignatedCombustibleLevel = computed({
         hide-details
       ></v-checkbox>
       <v-checkbox
-        :model-value="article13_hasHighFireUsageArea"
+        :model-value="article13_hasHighFireUsageAreaOver200sqm"
         @update:model-value="
-          emit('update:article13_hasHighFireUsageArea', $event)
+          emit('update:article13_hasHighFireUsageAreaOver200sqm', $event)
         "
-        label="ボイラー室など多量の火気を使用する部分がある"
+        label="ボイラー室など多量の火気を使用する部分がある（200㎡以上）"
         hide-details
       ></v-checkbox>
       <v-checkbox
-        :model-value="article13_hasElectricalEquipmentArea"
+        :model-value="article13_hasElectricalEquipmentOver200sqm"
         @update:model-value="
-          emit('update:article13_hasElectricalEquipmentArea', $event)
+          emit('update:article13_hasElectricalEquipmentOver200sqm', $event)
         "
-        label="変圧器など電気設備がある"
-        hide-details
-      ></v-checkbox>
-      <v-checkbox
-        :model-value="article13_hasRoadwayPart"
-        @update:model-value="
-          emit('update:article13_hasRoadwayPart', $event)
-        "
-        label="道路の用に供される部分がある"
+        label="変圧器など電気設備がある（200㎡以上）"
         hide-details
       ></v-checkbox>
     </v-card-text>
