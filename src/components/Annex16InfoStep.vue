@@ -218,6 +218,74 @@ const getUnassignedArea = (floor: Floor): number => {
   const assigned = getAssignedAreaForFloor(floor);
   return Math.max(0, floor.floorArea - assigned);
 };
+
+// ===== 合計行用の計算関数 =====
+
+// 特定用途コードの全階合計面積を計算
+const getTotalAreaForUseCode = (useCode: string): number => {
+  let total = 0;
+  // 各階の面積を集計
+  for (const floor of props.floors) {
+    const use = getComponentUseForFloor(floor, useCode);
+    if (use && use.floorArea) {
+      total += use.floorArea;
+    }
+  }
+  // 階に該当しない部分の面積も追加
+  if (props.hasNonFloorArea) {
+    const nonFloorUse = getNonFloorAreaComponentUse(useCode);
+    if (nonFloorUse && nonFloorUse.floorArea) {
+      total += nonFloorUse.floorArea;
+    }
+  }
+  return total;
+};
+
+// 特定用途コードの全階合計収容人員を計算
+const getTotalCapacityForUseCode = (useCode: string): number => {
+  let total = 0;
+  // 各階の収容人員を集計
+  for (const floor of props.floors) {
+    const use = getComponentUseForFloor(floor, useCode);
+    if (use && use.capacity) {
+      total += use.capacity;
+    }
+  }
+  // 階に該当しない部分の収容人員も追加
+  if (props.hasNonFloorArea) {
+    const nonFloorUse = getNonFloorAreaComponentUse(useCode);
+    if (nonFloorUse && nonFloorUse.capacity) {
+      total += nonFloorUse.capacity;
+    }
+  }
+  return total;
+};
+
+// 全体の床面積合計を計算
+const getTotalFloorArea = computed(() => {
+  let total = 0;
+  for (const floor of props.floors) {
+    if (floor.floorArea) {
+      total += floor.floorArea;
+    }
+  }
+  if (props.hasNonFloorArea && props.nonFloorAreaValue) {
+    total += props.nonFloorAreaValue;
+  }
+  return total;
+});
+
+// 全体の未割当面積合計を計算
+const getTotalUnassignedArea = computed(() => {
+  let total = 0;
+  for (const floor of props.floors) {
+    total += getUnassignedArea(floor);
+  }
+  if (props.hasNonFloorArea) {
+    total += getNonFloorAreaUnassignedArea.value;
+  }
+  return total;
+});
 </script>
 
 <template>
@@ -537,6 +605,24 @@ const getUnassignedArea = (floor: Floor): number => {
                 </td>
               </tr>
             </tbody>
+            <tfoot>
+              <!-- 合計行 -->
+              <tr class="bg-grey-lighten-3 font-weight-bold">
+                <td>合計</td>
+                <td>{{ getTotalFloorArea }} ㎡</td>
+                <td
+                  v-for="useCode in allUseCodes"
+                  :key="`total-${useCode}`"
+                  class="text-center"
+                >
+                  <div>{{ getTotalAreaForUseCode(useCode) }} ㎡</div>
+                  <div class="text-caption text-grey-darken-1">
+                    {{ getTotalCapacityForUseCode(useCode) }} 人
+                  </div>
+                </td>
+                <td class="text-right">{{ getTotalUnassignedArea }} ㎡</td>
+              </tr>
+            </tfoot>
           </v-table>
         </v-card-text>
       </v-card>
