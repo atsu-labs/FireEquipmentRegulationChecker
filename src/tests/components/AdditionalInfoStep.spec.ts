@@ -114,7 +114,7 @@ describe("AdditionalInfoStep.vue", () => {
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // 3項の用途に変更すると表示される
-    await wrapper.setProps({ buildingUse: "item03_i" });
+    await wrapper.setProps({ buildingUse: "annex03_i" });
     await nextTick();
 
     fireEquipmentCheckbox = wrapper.find(

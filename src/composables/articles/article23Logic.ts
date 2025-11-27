@@ -14,21 +14,21 @@ export function useArticle23Logic(userInput: Article23UserInput) {
     let basis = '';
 
     // 1号
-    const item1Codes = ['item06_i_1', 'item06_i_2', 'item06_i_3', 'item06_ro', 'item16_2', 'item16_3'];
+    const item1Codes = ['annex06_i_1', 'annex06_i_2', 'annex06_i_3', 'annex06_ro', 'annex16_2', 'annex16_3'];
     if (useCodeMatches(buildingUse.value, item1Codes)) {
       isRequired = true;
       basis = '令第23条第1項第1号';
     }
 
     // 2号
-    const item2Codes = ['item01', 'item02', 'item04', 'item05_i', 'item06_i_4', 'item06_ha', 'item06_ni', 'item12', 'item17'];
+    const item2Codes = ['annex01', 'annex02', 'annex04', 'annex05_i', 'annex06_i_4', 'annex06_ha', 'annex06_ni', 'annex12', 'annex17'];
     if (!isRequired && useCodeMatches(buildingUse.value, item2Codes) && area >= 500) {
       isRequired = true;
       basis = '令第23条第1項第2号';
     }
 
     // 3号
-    const item3Codes = ['item03', 'item05_ro', 'item07', 'item08', 'item09', 'item10', 'item11', 'item13', 'item14', 'item15'];
+    const item3Codes = ['annex03', 'annex05_ro', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex13', 'annex14', 'annex15'];
     if (!isRequired && useCodeMatches(buildingUse.value, item3Codes) && area >= 1000) {
       isRequired = true;
       basis = '令第23条第1項第3号';
@@ -36,7 +36,7 @@ export function useArticle23Logic(userInput: Article23UserInput) {
 
     if (isRequired) {
       // 電話で代替できない高リスク用途
-      const nonAlternativeCodes = ['item06_i_1', 'item06_i_2', 'item06_i_3', 'item06_ro', 'item05_i', 'item06_i_4', 'item06_ha'];
+      const nonAlternativeCodes = ['annex06_i_1', 'annex06_i_2', 'annex06_i_3', 'annex06_ro', 'annex05_i', 'annex06_i_4', 'annex06_ha'];
       if (useCodeMatches(buildingUse.value, nonAlternativeCodes)) {
         return { required: true, message: `用途（${useName}）が該当するため、設置が必要です。`, basis };
       }

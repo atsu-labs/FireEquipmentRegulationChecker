@@ -15,7 +15,7 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       const capacity = floor.capacity || 0;
 
       // 1号: (6)項
-      if (useCodeMatches(buildingUse.value, ['item06'])) {
+      if (useCodeMatches(buildingUse.value, ['annex06'])) {
         if (floor.level >= 2 || floor.type === 'basement') {
           if (capacity >= 20) {
             return {
@@ -35,7 +35,7 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 2号: (5)項
-      if (useCodeMatches(buildingUse.value, ['item05'])) {
+      if (useCodeMatches(buildingUse.value, ['annex05'])) {
         if (floor.level >= 2 || floor.type === 'basement') {
           if (capacity >= 30) {
             return {
@@ -55,7 +55,7 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 3号: (1)~(4), (7)~(11)項
-      const item3Codes = ['item01', 'item02', 'item03', 'item04', 'item07', 'item08', 'item09', 'item10', 'item11'];
+      const item3Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11'];
       if (useCodeMatches(buildingUse.value, item3Codes)) {
         if ((floor.level >= 2 || floor.type === 'basement') && capacity >= 50) {
           return {
@@ -67,7 +67,7 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 4号: (12), (15)項
-      const item4Codes = ['item12', 'item15'];
+      const item4Codes = ['annex12', 'annex15'];
       if (useCodeMatches(buildingUse.value, item4Codes)) {
         if (floor.level >= 3 || floor.type === 'basement') {
           if (capacity >= 150) {
@@ -88,7 +88,7 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 5号: その他すべて
-      const item5SpecialCases = useCodeMatches(buildingUse.value, ['item02', 'item03']) || (buildingUse.value?.startsWith('item16_i') && false); // TODO: 16項イの下階判定
+      const item5SpecialCases = useCodeMatches(buildingUse.value, ['annex02', 'annex03']) || (buildingUse.value?.startsWith('annex16_i') && false); // TODO: 16項イの下階判定
       if ((floor.level >= 3 || (item5SpecialCases && floor.level >= 2)) && capacity >= 10) {
         return {
           required: 'warning',

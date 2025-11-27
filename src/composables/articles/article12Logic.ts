@@ -38,14 +38,14 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     // 第三号: 11階建て以上（地階を除く階数が11以上）
     if (groundFloors.value >= 11) {
       const applicableUses = [
-        "item01",
-        "item02",
-        "item03",
-        "item04",
-        "item05_i",
-        "item06",
-        "item09_i",
-        "item16_i",
+        "annex01",
+        "annex02",
+        "annex03",
+        "annex04",
+        "annex05_i",
+        "annex06",
+        "annex09_i",
+        "annex16_i",
       ];
       if (useCodeMatches(useCode, applicableUses)) {
         return {
@@ -63,14 +63,14 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       1
     ) {
       // 平屋建てでない
-      const area3000Uses = ["item04", "item06_i_1", "item06_i_2", "item06_i_3"];
+      const area3000Uses = ["annex04", "annex06_i_1", "annex06_i_2", "annex06_i_3"];
       const area6000Uses = [
-        "item01",
-        "item02",
-        "item03",
-        "item05_i",
-        "item06",
-        "item09_i",
+        "annex01",
+        "annex02",
+        "annex03",
+        "annex05_i",
+        "annex06",
+        "annex09_i",
       ]; // (4)項と(6)項イ(1-3)を除く
 
       if (useCodeMatches(useCode, area3000Uses) && totalArea >= 3000) {
@@ -94,7 +94,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     }
 
     // 第十号: (16)項イ
-    const isItem16i = useCodeMatches(useCode, ["item16_i"]);
+    const isItem16i = useCodeMatches(useCode, ["annex16_i"]);
     if (isItem16i && totalArea >= 3000) {
       return {
         required: "warning",
@@ -105,7 +105,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     }
 
     // 第二号: 劇場等の舞台部
-    if (useCodeMatches(useCode, ["item01"]) && hasStageArea.value) {
+    if (useCodeMatches(useCode, ["annex01"]) && hasStageArea.value) {
       const stageArea = stageAreaRef.value || 0;
       if (
         stageFloorLevel.value === "basement_windowless_4th_or_higher" &&
@@ -127,7 +127,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     }
 
     // 第五号: ラック式倉庫
-    if (useCodeMatches(useCode, ["item14"]) && isRackWarehouse.value) {
+    if (useCodeMatches(useCode, ["annex14"]) && isRackWarehouse.value) {
       const ceilingHeight = ceilingHeightRef.value || 0;
       if (ceilingHeight > 10 && totalArea >= 700) {
         return {
@@ -139,7 +139,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     }
 
     // 第六号: (16の2)項で延べ面積1000㎡以上
-    if (useCodeMatches(useCode, ["item16_2"]) && totalArea >= 1000) {
+    if (useCodeMatches(useCode, ["annex16_2"]) && totalArea >= 1000) {
       return {
         required: true,
         message: `用途（${useDisplay}）が（16の2）項で、延べ面積が1000㎡以上のため、設置が必要です。`,
@@ -164,8 +164,8 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     // 第一号: 避難困難施設等（火災発生時の延焼抑制構造でないもの）
     if (!hasFireSuppressingStructure.value) {
       // イ: (6)項イ(1)及び(2)
-      if (useCodeMatches(useCode, ["item06_i_1", "item06_i_2"])) {
-        if (!(useCode.startsWith("item06_i_2") && !hasBeds.value)) {
+      if (useCodeMatches(useCode, ["annex06_i_1", "annex06_i_2"])) {
+        if (!(useCode.startsWith("annex06_i_2") && !hasBeds.value)) {
           return {
             required: true,
             message: `用途（${useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
@@ -174,7 +174,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
         }
       }
       // ロ: (6)項ロ(1)及び(3)
-      if (useCodeMatches(useCode, ["item06_ro_1", "item06_ro_3"])) {
+      if (useCodeMatches(useCode, ["annex06_ro_1", "annex06_ro_3"])) {
         return {
           required: true,
           message: `用途（${useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
@@ -183,7 +183,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       }
       // ハ: (6)項ロ(2),(4),(5)
       if (
-        useCodeMatches(useCode, ["item06_ro_2", "item06_ro_4", "item06_ro_5"])
+        useCodeMatches(useCode, ["annex06_ro_2", "annex06_ro_4", "annex06_ro_5"])
       ) {
         // 介助が必要な者が入所する施設の場合、面積に関わらず設置義務あり
         if (isCareDependentOccupancy.value) {
@@ -205,7 +205,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     }
 
     // 第七号: (16の3)項
-    if (useCodeMatches(useCode, ["item16_3"]) && totalArea >= 1000) {
+    if (useCodeMatches(useCode, ["annex16_3"]) && totalArea >= 1000) {
       return {
         required: "warning",
         message:
@@ -223,14 +223,14 @@ export function useArticle12Logic(userInput: Article12UserInput) {
     );
     if (hasApplicableFloor) {
       const item11Uses = [
-        "item01",
-        "item02",
-        "item03",
-        "item04",
-        "item05_i",
-        "item06",
-        "item09_i",
-        "item16_i",
+        "annex01",
+        "annex02",
+        "annex03",
+        "annex04",
+        "annex05_i",
+        "annex06",
+        "annex09_i",
+        "annex16_i",
       ];
       if (useCodeMatches(useCode, item11Uses)) {
         return {

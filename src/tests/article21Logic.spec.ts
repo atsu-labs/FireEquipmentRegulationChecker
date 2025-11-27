@@ -47,7 +47,7 @@ describe("useArticle21Logic", () => {
   };
 
   it("1号イ: (五)項イの建物で設置が必要になる", () => {
-    const userInput = createMockUserInput({ buildingUse: ref("item05_i") });
+    const userInput = createMockUserInput({ buildingUse: ref("annex05_i") });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第21条第1項第1号イ");
@@ -55,7 +55,7 @@ describe("useArticle21Logic", () => {
 
   it("1号ロ: (六)項ハの宿泊施設で設置が必要になる", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item06_ha_1"),
+      buildingUse: ref("annex06_ha_1"),
       hasLodging: ref(true),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -65,7 +65,7 @@ describe("useArticle21Logic", () => {
 
   it("2号: (九)項イで延べ面積200㎡以上の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item09_i"),
+      buildingUse: ref("annex09_i"),
       totalArea: ref(200),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -75,7 +75,7 @@ describe("useArticle21Logic", () => {
 
   it("3号イ: (四)項で延べ面積300㎡以上の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item04"),
+      buildingUse: ref("annex04"),
       totalArea: ref(300),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -85,7 +85,7 @@ describe("useArticle21Logic", () => {
 
   it("3号ロ: (六)項ハの宿泊施設なしで延べ面積300㎡以上の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item06_ha_2"),
+      buildingUse: ref("annex06_ha_2"),
       hasLodging: ref(false),
       totalArea: ref(300),
     });
@@ -96,7 +96,7 @@ describe("useArticle21Logic", () => {
 
   it("4号: (七)項で延べ面積500㎡以上の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item07"),
+      buildingUse: ref("annex07"),
       totalArea: ref(500),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -106,7 +106,7 @@ describe("useArticle21Logic", () => {
 
   it("5号: (16の3)項で延べ面積500㎡以上の場合にwarningを返す", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item16_3"),
+      buildingUse: ref("annex16_3"),
       totalArea: ref(500),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -116,7 +116,7 @@ describe("useArticle21Logic", () => {
 
   it("6号: (十一)項で延べ面積1000㎡以上の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item11"),
+      buildingUse: ref("annex11"),
       totalArea: ref(1000),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -126,7 +126,7 @@ describe("useArticle21Logic", () => {
 
   it("7号: 対象用途で特定一階段の場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item02_i"),
+      buildingUse: ref("annex02_i"),
       isSpecifiedOneStaircase: ref(true),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -136,7 +136,7 @@ describe("useArticle21Logic", () => {
 
   it("7号: 対象用途だが、特定一階段でない場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item02_i"),
+      buildingUse: ref("annex02_i"),
       isSpecifiedOneStaircase: ref(false),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -145,7 +145,7 @@ describe("useArticle21Logic", () => {
 
   it("7号: 対象用途でない場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item07"),
+      buildingUse: ref("annex07"),
       isSpecifiedOneStaircase: ref(true),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -170,7 +170,7 @@ describe("useArticle21Logic", () => {
   });
 
   it("9号: (16の2)号は、判定できないのでwarningを返す", () => {
-    const userInput = createMockUserInput({ buildingUse: ref("item16_2") });
+    const userInput = createMockUserInput({ buildingUse: ref("annex16_2") });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe("warning");
   });
@@ -186,7 +186,7 @@ describe("useArticle21Logic", () => {
       },
     ]);
     const userInput = createMockUserInput({
-      buildingUse: ref("item02_i"),
+      buildingUse: ref("annex02_i"),
       floors,
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -205,7 +205,7 @@ describe("useArticle21Logic", () => {
       },
     ]);
     const userInput = createMockUserInput({
-      buildingUse: ref("item03_i"),
+      buildingUse: ref("annex03_i"),
       floors,
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -224,7 +224,7 @@ describe("useArticle21Logic", () => {
       },
     ]);
     const userInput = createMockUserInput({
-      buildingUse: ref("item16_i"),
+      buildingUse: ref("annex16_i"),
       floors,
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -340,7 +340,7 @@ describe("useArticle21Logic", () => {
 
   it("どの条件にも該当しない場合", () => {
     const userInput = createMockUserInput({
-      buildingUse: ref("item18"),
+      buildingUse: ref("annex18"),
       totalArea: ref(100),
     });
     const { regulationResult } = useArticle21Logic(userInput);

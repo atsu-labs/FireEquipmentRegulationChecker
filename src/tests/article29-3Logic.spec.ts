@@ -33,14 +33,14 @@ describe('useArticle29_3Logic', () => {
   // --- 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの ---
   describe('令第二十九条の三', () => {
     it('用途が(16の2)項で延べ面積が1000㎡の場合、設置義務ありと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(1000) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(1000) });
       const { regulationResult } = useArticle29_3Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条の三');
     });
 
     it('用途が(16の2)項で延べ面積が999㎡の場合、設置義務なしと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(999) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(999) });
       const { regulationResult } = useArticle29_3Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -49,7 +49,7 @@ describe('useArticle29_3Logic', () => {
   // --- 設置義務なし ---
   it('どの条件にも該当しない場合、設置義務なしと判定されること', () => {
     const userInput = createMockUserInput({
-      buildingUse: ref('item01_i'),
+      buildingUse: ref('annex01_i'),
       totalFloorAreaInput: ref(100),
     });
     const { regulationResult } = useArticle29_3Logic(userInput);

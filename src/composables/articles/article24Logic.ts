@@ -24,9 +24,9 @@ export function useArticle24Logic(userInput: Article24UserInput) {
     const EXEMPTION_MESSAGE_2 = 'ただし、自動火災報知設備が設置されている場合は免除されます。';
 
     // --- 第3項のチェック（最も厳しい要件から） ---
-    const para3_item1_uses = ['item16_2', 'item16_3'];
-    const para3_item4_groupA = ['item01', 'item02', 'item03', 'item04', 'item05_i', 'item06', 'item09_i'];
-    const para3_item4_groupB = ['item05_ro', 'item07', 'item08'];
+    const para3_item1_uses = ['annex16_2', 'annex16_3'];
+    const para3_item4_groupA = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09_i'];
+    const para3_item4_groupB = ['annex05_ro', 'annex07', 'annex08'];
 
     if (useCodeMatches(use, para3_item1_uses)) {
       return {
@@ -42,7 +42,7 @@ export function useArticle24Logic(userInput: Article24UserInput) {
         basis: '令第24条第3項第2号',
       };
     }
-    if (useCodeMatches(use, ['item16_i']) && capacity >= 500) {
+    if (useCodeMatches(use, ['annex16_i']) && capacity >= 500) {
       return {
         required: true,
         message: '用途が(16)項イで収容人員が500人以上のため、非常ベル及び放送設備、又は自動式サイレン及び放送設備の設置が必要です。',
@@ -65,7 +65,7 @@ export function useArticle24Logic(userInput: Article24UserInput) {
     }
 
     // --- 第2項のチェック ---
-    const para2_item1_uses = ['item05_i', 'item06_i', 'item09_i'];
+    const para2_item1_uses = ['annex05_i', 'annex06_i', 'annex09_i'];
     const basementOrWindowlessCapacity = floors.value
         .filter(f => f.type === 'basement' || f.isWindowless)
         .reduce((sum, f) => sum + (f.capacity ?? 0), 0);
@@ -78,7 +78,7 @@ export function useArticle24Logic(userInput: Article24UserInput) {
         };
     }
 
-    const para2_item2_uses = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item10', 'item11', 'item12', 'item13', 'item14', 'item15', 'item16', 'item17'];
+    const para2_item2_uses = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex12', 'annex13', 'annex14', 'annex15', 'annex16', 'annex17'];
     if (useCodeMatches(use, para2_item2_uses) && !useCodeMatches(use, para2_item1_uses)) {
         if (capacity >= 50 || basementOrWindowlessCapacity >= 20) {
             return {
@@ -90,7 +90,7 @@ export function useArticle24Logic(userInput: Article24UserInput) {
     }
 
     // --- 第1項のチェック ---
-    const para1_uses = ['item04', 'item06_ro', 'item06_ha', 'item06_ni', 'item09_ro', 'item12'];
+    const para1_uses = ['annex04', 'annex06_ro', 'annex06_ha', 'annex06_ni', 'annex09_ro', 'annex12'];
     if (useCodeMatches(use, para1_uses) && capacity >= 20 && capacity < 50) {
         return {
             required: true,

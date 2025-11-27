@@ -21,7 +21,7 @@ export function useArticle28Logic(userInput: Article28UserInput) {
     }
 
     // --- 第1号のチェック ---
-    if (useCodeMatches(use, ['item16_2']) && currentTotalArea >= 1000) {
+    if (useCodeMatches(use, ['annex16_2']) && currentTotalArea >= 1000) {
       return {
         required: true,
         message: `用途が（16の2）項で延べ面積が1,000㎡以上のため、排煙設備の設置が必要です。`,
@@ -30,7 +30,7 @@ export function useArticle28Logic(userInput: Article28UserInput) {
     }
 
     // --- 第2号のチェック ---
-    if (useCodeMatches(use, ['item01']) && hasStageArea.value) {
+    if (useCodeMatches(use, ['annex01']) && hasStageArea.value) {
         const currentStageArea = stageArea.value ?? 0;
         if (currentStageArea >= 500) {
             return {
@@ -44,7 +44,7 @@ export function useArticle28Logic(userInput: Article28UserInput) {
     }
 
     // --- 第3号のチェック ---
-    const para3_uses = ['item02', 'item04', 'item10', 'item13'];
+    const para3_uses = ['annex02', 'annex04', 'annex10', 'annex13'];
     if (useCodeMatches(use, para3_uses)) {
         const basementOrWindowlessFloors = floors.value.filter(f => f.type === 'basement' || f.isWindowless);
         const totalBasementOrWindowlessArea = basementOrWindowlessFloors.reduce((sum, f) => sum + (f.floorArea ?? 0), 0);

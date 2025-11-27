@@ -61,7 +61,7 @@ describe("useArticle12Logic", () => {
   describe("令第12条第1項第1号（避難困難施設等）", () => {
     it("1号ロ: 用途が(6)項ロ(1)で延焼抑制構造でない場合、設置義務あり", () => {
       const input = createMockInput({
-        buildingUse: ref("item06_ro_1"),
+        buildingUse: ref("annex06_ro_1"),
         hasFireSuppressingStructure: ref(false),
       });
       const { regulationResult } = useArticle12Logic(input);
@@ -71,7 +71,7 @@ describe("useArticle12Logic", () => {
 
     it("1号ハ: 用途が(6)項ロ(2)で介助が必要な者が入所し、面積275㎡未満でも延焼抑制構造でない場合、設置義務あり", () => {
       const input = createMockInput({
-        buildingUse: ref("item06_ro_2"),
+        buildingUse: ref("annex06_ro_2"),
         isCareDependentOccupancy: ref(true),
         totalArea: ref(200),
         hasFireSuppressingStructure: ref(false),
@@ -86,7 +86,7 @@ describe("useArticle12Logic", () => {
 
     it("1号ハ: 用途が(6)項ロ(4)で介助が必要な者以外で、面積275㎡以上で延焼抑制構造でない場合、設置義務あり", () => {
       const input = createMockInput({
-        buildingUse: ref("item06_ro_4"),
+        buildingUse: ref("annex06_ro_4"),
         isCareDependentOccupancy: ref(false),
         totalArea: ref(300),
         hasFireSuppressingStructure: ref(false),
@@ -101,7 +101,7 @@ describe("useArticle12Logic", () => {
 
     it("1号ハ: 用途が(6)項ロ(5)で介助が必要な者以外で、面積275㎡未満なら設置義務なし", () => {
       const input = createMockInput({
-        buildingUse: ref("item06_ro_5"),
+        buildingUse: ref("annex06_ro_5"),
         isCareDependentOccupancy: ref(false),
         totalArea: ref(200),
         hasFireSuppressingStructure: ref(false),
@@ -112,7 +112,7 @@ describe("useArticle12Logic", () => {
 
     it("1号: 延焼抑制構造である場合、設置義務なし", () => {
       const input = createMockInput({
-        buildingUse: ref("item06_ro_1"),
+        buildingUse: ref("annex06_ro_1"),
         hasFireSuppressingStructure: ref(true),
       });
       const { regulationResult } = useArticle12Logic(input);
@@ -122,7 +122,7 @@ describe("useArticle12Logic", () => {
 
   it("用途がitem01で舞台部が地階・無窓階・4階以上かつ面積300㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       hasStageArea: ref(true),
       stageFloorLevel: ref("basement_windowless_4th_or_higher"),
       stageArea: ref(350),
@@ -134,7 +134,7 @@ describe("useArticle12Logic", () => {
 
   it("用途がitem04で平屋建て以外かつ延べ面積3000㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item04"),
+      buildingUse: ref("annex04"),
       groundFloors: ref(2),
       totalArea: ref(3500),
     });
@@ -145,7 +145,7 @@ describe("useArticle12Logic", () => {
 
   it("指定可燃物を基準数量の1000倍以上貯蔵している場合、設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       storesDesignatedCombustiblesOver1000x: ref(true),
     });
     const { regulationResult } = useArticle12Logic(input);

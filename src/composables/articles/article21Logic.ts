@@ -25,14 +25,14 @@ export function useArticle21Logic(userInput: Article21UserInput) {
 
     // --- 第1号 ---
     const item1_i_codes = [
-      "item02_ni",
-      "item05_i",
-      "item06_i_1",
-      "item06_i_2",
-      "item06_i_3",
-      "item06_ro",
-      "item13_ro",
-      "item17",
+      "annex02_ni",
+      "annex05_i",
+      "annex06_i_1",
+      "annex06_i_2",
+      "annex06_i_3",
+      "annex06_ro",
+      "annex13_ro",
+      "annex17",
     ];
     if (useCodeMatches(buildingUse, item1_i_codes)) {
       return {
@@ -41,7 +41,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
         basis: "令第21条第1項第1号イ",
       };
     }
-    const item1_ro_codes = ["item06_ha"];
+    const item1_ro_codes = ["annex06_ha"];
     if (useCodeMatches(buildingUse, item1_ro_codes) && hasLodging) {
       return {
         required: true,
@@ -51,7 +51,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第2号 ---
-    const item2_codes = ["item09_i"];
+    const item2_codes = ["annex09_i"];
     if (useCodeMatches(buildingUse, item2_codes) && totalArea >= 200) {
       return {
         required: true,
@@ -63,16 +63,16 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     // --- 第3号 ---
     if (totalArea >= 300) {
       const item3_i_codes = [
-        "item01",
-        "item02_i",
-        "item02_ro",
-        "item02_ha",
-        "item03",
-        "item04",
-        "item06_i_4",
-        "item06_ni",
-        "item16_i",
-        "item16_2",
+        "annex01",
+        "annex02_i",
+        "annex02_ro",
+        "annex02_ha",
+        "annex03",
+        "annex04",
+        "annex06_i_4",
+        "annex06_ni",
+        "annex16_i",
+        "annex16_2",
       ];
       if (useCodeMatches(buildingUse, item3_i_codes)) {
         return {
@@ -81,7 +81,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
           basis: "令第21条第1項第3号イ",
         };
       }
-      const item3_ro_codes = ["item06_ha"];
+      const item3_ro_codes = ["annex06_ha"];
       if (useCodeMatches(buildingUse, item3_ro_codes) && !hasLodging) {
         return {
           required: true,
@@ -93,14 +93,14 @@ export function useArticle21Logic(userInput: Article21UserInput) {
 
     // --- 第4号 ---
     const item4_codes = [
-      "item05_ro",
-      "item07",
-      "item08",
-      "item09_ro",
-      "item10",
-      "item12",
-      "item13_i",
-      "item14",
+      "annex05_ro",
+      "annex07",
+      "annex08",
+      "annex09_ro",
+      "annex10",
+      "annex12",
+      "annex13_i",
+      "annex14",
     ];
     if (useCodeMatches(buildingUse, item4_codes) && totalArea >= 500) {
       return {
@@ -111,7 +111,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第5号 ---
-    if (useCodeMatches(buildingUse, ["item16_3"]) && totalArea >= 500) {
+    if (useCodeMatches(buildingUse, ["annex16_3"]) && totalArea >= 500) {
       return {
         required: "warning",
         message:
@@ -121,7 +121,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第6号 ---
-    const item6_codes = ["item11", "item15"];
+    const item6_codes = ["annex11", "annex15"];
     if (useCodeMatches(buildingUse, item6_codes) && totalArea >= 1000) {
       return {
         required: true,
@@ -132,14 +132,14 @@ export function useArticle21Logic(userInput: Article21UserInput) {
 
     // --- 第7号 ---
     const item7_codes = [
-      "item01",
-      "item02",
-      "item03",
-      "item04",
-      "item05_i",
-      "item06",
-      "item09_i",
-      "item16_i",
+      "annex01",
+      "annex02",
+      "annex03",
+      "annex04",
+      "annex05_i",
+      "annex06",
+      "annex09_i",
+      "annex16_i",
     ];
     if (useCodeMatches(buildingUse, item7_codes) && isSpecifiedOneStaircase) {
       return {
@@ -160,7 +160,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第9号 ---
-    if (useCodeMatches(buildingUse, ["item16_2"])) {
+    if (useCodeMatches(buildingUse, ["annex16_2"])) {
       return {
         required: "warning",
         message:
@@ -170,7 +170,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第10号 ---
-    const item10_codes = ["item02_i", "item02_ro", "item02_ha", "item03"];
+    const item10_codes = ["annex02_i", "annex02_ro", "annex02_ha", "annex03"];
     const applicableFloor10 = floors.find((floor) => {
       const area = floor.floorArea || 0;
       if (area < 100) return false;
@@ -188,7 +188,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
         basis: "令第21条第1項第10号",
       };
     }
-    if (useCodeMatches(buildingUse, ["item16_i"]) && applicableFloor10) {
+    if (useCodeMatches(buildingUse, ["annex16_i"]) && applicableFloor10) {
       return {
         required: "warning",
         message:

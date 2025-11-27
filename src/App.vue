@@ -106,14 +106,14 @@ const buildingHeight = ref<number | null>(null);
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
   const targetUses = [
-    "item01",
-    "item02",
-    "item03",
-    "item04",
-    "item05_i",
-    "item06",
-    "item09_i",
-    "item16_i",
+    "annex01",
+    "annex02",
+    "annex03",
+    "annex04",
+    "annex05_i",
+    "annex06",
+    "annex09_i",
+    "annex16_i",
   ];
   return targetUses.some((use) => buildingUse.value!.startsWith(use));
 });

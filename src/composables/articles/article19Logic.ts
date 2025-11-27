@@ -14,7 +14,7 @@ export function useArticle19Logic(userInput: Article19UserInput) {
 
     // (16)項、(16の2)項、(16の3)項、(17)項、(18)項は対象外 (JSONでは17,18は対象だが、一般的に除外されるケースが多いので要確認。ここではJSONに従う)
     // Note: JSONには(17),(18)が含まれるが、多くの実務では除外される。ここではJSONの定義通りとする。
-    const excludedUses = ['item16', 'item16_2', 'item16_3'];
+    const excludedUses = ['annex16', 'annex16_2', 'annex16_3'];
     if (useCodeMatches(use, excludedUses)) {
       return { required: false, message: 'この用途は屋外消火栓設備の設置義務の対象外です。', basis: '令第19条第1項' };
     }

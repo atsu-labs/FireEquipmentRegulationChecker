@@ -27,13 +27,13 @@ export function useArticle10Logic(userInput: Article10UserInput) {
     // --- 第一号 ---
     // イ: (1)項イ, (2)項, (6)項イ(1)~(3), (6)項ロ, (16の2)項, (17)項, (20)項
     const item1Codes = [
-      'item01_i', 'item02', 'item06_i_1', 'item06_i_2', 'item06_i_3', 'item06_ro', 'item16_2', 'item17', 'item20'
+      'annex01_i', 'annex02', 'annex06_i_1', 'annex06_i_2', 'annex06_i_3', 'annex06_ro', 'annex16_2', 'annex17', 'annex20'
     ];
     if (useCodeMatches(useCode, item1Codes)) {
       return { required: true, message: `用途（${useDisplay}）により、消火器の設置が必要です。`, basis: '令第十条第一項一号イ' };
     }
   // ロ: (3)項で火気設備あり
-  if (useCodeMatches(useCode, ['item03']) && usesFireEquipment.value) {
+  if (useCodeMatches(useCode, ['annex03']) && usesFireEquipment.value) {
       return { required: true, message: '（3）項の防火対象物で火気設備等があるため、消火器の設置が必要です。', basis: '令第十条第一項一号ロ' };
     }
 
@@ -41,20 +41,20 @@ export function useArticle10Logic(userInput: Article10UserInput) {
     if (totalArea >= 150) {
       // イ: (1)項ロ, (4)項, (5)項, (6)項イ(4), (6)項ハ, (6)項ニ, (9)項, (12)項~(14)項
       const item2Codes = [
-        'item01_ro', 'item04', 'item05', 'item06_i_4', 'item06_ha', 'item06_ni', 'item09', 'item12', 'item13', 'item14'
+        'annex01_ro', 'annex04', 'annex05', 'annex06_i_4', 'annex06_ha', 'annex06_ni', 'annex09', 'annex12', 'annex13', 'annex14'
       ];
       if (useCodeMatches(useCode, item2Codes)) {
         return { required: true, message: `延べ面積150㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項二号イ' };
       }
   // ロ: (3)項で火気設備なし
-  if (useCodeMatches(useCode, ['item03']) && !usesFireEquipment.value) {
+  if (useCodeMatches(useCode, ['annex03']) && !usesFireEquipment.value) {
         return { required: true, message: '延べ面積150㎡以上の（3）項の防火対象物（火気設備等がない場合）のため、消火器の設置が必要です。', basis: '令第十条第一項二号ロ' };
       }
     }
 
     // --- 第三号 --- (延べ面積300㎡以上)
     if (totalArea >= 300) {
-      const item3Codes = ['item07', 'item08', 'item10', 'item11', 'item15'];
+      const item3Codes = ['annex07', 'annex08', 'annex10', 'annex11', 'annex15'];
       if (useCodeMatches(useCode, item3Codes)) {
         return { required: true, message: `延べ面積300㎡以上で、用途（${useDisplay}）により消火器の設置が必要です。`, basis: '令第十条第一項三号' };
       }
