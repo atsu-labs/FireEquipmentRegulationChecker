@@ -24,6 +24,15 @@ const emit = defineEmits(["update:floors"]);
 // 展開パネルの状態管理
 const expandedPanels = ref<number[]>([]);
 
+// 数値を安全にパースするヘルパー関数
+const parseNumber = (value: unknown): number | null => {
+  if (value === "" || value === null || value === undefined) {
+    return null;
+  }
+  const num = Number(value);
+  return isNaN(num) ? null : num;
+};
+
 // 階の表示名を取得
 const getFloorLabel = (floor: Floor): string => {
   if (floor.type === "basement") {
@@ -206,7 +215,7 @@ const getUnassignedArea = (floor: Floor): number => {
                   <v-text-field
                     :model-value="componentUse.floorArea"
                     @update:model-value="
-                      updateFloorArea(floorIndex, useIndex, $event === '' ? null : Number($event))
+                      updateFloorArea(floorIndex, useIndex, parseNumber($event))
                     "
                     label="床面積"
                     type="number"
@@ -220,7 +229,7 @@ const getUnassignedArea = (floor: Floor): number => {
                   <v-text-field
                     :model-value="componentUse.capacity"
                     @update:model-value="
-                      updateCapacity(floorIndex, useIndex, $event === '' ? null : Number($event))
+                      updateCapacity(floorIndex, useIndex, parseNumber($event))
                     "
                     label="収容人員"
                     type="number"
