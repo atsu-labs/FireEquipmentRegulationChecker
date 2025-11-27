@@ -103,6 +103,16 @@ const hasMultipleBuildingsOnSite = ref(false);
 const siteArea = ref<number | null>(null);
 const buildingHeight = ref<number | null>(null);
 
+// 16項（複合用途防火対象物）関連
+const annex16ConfigUse = ref<string | null>(null);
+const annex16FloorArea = ref<number | null>(null);
+
+// 16項かどうかを判定する computed property
+const isAnnex16 = computed(() => {
+  if (!buildingUse.value) return false;
+  return buildingUse.value.startsWith("annex16");
+});
+
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
   const targetUses = [
@@ -172,15 +182,35 @@ watch(currentStep, (newValue, oldValue) => {
   }
 });
 
+// When building type changes between Annex 16 and non-Annex 16, adjust current step if needed
+watch(isAnnex16, (newIsAnnex16) => {
+  // If user is on step 2 (Floor Info) and changes to Annex 16, move to step 3
+  if (currentStep.value === 2 && newIsAnnex16) {
+    currentStep.value = 3;
+  }
+  // If user is on step 3 (Annex 16 Info) and changes to non-Annex 16, move to step 2
+  else if (currentStep.value === 3 && !newIsAnnex16) {
+    currentStep.value = 2;
+  }
+});
+
 const nextStep = () => {
-  if (currentStep.value < 3) {
-    currentStep.value++;
+  if (currentStep.value === 1) {
+    // Step 1 -> Step 2 (Floor Info) or Step 3 (Annex 16 Info) based on isAnnex16
+    currentStep.value = isAnnex16.value ? 3 : 2;
+  } else if (currentStep.value === 2 || currentStep.value === 3) {
+    // Step 2 or Step 3 -> Step 4 (Additional Info)
+    currentStep.value = 4;
   }
 };
 
 const prevStep = () => {
-  if (currentStep.value > 1) {
-    currentStep.value--;
+  if (currentStep.value === 4) {
+    // Step 4 -> Step 2 (Floor Info) or Step 3 (Annex 16 Info) based on isAnnex16
+    currentStep.value = isAnnex16.value ? 3 : 2;
+  } else if (currentStep.value === 2 || currentStep.value === 3) {
+    // Step 2 or Step 3 -> Step 1
+    currentStep.value = 1;
   }
 };
 
@@ -763,8 +793,11 @@ generateFloors();
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
               v-model:siteArea="siteArea"
               v-model:buildingHeight="buildingHeight"
+              v-model:annex16ConfigUse="annex16ConfigUse"
+              v-model:annex16FloorArea="annex16FloorArea"
               :floors="floors"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
+              :isAnnex16="isAnnex16"
               :nextStep="nextStep"
               :prevStep="prevStep"
             />

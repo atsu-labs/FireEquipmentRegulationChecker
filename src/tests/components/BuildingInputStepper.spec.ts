@@ -74,6 +74,9 @@ describe("BuildingInputStepper.vue", () => {
     buildingHeight: number | null;
     floors: unknown[]; // Floor[]
     showArticle21Item7Checkbox: boolean;
+    isAnnex16: boolean;
+    annex16ConfigUse: string | null;
+    annex16FloorArea: number | null;
     nextStep: () => void;
     prevStep: () => void;
   };
@@ -127,8 +130,11 @@ describe("BuildingInputStepper.vue", () => {
     hasMultipleBuildingsOnSite: false,
     siteArea: null,
     buildingHeight: null,
+    annex16ConfigUse: null,
+    annex16FloorArea: null,
     floors: [],
     showArticle21Item7Checkbox: false,
+    isAnnex16: false,
     nextStep: () => {},
     prevStep: () => {},
   };
@@ -240,7 +246,8 @@ describe("BuildingInputStepper.vue", () => {
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
-    await wrapper.setProps({ buildingUse: "annex03_i", currentStep: 3 });
+    // AdditionalInfoStep は Step 4 に移動したため、currentStep を 4 に設定
+    await wrapper.setProps({ buildingUse: "annex03_i", currentStep: 4 });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -260,5 +267,34 @@ describe("BuildingInputStepper.vue", () => {
       '[data-testid="uses-fire-equipment-checkbox"]'
     );
     expect(fireEquipmentCheckbox.exists()).toBe(false);
+  });
+
+  // =================================================================
+  // 5. 動的ステッパーフローのテスト（16項判定）
+  // =================================================================
+  it("16項でない場合、ステップ2（各階の情報）が表示される", async () => {
+    await wrapper.setProps({ isAnnex16: false, currentStep: 2 });
+    await wrapper.vm.$nextTick();
+
+    // Step 2 (各階の情報) が表示されていることを確認
+    const stepperItems = wrapper.findAllComponents({ name: "VStepperItem" });
+    const step2Item = stepperItems.find(
+      (item) => item.props("value") === 2
+    );
+    expect(step2Item).toBeDefined();
+    expect(step2Item?.props("title")).toBe("各階の情報");
+  });
+
+  it("16項の場合、ステップ3（16項の情報）が表示される", async () => {
+    await wrapper.setProps({ isAnnex16: true, currentStep: 3 });
+    await wrapper.vm.$nextTick();
+
+    // Step 3 (16項の情報) が表示されていることを確認
+    const stepperItems = wrapper.findAllComponents({ name: "VStepperItem" });
+    const step3Item = stepperItems.find(
+      (item) => item.props("value") === 3
+    );
+    expect(step3Item).toBeDefined();
+    expect(step3Item?.props("title")).toBe("16項の情報");
   });
 });

@@ -2,6 +2,7 @@
 import BuildingInfoStep from "@/components/BuildingInfoStep.vue";
 import FloorInfoStep from "@/components/FloorInfoStep.vue";
 import AdditionalInfoStep from "@/components/AdditionalInfoStep.vue";
+import Annex16InfoStep from "@/components/Annex16InfoStep.vue";
 import type { Floor, Parking } from "@/types";
 import type { PropType } from "vue";
 import { watch } from "vue";
@@ -140,11 +141,23 @@ const props = defineProps({
   //
   buildingHeight: { type: Number as PropType<number | null>, default: null },
 
+  // 16項（複合用途防火対象物）関連
+  annex16ConfigUse: {
+    type: String as PropType<string | null>,
+    default: null,
+  },
+  annex16FloorArea: {
+    type: Number as PropType<number | null>,
+    default: null,
+  },
+
   // Other reactive props
   // floors: 各階データ。ほとんどの article ロジック（article10/11/12/21/24/25/27/28/29 等）で参照される
   floors: { type: Array as PropType<Floor[]>, required: true },
   // showArticle21Item7Checkbox: UI 表示制御（App.vue の計算結果をそのまま受け取る）
   showArticle21Item7Checkbox: { type: Boolean, required: true },
+  // isAnnex16: 16項かどうかのフラグ（App.vue から渡される）
+  isAnnex16: { type: Boolean, required: true },
 
   // Functions
   // prevStep / nextStep: ステッパーの前後移動（親のメソッドを受け取る）
@@ -199,7 +212,8 @@ const emit = defineEmits([
   "update:hasMultipleBuildingsOnSite",
   "update:siteArea",
   "update:buildingHeight",
-  "update:buildingHeight",
+  "update:annex16ConfigUse",
+  "update:annex16FloorArea",
 ]);
 
 watch(
@@ -228,13 +242,21 @@ watch(
       ></v-stepper-item>
       <v-divider></v-divider>
       <v-stepper-item
+        v-if="!isAnnex16"
         title="各階の情報"
         :value="2"
         :complete="currentStep > 2"
         editable
       ></v-stepper-item>
+      <v-stepper-item
+        v-if="isAnnex16"
+        title="16項の情報"
+        :value="3"
+        :complete="currentStep > 3"
+        editable
+      ></v-stepper-item>
       <v-divider></v-divider>
-      <v-stepper-item title="追加情報" :value="3" editable></v-stepper-item>
+      <v-stepper-item title="追加情報" :value="4" editable></v-stepper-item>
     </v-stepper-header>
 
     <v-stepper-window>
@@ -309,6 +331,15 @@ watch(
       </v-stepper-window-item>
 
       <v-stepper-window-item :value="3">
+        <Annex16InfoStep
+          :annex16ConfigUse="annex16ConfigUse"
+          :annex16FloorArea="annex16FloorArea"
+          @update:annex16ConfigUse="emit('update:annex16ConfigUse', $event)"
+          @update:annex16FloorArea="emit('update:annex16FloorArea', $event)"
+        />
+      </v-stepper-window-item>
+
+      <v-stepper-window-item :value="4">
         <AdditionalInfoStep
           :buildingUse="buildingUse"
           :usesFireEquipment="usesFireEquipment"
@@ -409,7 +440,7 @@ watch(
     <v-card-actions>
       <v-btn v-if="currentStep > 1" @click="prevStep"> 戻る </v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="currentStep < 3" color="primary" @click="nextStep">
+      <v-btn v-if="currentStep < 4" color="primary" @click="nextStep">
         次へ
       </v-btn>
     </v-card-actions>
