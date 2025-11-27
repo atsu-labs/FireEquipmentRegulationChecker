@@ -153,6 +153,11 @@ const props = defineProps({
     type: Array as PropType<ComponentUse[]>,
     required: true,
   },
+  // nonFloorAreaComponentUses: 階に該当しない部分の構成用途情報
+  nonFloorAreaComponentUses: {
+    type: Array as PropType<ComponentUse[]>,
+    required: true,
+  },
 
   // Functions
   // prevStep / nextStep: ステッパーの前後移動（親のメソッドを受け取る）
@@ -208,6 +213,8 @@ const emit = defineEmits([
   "update:siteArea",
   "update:buildingHeight",
   "update:componentUses",
+  "update:floors",
+  "update:nonFloorAreaComponentUses",
 ]);
 
 watch(
@@ -235,14 +242,14 @@ watch(
         editable
       ></v-stepper-item>
       <v-divider></v-divider>
-      <!-- 16項以外: ステップ2（各階の情報） -->
+      <!-- ステップ2（各階の情報）: 全ての用途で表示 -->
       <v-stepper-item
-        v-if="!isAnnex16"
         title="各階の情報"
         :value="2"
         :complete="currentStep > 2"
         editable
       ></v-stepper-item>
+      <v-divider v-if="isAnnex16"></v-divider>
       <!-- 16項: ステップ3（構成用途情報） -->
       <v-stepper-item
         v-if="isAnnex16"
@@ -321,7 +328,7 @@ watch(
         />
       </v-stepper-window-item>
 
-      <!-- ステップ2: 各階の情報（16項以外） -->
+      <!-- ステップ2: 各階の情報（全ての用途） -->
       <v-stepper-window-item :value="2">
         <FloorInfoStep
           :hasNonFloorArea="hasNonFloorArea"
@@ -334,8 +341,12 @@ watch(
       <!-- ステップ3: 構成用途情報（16項のみ） -->
       <v-stepper-window-item :value="3">
         <Annex16InfoStep
-          :componentUses="componentUses"
-          @update:componentUses="emit('update:componentUses', $event)"
+          :floors="floors"
+          :hasNonFloorArea="hasNonFloorArea"
+          :nonFloorAreaValue="nonFloorAreaValue"
+          :nonFloorAreaComponentUses="nonFloorAreaComponentUses"
+          @update:floors="emit('update:floors', $event)"
+          @update:nonFloorAreaComponentUses="emit('update:nonFloorAreaComponentUses', $event)"
         />
       </v-stepper-window-item>
 

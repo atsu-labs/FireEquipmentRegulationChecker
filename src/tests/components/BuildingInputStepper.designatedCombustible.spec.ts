@@ -62,7 +62,8 @@ describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", ()
     floors: [],
     showArticle21Item7Checkbox: false,
     isAnnex16: false,
-    componentUses: [{ useCode: "", floorArea: null }],
+    componentUses: [{ useCode: "", floorArea: null, capacity: null }],
+    nonFloorAreaComponentUses: [],
     prevStep: () => {},
     nextStep: () => {},
   });

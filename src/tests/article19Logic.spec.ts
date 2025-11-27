@@ -46,14 +46,14 @@ describe('useArticle19Logic', () => {
   });
 
   it('平屋建てで1階の面積が基準値未満の場合、設置義務なし', () => {
-    const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 2999, capacity: null, isWindowless: false }];
+    const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 2999, capacity: null, isWindowless: false, componentUses: [] }];
     const input = createMockInput({ groundFloors: ref(1), floors: ref(floors), buildingStructure: ref('other') });
     const { regulationResult } = useArticle19Logic(input);
     expect(regulationResult.value.required).toBe(false);
   });
 
   it('平屋建てで1階の面積が基準値以上の場合、設置義務あり（その他の建築物）', () => {
-    const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 3000, capacity: null, isWindowless: false }];
+    const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 3000, capacity: null, isWindowless: false, componentUses: [] }];
     const input = createMockInput({ groundFloors: ref(1), floors: ref(floors), buildingStructure: ref('other') });
     const { regulationResult } = useArticle19Logic(input);
     expect(regulationResult.value.required).toBe(true);
@@ -62,8 +62,8 @@ describe('useArticle19Logic', () => {
 
   it('2階建て以上で1,2階の合計面積が基準値未満の場合、設置義務なし', () => {
     const floors: Floor[] = [
-      { level: 2, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false },
-      { level: 1, type: 'ground', floorArea: 4999, capacity: null, isWindowless: false },
+      { level: 2, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 1, type: 'ground', floorArea: 4999, capacity: null, isWindowless: false, componentUses: [] },
     ];
     const input = createMockInput({ groundFloors: ref(2), floors: ref(floors), buildingStructure: ref('quasi-fire-resistant') });
     const { regulationResult } = useArticle19Logic(input);
@@ -72,8 +72,8 @@ describe('useArticle19Logic', () => {
 
   it('2階建て以上で1,2階の合計面積が基準値以上の場合、設置義務あり（準耐火建築物）', () => {
     const floors: Floor[] = [
-      { level: 2, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false },
-      { level: 1, type: 'ground', floorArea: 5000, capacity: null, isWindowless: false },
+      { level: 2, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 1, type: 'ground', floorArea: 5000, capacity: null, isWindowless: false, componentUses: [] },
     ];
     const input = createMockInput({ groundFloors: ref(2), floors: ref(floors), buildingStructure: ref('quasi-fire-resistant') });
     const { regulationResult } = useArticle19Logic(input);
@@ -83,9 +83,9 @@ describe('useArticle19Logic', () => {
 
   it('3階建てで1,2階の合計面積が基準値以上の場合、設置義務あり（耐火建築物）', () => {
     const floors: Floor[] = [
-      { level: 3, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false },
-      { level: 2, type: 'ground', floorArea: 4000, capacity: null, isWindowless: false },
-      { level: 1, type: 'ground', floorArea: 5000, capacity: null, isWindowless: false },
+      { level: 3, type: 'ground', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 2, type: 'ground', floorArea: 4000, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 1, type: 'ground', floorArea: 5000, capacity: null, isWindowless: false, componentUses: [] },
     ];
     const input = createMockInput({ groundFloors: ref(3), floors: ref(floors), buildingStructure: ref('fire-resistant') });
     const { regulationResult } = useArticle19Logic(input);

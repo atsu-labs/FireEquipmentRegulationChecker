@@ -42,14 +42,14 @@ describe('useArticle28_2Logic', () => {
 
   describe('一般の対象用途（地階の床面積で判定）', () => {
     it('地階の床面積合計が700㎡未満の場合、設置義務なしと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 699, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 699, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex04'), floors }); // (4)項は対象
       const { regulationResult } = useArticle28_2Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
 
     it('地階の床面積合計がちょうど700㎡の場合、設置義務ありと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 700, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 700, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex04'), floors });
       const { regulationResult } = useArticle28_2Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
@@ -58,7 +58,7 @@ describe('useArticle28_2Logic', () => {
 
     it('地階の床面積合計が700㎡以上の場合、設置義務ありと判定されること', () => {
       const floors = ref<Floor[]>(
-        [{ level: 1, type: 'basement', floorArea: 400, capacity: null, isWindowless: false }, { level: 2, type: 'basement', floorArea: 301, capacity: null, isWindowless: false }]
+        [{ level: 1, type: 'basement', floorArea: 400, capacity: null, isWindowless: false, componentUses: [] }, { level: 2, type: 'basement', floorArea: 301, capacity: null, isWindowless: false, componentUses: [] }]
       );
       const userInput = createMockUserInput({ buildingUse: ref('annex04'), floors });
       const { regulationResult } = useArticle28_2Logic(userInput);
@@ -67,7 +67,7 @@ describe('useArticle28_2Logic', () => {
     });
 
     it('地階がない場合、設置義務なしと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'ground', floorArea: 800, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'ground', floorArea: 800, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex04'), floors });
       const { regulationResult } = useArticle28_2Logic(userInput);
       expect(regulationResult.value.required).toBe(false);

@@ -66,7 +66,7 @@ describe('useArticle24Logic', () => {
     });
 
     it('用途(1)項、収容人員40人、地階収容人員25人で設置義務あり', () => {
-      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 100, capacity: 25, isWindowless: false }];
+      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 100, capacity: 25, isWindowless: false, componentUses: [] }];
       const input = createMockInput({ buildingUse: ref('annex01_i_ro'), totalCapacity: ref(40), floors: ref(floors) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);

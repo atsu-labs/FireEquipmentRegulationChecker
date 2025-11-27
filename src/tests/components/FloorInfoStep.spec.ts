@@ -26,6 +26,7 @@ describe("FloorInfoStep.vue", () => {
       floorArea: 500,
       capacity: 50,
       isWindowless: false,
+      componentUses: [],
     },
     {
       type: "ground", 
@@ -33,6 +34,7 @@ describe("FloorInfoStep.vue", () => {
       floorArea: 400,
       capacity: 40,
       isWindowless: true,
+      componentUses: [],
     },
     {
       type: "basement",
@@ -40,6 +42,7 @@ describe("FloorInfoStep.vue", () => {
       floorArea: 300,
       capacity: 30,
       isWindowless: false,
+      componentUses: [],
     },
   ];
 

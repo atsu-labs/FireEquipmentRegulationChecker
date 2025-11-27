@@ -183,6 +183,7 @@ describe("useArticle21Logic", () => {
         floorArea: 100,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({
@@ -202,6 +203,7 @@ describe("useArticle21Logic", () => {
         floorArea: 100,
         capacity: null,
         isWindowless: true,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({
@@ -221,6 +223,7 @@ describe("useArticle21Logic", () => {
         floorArea: 100,
         capacity: null,
         isWindowless: true,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({
@@ -239,6 +242,7 @@ describe("useArticle21Logic", () => {
         floorArea: 300,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({ floors });
@@ -255,6 +259,7 @@ describe("useArticle21Logic", () => {
         floorArea: 300,
         capacity: null,
         isWindowless: true,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({ floors });
@@ -271,6 +276,7 @@ describe("useArticle21Logic", () => {
         floorArea: 300,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({ floors });
@@ -287,6 +293,7 @@ describe("useArticle21Logic", () => {
         floorArea: 100,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       },
     ]);
     const userInput = createMockUserInput({ floors });

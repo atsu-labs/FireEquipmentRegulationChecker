@@ -43,7 +43,7 @@ describe('useArticle21_2Logic', () => {
   });
 
   it('4号: (1)項で地階の面積合計が1000㎡以上', () => {
-    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false }]);
+    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] }]);
     const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
     const { regulationResult } = useArticle21_2Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
@@ -51,14 +51,14 @@ describe('useArticle21_2Logic', () => {
   });
 
   it('4号: (1)項で地階の面積合計が1000㎡未満', () => {
-    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 999, capacity: null, isWindowless: false }]);
+    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 999, capacity: null, isWindowless: false, componentUses: [] }]);
     const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
     const { regulationResult } = useArticle21_2Logic(userInput);
     expect(regulationResult.value.required).toBe(false);
   });
 
   it('4号: 3号に該当する場合、4号の条件を満たしても3号が優先される', () => {
-    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false }]);
+    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] }]);
     const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors, hasHotSpringFacility: ref(true), isHotSpringFacilityConfirmed: ref(false) });
     const { regulationResult } = useArticle21_2Logic(userInput);
     expect(regulationResult.value.required).toBe('warning'); // 3号のwarning
@@ -66,7 +66,7 @@ describe('useArticle21_2Logic', () => {
   });
 
   it('5号: (16)項イで地階の面積合計が1000㎡以上の場合にwarningを返す', () => {
-    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false }]);
+    const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] }]);
     const userInput = createMockUserInput({ buildingUse: ref('annex16_i'), floors });
     const { regulationResult } = useArticle21_2Logic(userInput);
     expect(regulationResult.value.required).toBe('warning');
