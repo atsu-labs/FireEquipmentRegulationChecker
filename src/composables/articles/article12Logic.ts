@@ -222,7 +222,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
         (f.type === "ground" && f.level >= 4 && f.level <= 10)
     );
     if (hasApplicableFloor) {
-      const annex11Uses = [
+      const item11Uses = [
         "annex01",
         "annex02",
         "annex03",
@@ -232,7 +232,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
         "annex09_i",
         "annex16_i",
       ];
-      if (useCodeMatches(useCode, annex11Uses)) {
+      if (useCodeMatches(useCode, item11Uses)) {
         return {
           required: "warning",
           message:

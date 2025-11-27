@@ -191,7 +191,7 @@ const selectedDesignatedCombustibleLevel = computed({
         @update:model-value="emit('update:isSpecifiedOneStaircase', $event)"
         label="特定一階段等防火対象物に該当する"
         hide-details
-        data-testid="article21-annex7-checkbox"
+        data-testid="article21-item7-checkbox"
       ></v-checkbox>
 
       <v-divider class="my-4"></v-divider>

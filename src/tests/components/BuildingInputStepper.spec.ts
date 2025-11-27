@@ -188,7 +188,7 @@ describe("BuildingInputStepper.vue", () => {
     // --- 初期状態の確認 ---
     // 特定のチェックボックスが最初は表示されていないことを確認
     // 例: `showArticle21Item7Checkbox` に連動するチェックボックス
-    let specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
+    let specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
@@ -199,14 +199,14 @@ describe("BuildingInputStepper.vue", () => {
 
     // --- UIが更新されたことを確認 ---
     // チェックボックスが表示されたことを確認
-    specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
+    specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
     expect(wrapper.text()).toContain('特定の避難階段が1つ'); // ラベルのテキストなどで確認
 
     // --- 再度 props を更新して非表示になることを確認 ---
     await wrapper.setProps({
       showArticle21Item7Checkbox: false,
     });
-    specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
+    specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(false);
   }); 
   */

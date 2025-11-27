@@ -120,7 +120,7 @@ describe("useArticle12Logic", () => {
     });
   });
 
-  it("用途がannex01で舞台部が地階・無窓階・4階以上かつ面積300㎡以上なら設置義務あり", () => {
+  it("用途がitem01で舞台部が地階・無窓階・4階以上かつ面積300㎡以上なら設置義務あり", () => {
     const input = createMockInput({
       buildingUse: ref("annex01"),
       hasStageArea: ref(true),
@@ -132,7 +132,7 @@ describe("useArticle12Logic", () => {
     expect(regulationResult.value.basis).toContain("令第12条第1項第2号");
   });
 
-  it("用途がannex04で平屋建て以外かつ延べ面積3000㎡以上なら設置義務あり", () => {
+  it("用途がitem04で平屋建て以外かつ延べ面積3000㎡以上なら設置義務あり", () => {
     const input = createMockInput({
       buildingUse: ref("annex04"),
       groundFloors: ref(2),

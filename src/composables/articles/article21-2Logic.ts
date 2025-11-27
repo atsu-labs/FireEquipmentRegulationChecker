@@ -32,12 +32,12 @@ export function useArticle21_2Logic(userInput: Article21_2UserInput) {
     }
 
     // 4号
-    const annex4Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09_i'];
+    const item4Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09_i'];
     const basementArea = floors.value
       .filter(f => f.type === 'basement')
       .reduce((sum, f) => sum + (f.floorArea || 0), 0);
 
-    if (useCodeMatches(buildingUse.value, annex4Codes) && basementArea >= 1000) {
+    if (useCodeMatches(buildingUse.value, item4Codes) && basementArea >= 1000) {
         if (hasHotSpringFacility.value) { // 3号に該当する場合はそちらを優先
             // No-op, fall through to default
         } else {

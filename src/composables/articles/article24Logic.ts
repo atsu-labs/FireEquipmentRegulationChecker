@@ -24,11 +24,11 @@ export function useArticle24Logic(userInput: Article24UserInput) {
     const EXEMPTION_MESSAGE_2 = 'ただし、自動火災報知設備が設置されている場合は免除されます。';
 
     // --- 第3項のチェック（最も厳しい要件から） ---
-    const para3_annex1_uses = ['annex16_2', 'annex16_3'];
-    const para3_annex4_groupA = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09_i'];
-    const para3_annex4_groupB = ['annex05_ro', 'annex07', 'annex08'];
+    const para3_item1_uses = ['annex16_2', 'annex16_3'];
+    const para3_item4_groupA = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09_i'];
+    const para3_item4_groupB = ['annex05_ro', 'annex07', 'annex08'];
 
-    if (useCodeMatches(use, para3_annex1_uses)) {
+    if (useCodeMatches(use, para3_item1_uses)) {
       return {
         required: true,
         message: '用途（(16の2)項または(16の3)項）に該当するため、非常ベル及び放送設備、又は自動式サイレン及び放送設備の設置が必要です。',
@@ -49,14 +49,14 @@ export function useArticle24Logic(userInput: Article24UserInput) {
         basis: '令第24条第3項第3号',
       };
     }
-    if (useCodeMatches(use, para3_annex4_groupA) && capacity >= 300) {
+    if (useCodeMatches(use, para3_item4_groupA) && capacity >= 300) {
         return {
             required: true,
             message: `特定用途（${use}）で収容人員が300人以上のため、非常ベル及び放送設備、又は自動式サイレン及び放送設備の設置が必要です。`,
             basis: '令第24条第3項第4号',
         };
     }
-    if (useCodeMatches(use, para3_annex4_groupB) && capacity >= 800) {
+    if (useCodeMatches(use, para3_item4_groupB) && capacity >= 800) {
         return {
             required: true,
             message: `特定用途（${use}）で収容人員が800人以上のため、非常ベル及び放送設備、又は自動式サイレン及び放送設備の設置が必要です。`,
@@ -65,12 +65,12 @@ export function useArticle24Logic(userInput: Article24UserInput) {
     }
 
     // --- 第2項のチェック ---
-    const para2_annex1_uses = ['annex05_i', 'annex06_i', 'annex09_i'];
+    const para2_item1_uses = ['annex05_i', 'annex06_i', 'annex09_i'];
     const basementOrWindowlessCapacity = floors.value
         .filter(f => f.type === 'basement' || f.isWindowless)
         .reduce((sum, f) => sum + (f.capacity ?? 0), 0);
 
-    if (useCodeMatches(use, para2_annex1_uses) && capacity >= 20) {
+    if (useCodeMatches(use, para2_item1_uses) && capacity >= 20) {
         return {
             required: true,
             message: `特定用途（${use}）で収容人員が20人以上のため、非常ベル、自動式サイレン又は放送設備の設置が必要です。${EXEMPTION_MESSAGE_2}`,
@@ -78,8 +78,8 @@ export function useArticle24Logic(userInput: Article24UserInput) {
         };
     }
 
-    const para2_annex2_uses = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex12', 'annex13', 'annex14', 'annex15', 'annex16', 'annex17'];
-    if (useCodeMatches(use, para2_annex2_uses) && !useCodeMatches(use, para2_annex1_uses)) {
+    const para2_item2_uses = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex12', 'annex13', 'annex14', 'annex15', 'annex16', 'annex17'];
+    if (useCodeMatches(use, para2_item2_uses) && !useCodeMatches(use, para2_item1_uses)) {
         if (capacity >= 50 || basementOrWindowlessCapacity >= 20) {
             return {
                 required: true,

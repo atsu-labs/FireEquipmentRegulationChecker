@@ -126,7 +126,7 @@ describe("AdditionalInfoStep.vue", () => {
   it("showArticle21Item7Checkboxがtrueの時に特定一階段等のチェックボックスが表示される", async () => {
     // 最初は表示されない
     let specificCheckbox = wrapper.find(
-      '[data-testid="article21-annex7-checkbox"]'
+      '[data-testid="article21-item7-checkbox"]'
     );
     expect(specificCheckbox.exists()).toBe(false);
 
@@ -134,7 +134,7 @@ describe("AdditionalInfoStep.vue", () => {
     await wrapper.setProps({ showArticle21Item7Checkbox: true });
     await nextTick();
 
-    specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
+    specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(true);
     expect(wrapper.text()).toContain("特定一階段等防火対象物に該当する");
   });

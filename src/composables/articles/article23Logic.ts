@@ -14,22 +14,22 @@ export function useArticle23Logic(userInput: Article23UserInput) {
     let basis = '';
 
     // 1号
-    const annex1Codes = ['annex06_i_1', 'annex06_i_2', 'annex06_i_3', 'annex06_ro', 'annex16_2', 'annex16_3'];
-    if (useCodeMatches(buildingUse.value, annex1Codes)) {
+    const item1Codes = ['annex06_i_1', 'annex06_i_2', 'annex06_i_3', 'annex06_ro', 'annex16_2', 'annex16_3'];
+    if (useCodeMatches(buildingUse.value, item1Codes)) {
       isRequired = true;
       basis = '令第23条第1項第1号';
     }
 
     // 2号
-    const annex2Codes = ['annex01', 'annex02', 'annex04', 'annex05_i', 'annex06_i_4', 'annex06_ha', 'annex06_ni', 'annex12', 'annex17'];
-    if (!isRequired && useCodeMatches(buildingUse.value, annex2Codes) && area >= 500) {
+    const item2Codes = ['annex01', 'annex02', 'annex04', 'annex05_i', 'annex06_i_4', 'annex06_ha', 'annex06_ni', 'annex12', 'annex17'];
+    if (!isRequired && useCodeMatches(buildingUse.value, item2Codes) && area >= 500) {
       isRequired = true;
       basis = '令第23条第1項第2号';
     }
 
     // 3号
-    const annex3Codes = ['annex03', 'annex05_ro', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex13', 'annex14', 'annex15'];
-    if (!isRequired && useCodeMatches(buildingUse.value, annex3Codes) && area >= 1000) {
+    const item3Codes = ['annex03', 'annex05_ro', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex13', 'annex14', 'annex15'];
+    if (!isRequired && useCodeMatches(buildingUse.value, item3Codes) && area >= 1000) {
       isRequired = true;
       basis = '令第23条第1項第3号';
     }

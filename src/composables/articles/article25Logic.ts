@@ -55,8 +55,8 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 3号: (1)~(4), (7)~(11)項
-      const annex3Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11'];
-      if (useCodeMatches(buildingUse.value, annex3Codes)) {
+      const item3Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11'];
+      if (useCodeMatches(buildingUse.value, item3Codes)) {
         if ((floor.level >= 2 || floor.type === 'basement') && capacity >= 50) {
           return {
             required: 'warning',
@@ -67,8 +67,8 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 4号: (12), (15)項
-      const annex4Codes = ['annex12', 'annex15'];
-      if (useCodeMatches(buildingUse.value, annex4Codes)) {
+      const item4Codes = ['annex12', 'annex15'];
+      if (useCodeMatches(buildingUse.value, item4Codes)) {
         if (floor.level >= 3 || floor.type === 'basement') {
           if (capacity >= 150) {
             return {
@@ -88,8 +88,8 @@ export function useArticle25Logic(userInput: Article25UserInput) {
       }
 
       // 5号: その他すべて
-      const annex5SpecialCases = useCodeMatches(buildingUse.value, ['annex02', 'annex03']) || (buildingUse.value?.startsWith('annex16_i') && false); // TODO: 16項イの下階判定
-      if ((floor.level >= 3 || (annex5SpecialCases && floor.level >= 2)) && capacity >= 10) {
+      const item5SpecialCases = useCodeMatches(buildingUse.value, ['annex02', 'annex03']) || (buildingUse.value?.startsWith('annex16_i') && false); // TODO: 16項イの下階判定
+      if ((floor.level >= 3 || (item5SpecialCases && floor.level >= 2)) && capacity >= 10) {
         return {
           required: 'warning',
           message: `${floorIdentifier}は、収容人員が10人以上です。地上への直通階段が1つ以下の場合、避難器具が必要です。階段の数を確認してください。`,

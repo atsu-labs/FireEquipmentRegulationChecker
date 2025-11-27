@@ -31,14 +31,14 @@ export function useArticle22Logic(userInput: Article22UserInput) {
     }
 
     // 3号
-    const annex3Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex06', 'annex12', 'annex16_2'];
-    if (useCodeMatches(buildingUse.value, annex3Codes) && area >= 300) {
+    const item3Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex06', 'annex12', 'annex16_2'];
+    if (useCodeMatches(buildingUse.value, item3Codes) && area >= 300) {
       return { required: true, message: `用途（${useName}）で延べ面積が300㎡以上のため、設置が必要です。`, basis: '令第22条第1項第3号' };
     }
 
     // 4号
-    const annex4Codes = ['annex07', 'annex08', 'annex10', 'annex11'];
-    if (useCodeMatches(buildingUse.value, annex4Codes) && area >= 500) {
+    const item4Codes = ['annex07', 'annex08', 'annex10', 'annex11'];
+    if (useCodeMatches(buildingUse.value, item4Codes) && area >= 500) {
       return { required: true, message: `用途（${useName}）で延べ面積が500㎡以上のため、設置が必要です。`, basis: '令第22条第1項第4号' };
     }
 
@@ -57,8 +57,8 @@ export function useArticle22Logic(userInput: Article22UserInput) {
     }
 
     // 7号
-    const annex7Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex15', 'annex16'];
-    if (useCodeMatches(buildingUse.value, annex7Codes) && capacity > 50) {
+    const item7Codes = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex15', 'annex16'];
+    if (useCodeMatches(buildingUse.value, item7Codes) && capacity > 50) {
       return { required: true, message: `用途（${useName}）で契約電流容量が50Aを超えるため、設置が必要です。`, basis: '令第22条第1項第7号' };
     }
 
