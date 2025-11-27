@@ -77,6 +77,7 @@ describe("BuildingInputStepper.vue", () => {
     showArticle21Item7Checkbox: boolean;
     isAnnex16: boolean;
     componentUses: ComponentUse[];
+    nonFloorAreaComponentUses: ComponentUse[];
     nextStep: () => void;
     prevStep: () => void;
   };
@@ -134,6 +135,7 @@ describe("BuildingInputStepper.vue", () => {
     showArticle21Item7Checkbox: false,
     isAnnex16: false,
     componentUses: [{ useCode: "", floorArea: null, capacity: null }],
+    nonFloorAreaComponentUses: [],
     nextStep: () => {},
     prevStep: () => {},
   };

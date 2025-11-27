@@ -32,6 +32,7 @@ const totalFloorAreaInput = ref<number | null>(null);
 const capacityInput = ref<number | null>(null);
 const hasNonFloorArea = ref(false);
 const nonFloorAreaValue = ref<number | null>(null);
+const nonFloorAreaComponentUses = ref<ComponentUse[]>([]);
 
 // --- 追加情報のデータ ---
 const usesFireEquipment = ref(false);
@@ -795,6 +796,7 @@ generateFloors();
               v-model:buildingHeight="buildingHeight"
               v-model:componentUses="componentUses"
               v-model:floors="floors"
+              v-model:nonFloorAreaComponentUses="nonFloorAreaComponentUses"
               :isAnnex16="isAnnex16"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"

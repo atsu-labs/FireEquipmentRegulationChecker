@@ -17,9 +17,24 @@ const props = defineProps({
     type: Array as PropType<Floor[]>,
     required: true,
   },
+  // 階に該当しない部分があるか
+  hasNonFloorArea: {
+    type: Boolean,
+    default: false,
+  },
+  // 階に該当しない部分の面積
+  nonFloorAreaValue: {
+    type: Object as PropType<number | null | undefined>,
+    default: null,
+  },
+  // 階に該当しない部分の構成用途
+  nonFloorAreaComponentUses: {
+    type: Array as PropType<ComponentUse[]>,
+    default: () => [],
+  },
 });
 
-const emit = defineEmits(["update:floors"]);
+const emit = defineEmits(["update:floors", "update:nonFloorAreaComponentUses"]);
 
 // 展開パネルの状態管理
 const expandedPanels = ref<number[]>([]);
@@ -44,6 +59,11 @@ const getFloorLabel = (floor: Floor): string => {
 // ディープコピーを作成してフロア配列を更新
 const updateFloors = (newFloors: Floor[]) => {
   emit("update:floors", JSON.parse(JSON.stringify(newFloors)));
+};
+
+// 階に該当しない部分の構成用途を更新
+const updateNonFloorAreaComponentUses = (newUses: ComponentUse[]) => {
+  emit("update:nonFloorAreaComponentUses", JSON.parse(JSON.stringify(newUses)));
 };
 
 // 特定階に構成用途を追加
@@ -105,7 +125,64 @@ const isAreaExceeded = (floor: Floor): boolean => {
   return getAssignedAreaForFloor(floor) > floor.floorArea;
 };
 
-// 全フロアで使用されている用途コードの一覧（重複なし）
+// ===== 階に該当しない部分用の関数 =====
+
+// 階に該当しない部分に構成用途を追加
+const addComponentUseToNonFloorArea = () => {
+  const newUses = [...(props.nonFloorAreaComponentUses || []), { useCode: "", floorArea: null, capacity: null }];
+  updateNonFloorAreaComponentUses(newUses);
+};
+
+// 階に該当しない部分の構成用途を削除
+const removeComponentUseFromNonFloorArea = (useIndex: number) => {
+  const newUses = (props.nonFloorAreaComponentUses || []).filter((_, i) => i !== useIndex);
+  updateNonFloorAreaComponentUses(newUses);
+};
+
+// 階に該当しない部分の構成用途コード更新
+const updateNonFloorAreaUseCode = (useIndex: number, value: string) => {
+  const newUses = [...(props.nonFloorAreaComponentUses || [])];
+  newUses[useIndex] = { ...newUses[useIndex], useCode: value };
+  updateNonFloorAreaComponentUses(newUses);
+};
+
+// 階に該当しない部分の床面積更新
+const updateNonFloorAreaFloorArea = (useIndex: number, value: number | null) => {
+  const newUses = [...(props.nonFloorAreaComponentUses || [])];
+  newUses[useIndex] = { ...newUses[useIndex], floorArea: value };
+  updateNonFloorAreaComponentUses(newUses);
+};
+
+// 階に該当しない部分の収容人員更新
+const updateNonFloorAreaCapacity = (useIndex: number, value: number | null) => {
+  const newUses = [...(props.nonFloorAreaComponentUses || [])];
+  newUses[useIndex] = { ...newUses[useIndex], capacity: value };
+  updateNonFloorAreaComponentUses(newUses);
+};
+
+// 階に該当しない部分の割り当て済み面積の合計
+const getNonFloorAreaAssignedArea = computed(() => {
+  return (props.nonFloorAreaComponentUses || []).reduce((sum, use) => sum + (use.floorArea || 0), 0);
+});
+
+// 階に該当しない部分の面積超過警告
+const isNonFloorAreaExceeded = computed(() => {
+  if (!props.nonFloorAreaValue) return false;
+  return getNonFloorAreaAssignedArea.value > props.nonFloorAreaValue;
+});
+
+// 階に該当しない部分の未割り当て面積
+const getNonFloorAreaUnassignedArea = computed(() => {
+  if (!props.nonFloorAreaValue) return 0;
+  return Math.max(0, props.nonFloorAreaValue - getNonFloorAreaAssignedArea.value);
+});
+
+// 階に該当しない部分・用途コードに対応するComponentUseを取得
+const getNonFloorAreaComponentUse = (useCode: string): ComponentUse | null => {
+  return (props.nonFloorAreaComponentUses || []).find((u) => u.useCode === useCode) || null;
+};
+
+// 全フロア＋非フロアエリアで使用されている用途コードの一覧（重複なし）
 const allUseCodes = computed(() => {
   const codes = new Set<string>();
   for (const floor of props.floors) {
@@ -113,6 +190,12 @@ const allUseCodes = computed(() => {
       if (use.useCode) {
         codes.add(use.useCode);
       }
+    }
+  }
+  // 階に該当しない部分の用途も追加
+  for (const use of props.nonFloorAreaComponentUses || []) {
+    if (use.useCode) {
+      codes.add(use.useCode);
     }
   }
   return Array.from(codes).sort();
@@ -262,6 +345,114 @@ const getUnassignedArea = (floor: Floor): number => {
             </v-btn>
           </v-expansion-panel-text>
         </v-expansion-panel>
+
+        <!-- 階に該当しない部分 -->
+        <v-expansion-panel
+          v-if="hasNonFloorArea"
+          key="non-floor-area"
+        >
+          <v-expansion-panel-title>
+            <v-row align="center" no-gutters>
+              <v-col cols="auto" class="mr-3">
+                <span class="text-h6 font-weight-bold">階に該当しない部分</span>
+              </v-col>
+              <v-col cols="auto" class="mr-3">
+                <span class="text-body-2 text-grey-darken-1">
+                  面積: {{ nonFloorAreaValue ?? '-' }} ㎡
+                </span>
+              </v-col>
+              <v-col cols="auto" class="ml-2">
+                <v-chip
+                  v-if="isNonFloorAreaExceeded"
+                  color="error"
+                  size="small"
+                  variant="flat"
+                >
+                  面積超過
+                </v-chip>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-alert
+              v-if="isNonFloorAreaExceeded"
+              type="warning"
+              variant="tonal"
+              class="mb-4"
+            >
+              用途別床面積の合計（{{ getNonFloorAreaAssignedArea }} ㎡）が面積（{{ nonFloorAreaValue }} ㎡）を超えています。
+            </v-alert>
+
+            <div
+              v-for="(componentUse, useIndex) in nonFloorAreaComponentUses || []"
+              :key="useIndex"
+              class="mb-4"
+            >
+              <v-row align="center">
+                <v-col cols="12" sm="4">
+                  <v-autocomplete
+                    :model-value="componentUse.useCode"
+                    @update:model-value="updateNonFloorAreaUseCode(useIndex, $event)"
+                    :items="availableUses"
+                    item-title="annexedName"
+                    item-value="annexedCode"
+                    label="構成用途"
+                    density="compact"
+                    hide-details
+                    clearable
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="3">
+                  <v-text-field
+                    :model-value="componentUse.floorArea"
+                    @update:model-value="
+                      updateNonFloorAreaFloorArea(useIndex, parseNumber($event))
+                    "
+                    label="床面積"
+                    type="number"
+                    min="0"
+                    suffix="㎡"
+                    density="compact"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3">
+                  <v-text-field
+                    :model-value="componentUse.capacity"
+                    @update:model-value="
+                      updateNonFloorAreaCapacity(useIndex, parseNumber($event))
+                    "
+                    label="収容人員"
+                    type="number"
+                    min="0"
+                    suffix="人"
+                    density="compact"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="2">
+                  <v-btn
+                    color="error"
+                    variant="outlined"
+                    size="small"
+                    @click="removeComponentUseFromNonFloorArea(useIndex)"
+                  >
+                    削除
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </div>
+
+            <v-btn
+              color="primary"
+              variant="outlined"
+              size="small"
+              @click="addComponentUseToNonFloorArea"
+            >
+              この部分に用途を追加
+            </v-btn>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
       </v-expansion-panels>
 
       <!-- サマリーマトリクス表 -->
@@ -317,6 +508,31 @@ const getUnassignedArea = (floor: Floor): number => {
                 <td class="text-right">
                   <span :class="{ 'text-error': isAreaExceeded(floor) }">
                     {{ getUnassignedArea(floor) }} ㎡
+                  </span>
+                </td>
+              </tr>
+              <!-- 階に該当しない部分の行 -->
+              <tr v-if="hasNonFloorArea" key="summary-non-floor-area">
+                <td class="font-weight-bold">階に該当しない部分</td>
+                <td>
+                  <span>{{ nonFloorAreaValue ?? '-' }} ㎡</span>
+                </td>
+                <td
+                  v-for="useCode in allUseCodes"
+                  :key="`non-floor-area-${useCode}`"
+                  class="text-center"
+                >
+                  <template v-if="getNonFloorAreaComponentUse(useCode)">
+                    <div>{{ getNonFloorAreaComponentUse(useCode)?.floorArea ?? '-' }} ㎡</div>
+                    <div class="text-caption text-grey-darken-1">
+                      {{ getNonFloorAreaComponentUse(useCode)?.capacity ?? '-' }} 人
+                    </div>
+                  </template>
+                  <span v-else class="text-grey-lighten-1">-</span>
+                </td>
+                <td class="text-right">
+                  <span :class="{ 'text-error': isNonFloorAreaExceeded }">
+                    {{ getNonFloorAreaUnassignedArea }} ㎡
                   </span>
                 </td>
               </tr>
