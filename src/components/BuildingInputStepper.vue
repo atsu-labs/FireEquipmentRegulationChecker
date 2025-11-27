@@ -208,6 +208,7 @@ const emit = defineEmits([
   "update:siteArea",
   "update:buildingHeight",
   "update:componentUses",
+  "update:floors",
 ]);
 
 watch(
@@ -334,8 +335,8 @@ watch(
       <!-- ステップ3: 構成用途情報（16項のみ） -->
       <v-stepper-window-item :value="3">
         <Annex16InfoStep
-          :componentUses="componentUses"
-          @update:componentUses="emit('update:componentUses', $event)"
+          :floors="floors"
+          @update:floors="emit('update:floors', $event)"
         />
       </v-stepper-window-item>
 

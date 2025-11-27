@@ -794,7 +794,7 @@ generateFloors();
               v-model:siteArea="siteArea"
               v-model:buildingHeight="buildingHeight"
               v-model:componentUses="componentUses"
-              :floors="floors"
+              v-model:floors="floors"
               :isAnnex16="isAnnex16"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
