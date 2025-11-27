@@ -142,16 +142,16 @@ const emit = defineEmits([
       <v-row>
         <v-col cols="12" sm="12" class="mt-2">
           <div
-            v-if="buildingUse && buildingUse.startsWith('item06')"
+            v-if="buildingUse && buildingUse.startsWith('annex06')"
             class="mb-2"
           >
             <p class="font-weight-bold">（6）項関連の追加情報</p>
             <v-checkbox
               v-if="
                 useCodeMatches(buildingUse, [
-                  'item06_ro_2',
-                  'item06_ro_4',
-                  'item06_ro_5',
+                  'annex06_ro_2',
+                  'annex06_ro_4',
+                  'annex06_ro_5',
                 ])
               "
               :model-value="isCareDependentOccupancy"
@@ -169,7 +169,7 @@ const emit = defineEmits([
             ></v-checkbox>
             <!-- hasLodging は 6項ハ の用途コードのときのみ表示 -->
             <v-checkbox
-              v-if="buildingUse && buildingUse.startsWith('item06_ha')"
+              v-if="buildingUse && buildingUse.startsWith('annex06_ha')"
               :model-value="hasLodging"
               @update:model-value="emit('update:hasLodging', $event)"
               label="宿泊施設、入居施設、または宿泊を伴うサービスがある"
@@ -178,7 +178,7 @@ const emit = defineEmits([
           </div>
 
           <div
-            v-if="buildingUse && buildingUse.startsWith('item01')"
+            v-if="buildingUse && buildingUse.startsWith('annex01')"
             class="mb-2"
           >
             <p class="font-weight-bold">（1）項関連の追加情報</p>
@@ -222,7 +222,7 @@ const emit = defineEmits([
           </div>
 
           <div
-            v-if="buildingUse && buildingUse.startsWith('item14')"
+            v-if="buildingUse && buildingUse.startsWith('annex14')"
             class="mb-2"
           >
             <p class="font-weight-bold">（14）項関連の追加情報</p>

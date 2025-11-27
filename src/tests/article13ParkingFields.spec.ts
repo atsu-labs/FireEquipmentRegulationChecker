@@ -8,7 +8,7 @@ describe("useArticle13Logic - parking split fields", () => {
   const makeInput = (overrides: any = {}) => {
     return {
       // article13 logic expects a buildingUse; provide a neutral default
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       storesDesignatedCombustiblesOver1000x: ref(false),
       parking: ref({
         exists: true,

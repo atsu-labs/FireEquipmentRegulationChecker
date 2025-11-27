@@ -24,25 +24,25 @@ export function useArticle21Logic(userInput: Article21UserInput) {
       parking?.value?.canAllVehiclesExitSimultaneously ?? false;
 
     // --- 第1号 ---
-    const item1_i_codes = [
-      "item02_ni",
-      "item05_i",
-      "item06_i_1",
-      "item06_i_2",
-      "item06_i_3",
-      "item06_ro",
-      "item13_ro",
-      "item17",
+    const annex1_i_codes = [
+      "annex02_ni",
+      "annex05_i",
+      "annex06_i_1",
+      "annex06_i_2",
+      "annex06_i_3",
+      "annex06_ro",
+      "annex13_ro",
+      "annex17",
     ];
-    if (useCodeMatches(buildingUse, item1_i_codes)) {
+    if (useCodeMatches(buildingUse, annex1_i_codes)) {
       return {
         required: true,
         message: `用途（${useName}）が該当するため、設置が必要です。`,
         basis: "令第21条第1項第1号イ",
       };
     }
-    const item1_ro_codes = ["item06_ha"];
-    if (useCodeMatches(buildingUse, item1_ro_codes) && hasLodging) {
+    const annex1_ro_codes = ["annex06_ha"];
+    if (useCodeMatches(buildingUse, annex1_ro_codes) && hasLodging) {
       return {
         required: true,
         message: `用途（${useName}）で宿泊施設等があるため、設置が必要です。`,
@@ -51,8 +51,8 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第2号 ---
-    const item2_codes = ["item09_i"];
-    if (useCodeMatches(buildingUse, item2_codes) && totalArea >= 200) {
+    const annex2_codes = ["annex09_i"];
+    if (useCodeMatches(buildingUse, annex2_codes) && totalArea >= 200) {
       return {
         required: true,
         message: `用途（${useName}）で、延べ面積が200㎡以上のため、設置が必要です。`,
@@ -62,27 +62,27 @@ export function useArticle21Logic(userInput: Article21UserInput) {
 
     // --- 第3号 ---
     if (totalArea >= 300) {
-      const item3_i_codes = [
-        "item01",
-        "item02_i",
-        "item02_ro",
-        "item02_ha",
-        "item03",
-        "item04",
-        "item06_i_4",
-        "item06_ni",
-        "item16_i",
-        "item16_2",
+      const annex3_i_codes = [
+        "annex01",
+        "annex02_i",
+        "annex02_ro",
+        "annex02_ha",
+        "annex03",
+        "annex04",
+        "annex06_i_4",
+        "annex06_ni",
+        "annex16_i",
+        "annex16_2",
       ];
-      if (useCodeMatches(buildingUse, item3_i_codes)) {
+      if (useCodeMatches(buildingUse, annex3_i_codes)) {
         return {
           required: true,
           message: `延べ面積が300㎡以上で、用途（${useName}）が該当するため、設置が必要です。`,
           basis: "令第21条第1項第3号イ",
         };
       }
-      const item3_ro_codes = ["item06_ha"];
-      if (useCodeMatches(buildingUse, item3_ro_codes) && !hasLodging) {
+      const annex3_ro_codes = ["annex06_ha"];
+      if (useCodeMatches(buildingUse, annex3_ro_codes) && !hasLodging) {
         return {
           required: true,
           message: `延べ面積が300㎡以上で、用途（${useName}）が該当し、宿泊施設等がないため、設置が必要です。`,
@@ -92,17 +92,17 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第4号 ---
-    const item4_codes = [
-      "item05_ro",
-      "item07",
-      "item08",
-      "item09_ro",
-      "item10",
-      "item12",
-      "item13_i",
-      "item14",
+    const annex4_codes = [
+      "annex05_ro",
+      "annex07",
+      "annex08",
+      "annex09_ro",
+      "annex10",
+      "annex12",
+      "annex13_i",
+      "annex14",
     ];
-    if (useCodeMatches(buildingUse, item4_codes) && totalArea >= 500) {
+    if (useCodeMatches(buildingUse, annex4_codes) && totalArea >= 500) {
       return {
         required: true,
         message: `延べ面積が500㎡以上で、用途（${useName}）が該当するため、設置が必要です。`,
@@ -111,7 +111,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第5号 ---
-    if (useCodeMatches(buildingUse, ["item16_3"]) && totalArea >= 500) {
+    if (useCodeMatches(buildingUse, ["annex16_3"]) && totalArea >= 500) {
       return {
         required: "warning",
         message:
@@ -121,8 +121,8 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第6号 ---
-    const item6_codes = ["item11", "item15"];
-    if (useCodeMatches(buildingUse, item6_codes) && totalArea >= 1000) {
+    const annex6_codes = ["annex11", "annex15"];
+    if (useCodeMatches(buildingUse, annex6_codes) && totalArea >= 1000) {
       return {
         required: true,
         message: `延べ面積が1000㎡以上で、用途（${useName}）が該当するため、設置が必要です。`,
@@ -131,17 +131,17 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第7号 ---
-    const item7_codes = [
-      "item01",
-      "item02",
-      "item03",
-      "item04",
-      "item05_i",
-      "item06",
-      "item09_i",
-      "item16_i",
+    const annex7_codes = [
+      "annex01",
+      "annex02",
+      "annex03",
+      "annex04",
+      "annex05_i",
+      "annex06",
+      "annex09_i",
+      "annex16_i",
     ];
-    if (useCodeMatches(buildingUse, item7_codes) && isSpecifiedOneStaircase) {
+    if (useCodeMatches(buildingUse, annex7_codes) && isSpecifiedOneStaircase) {
       return {
         required: true,
         message: "特定一階段等防火対象物に該当するため、設置が必要です。",
@@ -160,7 +160,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第9号 ---
-    if (useCodeMatches(buildingUse, ["item16_2"])) {
+    if (useCodeMatches(buildingUse, ["annex16_2"])) {
       return {
         required: "warning",
         message:
@@ -170,13 +170,13 @@ export function useArticle21Logic(userInput: Article21UserInput) {
     }
 
     // --- 第10号 ---
-    const item10_codes = ["item02_i", "item02_ro", "item02_ha", "item03"];
+    const annex10_codes = ["annex02_i", "annex02_ro", "annex02_ha", "annex03"];
     const applicableFloor10 = floors.find((floor) => {
       const area = floor.floorArea || 0;
       if (area < 100) return false;
       return floor.type === "basement" || floor.isWindowless;
     });
-    if (useCodeMatches(buildingUse, item10_codes) && applicableFloor10) {
+    if (useCodeMatches(buildingUse, annex10_codes) && applicableFloor10) {
       const floorName =
         applicableFloor10.type === "basement"
           ? `地階${applicableFloor10.level}階`
@@ -188,7 +188,7 @@ export function useArticle21Logic(userInput: Article21UserInput) {
         basis: "令第21条第1項第10号",
       };
     }
-    if (useCodeMatches(buildingUse, ["item16_i"]) && applicableFloor10) {
+    if (useCodeMatches(buildingUse, ["annex16_i"]) && applicableFloor10) {
       return {
         required: "warning",
         message:

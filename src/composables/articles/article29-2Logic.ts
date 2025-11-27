@@ -26,7 +26,7 @@ export function useArticle29_2Logic(userInput: Article29_2UserInput) {
     }
 
     // --- 第二号: 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの ---
-    if (useCode === 'item16_2' && totalArea >= 1000) {
+    if (useCode === 'annex16_2' && totalArea >= 1000) {
       return { required: true, message: `用途（${useDisplay}）で延べ面積が1,000㎡以上（${totalArea}㎡）のため、非常コンセント設備の設置が必要です。`, basis: '令第二十九条の二第二号' };
     }
 

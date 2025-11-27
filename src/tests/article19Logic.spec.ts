@@ -6,7 +6,7 @@ import type { Floor, Article19UserInput } from '@/types';
 
 const createMockInput = (overrides: Partial<Article19UserInput> = {}): Article19UserInput => {
   const defaults: Article19UserInput = {
-    buildingUse: ref('item01_i_ro'),
+    buildingUse: ref('annex01_i_ro'),
     groundFloors: ref(1),
     floors: ref<Floor[]>([]),
     buildingStructure: ref('other'),
@@ -25,7 +25,7 @@ describe('useArticle19Logic', () => {
   });
 
   it('対象外の用途（(16)項など）の場合、設置義務なしと判定されること', () => {
-    const input = createMockInput({ buildingUse: ref('item16') });
+    const input = createMockInput({ buildingUse: ref('annex16') });
     const { regulationResult } = useArticle19Logic(input);
     expect(regulationResult.value.required).toBe(false);
     expect(regulationResult.value.message).toContain('対象外です');

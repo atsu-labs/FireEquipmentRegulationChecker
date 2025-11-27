@@ -45,7 +45,7 @@ describe('useArticle29Logic', () => {
         { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
         { level: 7, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条第一号');
@@ -60,7 +60,7 @@ describe('useArticle29Logic', () => {
         { level: 5, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
         { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(false); // 他の条件に該当しない限りfalse
     });
@@ -76,7 +76,7 @@ describe('useArticle29Logic', () => {
         { level: 4, type: 'ground', floorArea: 1200, capacity: null, isWindowless: false },
         { level: 5, type: 'ground', floorArea: 1200, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors, totalFloorAreaInput: ref(6000) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors, totalFloorAreaInput: ref(6000) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条第二号');
@@ -89,7 +89,7 @@ describe('useArticle29Logic', () => {
         { level: 3, type: 'ground', floorArea: 1500, capacity: null, isWindowless: false },
         { level: 4, type: 'ground', floorArea: 1500, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors, totalFloorAreaInput: ref(6000) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors, totalFloorAreaInput: ref(6000) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -102,7 +102,7 @@ describe('useArticle29Logic', () => {
         { level: 4, type: 'ground', floorArea: 1199.8, capacity: null, isWindowless: false },
         { level: 5, type: 'ground', floorArea: 1199.8, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors, totalFloorAreaInput: ref(5999) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors, totalFloorAreaInput: ref(5999) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -111,14 +111,14 @@ describe('useArticle29Logic', () => {
   // --- 第三号: 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの（地下街） ---
   describe('令第二十九条第三号', () => {
     it('用途が(16の2)項で延べ面積が1000㎡の場合、設置義務ありと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(1000) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(1000) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条第三号');
     });
 
     it('用途が(16の2)項で延べ面積が999㎡の場合、第三号では設置義務なしと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(999) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(999) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -127,7 +127,7 @@ describe('useArticle29Logic', () => {
   // --- 第四号: 別表第一（十八）項に掲げる防火対象物（延長50メートル以上のアーケード） ---
   describe('令第二十九条第四号', () => {
     it('用途が(18)項の場合、面積に関わらず設置義務ありと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item18'), totalFloorAreaInput: ref(100) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex18'), totalFloorAreaInput: ref(100) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条第四号');
@@ -137,14 +137,14 @@ describe('useArticle29Logic', () => {
   // --- 第五号: 道路の用に供される部分を有するもの ---
   describe('令第二十九条第五号', () => {
     it('道路の用に供される部分を有する場合、設置義務ありと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), hasRoadPart: ref(true) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), hasRoadPart: ref(true) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条第五号');
     });
 
     it('道路の用に供される部分を有しない場合、第五号では設置義務なしと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), hasRoadPart: ref(false) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), hasRoadPart: ref(false) });
       const { regulationResult } = useArticle29Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -159,7 +159,7 @@ describe('useArticle29Logic', () => {
       { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
     ]);
     const userInput = createMockUserInput({
-      buildingUse: ref('item01_i'),
+      buildingUse: ref('annex01_i'),
       totalFloorAreaInput: ref(100),
       floors: floors,
       hasRoadPart: ref(false),

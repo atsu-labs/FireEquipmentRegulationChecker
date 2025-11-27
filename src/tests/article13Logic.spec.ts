@@ -55,14 +55,14 @@ describe("useArticle13Logic", () => {
   });
 
   it("デフォルト状態では設置義務なしと判定されること", () => {
-    const input = createMockInput({ buildingUse: "item01_i_ro" });
+    const input = createMockInput({ buildingUse: "annex01_i_ro" });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe(false);
     expect(regulationResult.value.message).toContain("設置義務はありません");
   });
 
   it("1号: 用途が(13)項ロの場合、設置義務あり", () => {
-    const input = createMockInput({ buildingUse: "item13_ro" });
+    const input = createMockInput({ buildingUse: "annex13_ro" });
     const { regulationResult } = useArticle13Logic(input);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第13条第1項第1号");
@@ -71,7 +71,7 @@ describe("useArticle13Logic", () => {
 
   it("2号: ヘリポートがある場合、設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasHelicopterLandingZone: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -82,7 +82,7 @@ describe("useArticle13Logic", () => {
 
   it("3号: 道路の用に供される部分がある場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasRoadPart: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -92,7 +92,7 @@ describe("useArticle13Logic", () => {
 
   it("3号: 道路の屋上部分が600㎡以上の場合、必須を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasRoadPart: true,
       roadPartRooftopArea: 600,
       roadPartOtherArea: 0,
@@ -104,7 +104,7 @@ describe("useArticle13Logic", () => {
 
   it("3号: 道路のその他部分が400㎡以上の場合、必須を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasRoadPart: true,
       roadPartRooftopArea: 0,
       roadPartOtherArea: 400,
@@ -116,7 +116,7 @@ describe("useArticle13Logic", () => {
 
   it("3号: 道路の屋上部分が600㎡未満の場合、不要を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasRoadPart: true,
       roadPartRooftopArea: 599,
       roadPartOtherArea: 0,
@@ -128,7 +128,7 @@ describe("useArticle13Logic", () => {
 
   it("3号: 道路のその他部分が400㎡未満の場合、不要を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasRoadPart: true,
       roadPartRooftopArea: 0,
       roadPartOtherArea: 399,
@@ -140,7 +140,7 @@ describe("useArticle13Logic", () => {
 
   it("4号: 自動車修理工場がある場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasCarRepairArea: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -150,7 +150,7 @@ describe("useArticle13Logic", () => {
 
   it("4号: 自動車修理工場で地階・2階以上が200㎡以上の場合、必須を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasCarRepairArea: true,
       carRepairAreaBasementOrUpper: 200,
       carRepairAreaFirstFloor: 0,
@@ -162,7 +162,7 @@ describe("useArticle13Logic", () => {
 
   it("4号: 自動車修理工場で1階が500㎡以上の場合、必須を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasCarRepairArea: true,
       carRepairAreaBasementOrUpper: 0,
       carRepairAreaFirstFloor: 500,
@@ -174,7 +174,7 @@ describe("useArticle13Logic", () => {
 
   it("4号: 自動車修理工場で地階・2階以上が199㎡の場合、不要を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasCarRepairArea: true,
       carRepairAreaBasementOrUpper: 199,
       carRepairAreaFirstFloor: 0,
@@ -186,7 +186,7 @@ describe("useArticle13Logic", () => {
 
   it("4号: 自動車修理工場で1階が499㎡の場合、不要を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasCarRepairArea: true,
       carRepairAreaBasementOrUpper: 0,
       carRepairAreaFirstFloor: 499,
@@ -198,7 +198,7 @@ describe("useArticle13Logic", () => {
 
   it("5号イ: 駐車場がある場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       parking: { ...(null as any), exists: true },
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -208,7 +208,7 @@ describe("useArticle13Logic", () => {
 
   it("5号ロ: 機械式駐車場で収容台数10台未満の場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       parking: { ...(null as any), mechanical: { present: true, capacity: 9 } },
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -218,7 +218,7 @@ describe("useArticle13Logic", () => {
 
   it("5号ロ: 機械式駐車場で収容台数10台以上の場合、設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       parking: {
         ...(null as any),
         mechanical: { present: true, capacity: 10 },
@@ -231,7 +231,7 @@ describe("useArticle13Logic", () => {
 
   it("6号: 電気設備室200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasElectricalEquipmentOver200sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -241,7 +241,7 @@ describe("useArticle13Logic", () => {
 
   it("7号: 多量の火気を使用する部分200㎡以上の場合、設置義務ありを返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasHighFireUsageAreaOver200sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -251,7 +251,7 @@ describe("useArticle13Logic", () => {
 
   it("8号: 通信機器室がある場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       hasTelecomRoomOver500sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
@@ -261,7 +261,7 @@ describe("useArticle13Logic", () => {
 
   it("9号: 指定可燃物が1000倍以上ある場合、警告を返す", () => {
     const input = createMockInput({
-      buildingUse: "item01_i_ro",
+      buildingUse: "annex01_i_ro",
       storesDesignatedCombustiblesOver1000x: true,
     });
     const { regulationResult } = useArticle13Logic(input);

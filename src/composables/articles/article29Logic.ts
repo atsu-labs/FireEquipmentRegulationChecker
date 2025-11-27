@@ -32,12 +32,12 @@ export function useArticle29Logic(userInput: Article29UserInput) {
     }
 
     // --- 第三号: 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの（地下街） ---
-    if (useCode === 'item16_2' && totalArea >= 1000) {
+    if (useCode === 'annex16_2' && totalArea >= 1000) {
       return { required: true, message: `用途（${useDisplay}）で延べ面積が1,000㎡以上（${totalArea}㎡）のため、連結送水管の設置が必要です。`, basis: '令第二十九条第三号' };
     }
 
     // --- 第四号: 別表第一（十八）項に掲げる防火対象物（延長50メートル以上のアーケード） ---
-    if (useCode === 'item18') {
+    if (useCode === 'annex18') {
       return { required: true, message: `用途（${useDisplay}）のため、連結送水管の設置が必要です。`, basis: '令第二十九条第四号' };
     }
 

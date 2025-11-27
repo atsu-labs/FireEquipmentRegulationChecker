@@ -45,9 +45,9 @@ describe("useArticle11Logic", () => {
     );
   });
 
-  it("用途がitem01で延べ面積500㎡以上なら設置義務あり", () => {
+  it("用途がannex01で延べ面積500㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       totalArea: ref(600),
     });
     const { regulationResult } = useArticle11Logic(input);
@@ -55,18 +55,18 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.basis).toContain("令第11条第1項第1号");
   });
 
-  it("用途がitem02で延べ面積700㎡未満なら設置義務なし", () => {
+  it("用途がannex02で延べ面積700㎡未満なら設置義務なし", () => {
     const input = createMockInput({
-      buildingUse: ref("item02"),
+      buildingUse: ref("annex02"),
       totalArea: ref(500),
     });
     const { regulationResult } = useArticle11Logic(input);
     expect(regulationResult.value.required).toBe(false);
   });
 
-  it("用途がitem11で延べ面積1000㎡以上なら設置義務あり", () => {
+  it("用途がannex11で延べ面積1000㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item11"),
+      buildingUse: ref("annex11"),
       totalArea: ref(1200),
     });
     const { regulationResult } = useArticle11Logic(input);
@@ -76,7 +76,7 @@ describe("useArticle11Logic", () => {
 
   it("指定可燃物を750倍以上貯蔵している場合、設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       storesFlammableItems: ref(true),
       storesDesignatedCombustiblesOver750x: ref(true),
     });
@@ -85,9 +85,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.basis).toContain("令第11条第1項第5号");
   });
 
-  it("構造A・仕上げflammableで面積要件が3倍になること（item01, totalArea 1500㎡）", () => {
+  it("構造A・仕上げflammableで面積要件が3倍になること（annex01, totalArea 1500㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       totalArea: ref(1500),
       structureType: ref("A"),
       finishType: ref("flammable"),
@@ -98,9 +98,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.basis).toContain("令第11条第1項第1号");
   });
 
-  it("構造A・仕上げflammableで面積要件3倍でも未満なら設置義務なし（item01, totalArea 1000㎡）", () => {
+  it("構造A・仕上げflammableで面積要件3倍でも未満なら設置義務なし（annex01, totalArea 1000㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       totalArea: ref(1000),
       structureType: ref("A"),
       finishType: ref("flammable"),
@@ -110,9 +110,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.message).toContain("設置義務はありません");
   });
 
-  it("group2用途（item02）で面積要件2倍（構造A, 仕上げother, totalArea 1400㎡）", () => {
+  it("group2用途（annex02）で面積要件2倍（構造A, 仕上げother, totalArea 1400㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item02"),
+      buildingUse: ref("annex02"),
       totalArea: ref(1400),
       structureType: ref("A"),
       finishType: ref("other"),
@@ -123,9 +123,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.basis).toContain("令第11条第1項第2号");
   });
 
-  it("特殊コード（item06_i_1）で面積要件2倍でも1000㎡未満なら設置義務なし", () => {
+  it("特殊コード（annex06_i_1）で面積要件2倍でも1000㎡未満なら設置義務なし", () => {
     const input = createMockInput({
-      buildingUse: ref("item06_i_1"),
+      buildingUse: ref("annex06_i_1"),
       totalArea: ref(900),
       structureType: ref("A"),
       finishType: ref("other"),
@@ -135,9 +135,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.message).toContain("設置義務はありません");
   });
 
-  it("特殊コード（item06_i_1）で面積要件2倍でも1000㎡以上なら設置義務あり", () => {
+  it("特殊コード（annex06_i_1）で面積要件2倍でも1000㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item06_i_1"),
+      buildingUse: ref("annex06_i_1"),
       totalArea: ref(1000),
       structureType: ref("A"),
       finishType: ref("other"),
@@ -149,9 +149,9 @@ describe("useArticle11Logic", () => {
     );
   });
 
-  it("item16_2で150㎡以上なら設置義務あり", () => {
+  it("annex16_2で150㎡以上なら設置義務あり", () => {
     const input = createMockInput({
-      buildingUse: ref("item16_2"),
+      buildingUse: ref("annex16_2"),
       totalArea: ref(200),
     });
     const { regulationResult } = useArticle11Logic(input);
@@ -159,9 +159,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.basis).toContain("令第11条第1項第4号");
   });
 
-  it("item16_2で150㎡未満なら設置義務なし", () => {
+  it("annex16_2で150㎡未満なら設置義務なし", () => {
     const input = createMockInput({
-      buildingUse: ref("item16_2"),
+      buildingUse: ref("annex16_2"),
       totalArea: ref(100),
     });
     const { regulationResult } = useArticle11Logic(input);
@@ -169,9 +169,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.message).toContain("設置義務はありません");
   });
 
-  it("地階の床面積が要件以上なら設置義務あり（item01, basementArea 120㎡）", () => {
+  it("地階の床面積が要件以上なら設置義務あり（annex01, basementArea 120㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       hasBasement: ref(true),
       basementArea: ref(120),
     });
@@ -181,9 +181,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.message).toContain("地階の床面積");
   });
 
-  it("無窓階の床面積が要件以上なら設置義務あり（item02, noWindowFloorArea 200㎡）", () => {
+  it("無窓階の床面積が要件以上なら設置義務あり（annex02, noWindowFloorArea 200㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item02"),
+      buildingUse: ref("annex02"),
       hasNoWindowFloor: ref(true),
       noWindowFloorArea: ref(200),
     });
@@ -193,9 +193,9 @@ describe("useArticle11Logic", () => {
     expect(regulationResult.value.message).toContain("無窓階の床面積");
   });
 
-  it("4階以上の階の床面積が要件以上なら設置義務あり（item11, upperFloorsArea 250㎡）", () => {
+  it("4階以上の階の床面積が要件以上なら設置義務あり（annex11, upperFloorsArea 250㎡）", () => {
     const input = createMockInput({
-      buildingUse: ref("item11"),
+      buildingUse: ref("annex11"),
       hasUpperFloors: ref(true),
       upperFloorsArea: ref(250),
     });
@@ -207,7 +207,7 @@ describe("useArticle11Logic", () => {
 
   it("どの条件にも該当しない場合は設置義務なし", () => {
     const input = createMockInput({
-      buildingUse: ref("item01"),
+      buildingUse: ref("annex01"),
       totalArea: ref(100),
     });
     const { regulationResult } = useArticle11Logic(input);

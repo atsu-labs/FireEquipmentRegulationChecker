@@ -19,7 +19,7 @@ export function useArticle29_3Logic(userInput: Article29_3UserInput) {
   const useDisplay = getUseDisplayName(useCode);
 
     // --- 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの ---
-    if (useCode === 'item16_2' && totalArea >= 1000) {
+    if (useCode === 'annex16_2' && totalArea >= 1000) {
       return { required: true, message: `用途（${useDisplay}）で延べ面積が1,000㎡以上（${totalArea}㎡）のため、無線通信補助設備の設置が必要です。`, basis: '令第二十九条の三' };
     }
 

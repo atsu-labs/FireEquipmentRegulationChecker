@@ -32,7 +32,7 @@ export function useArticle27Logic(userInput: Article27UserInput) {
     }
 
     // --- 第1号のチェック ---
-    const excludedUses = ['item16']; // (16)項は対象外
+    const excludedUses = ['annex16']; // (16)項は対象外
     if (useCodeMatches(use, excludedUses)) {
         return { required: false, message: 'この用途は令第27条第1号の対象外です。', basis: '令第27条第1号' };
     }

@@ -6,23 +6,23 @@ import { getUseDisplayName } from '@/composables/utils';
 
 // 令第28条の2の対象となる用途コードのリスト
 const TARGET_USE_CODES = [
-  'item01', // (1)項
-  'item02', // (2)項
-  'item03', // (3)項
-  'item04', // (4)項
-  'item05', // (5)項
-  'item06', // (6)項
-  'item07', // (7)項
-  'item08', // (8)項
-  'item09', // (9)項
-  'item10', // (10)項
-  'item11', // (11)項
-  'item12', // (12)項
-  'item13', // (13)項
-  'item14', // (14)項
-  'item15', // (15)項
-  'item16_2', // (16の2)項
-  'item17', // (17)項
+  'annex01', // (1)項
+  'annex02', // (2)項
+  'annex03', // (3)項
+  'annex04', // (4)項
+  'annex05', // (5)項
+  'annex06', // (6)項
+  'annex07', // (7)項
+  'annex08', // (8)項
+  'annex09', // (9)項
+  'annex10', // (10)項
+  'annex11', // (11)項
+  'annex12', // (12)項
+  'annex13', // (13)項
+  'annex14', // (14)項
+  'annex15', // (15)項
+  'annex16_2', // (16の2)項
+  'annex17', // (17)項
 ];
 
 export function useArticle28_2Logic(userInput: Article28_2UserInput) {
@@ -43,7 +43,7 @@ export function useArticle28_2Logic(userInput: Article28_2UserInput) {
     const useDisplayName = getUseDisplayName(useCode);
 
     // (16の2)項の場合: 延べ面積で判定
-    if (useCode === 'item16_2') {
+    if (useCode === 'annex16_2') {
       const totalArea = totalFloorAreaInput.value || 0;
       if (totalArea >= 700) {
         return {

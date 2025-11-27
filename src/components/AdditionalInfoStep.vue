@@ -135,7 +135,7 @@ const selectedDesignatedCombustibleLevel = computed({
     <v-card-text>
       <p class="font-weight-bold mb-2">令第10条（消火器）関連</p>
       <v-checkbox
-        v-if="useCodeMatches(buildingUse, ['item03'])"
+        v-if="useCodeMatches(buildingUse, ['annex03'])"
         :model-value="usesFireEquipment"
         @update:model-value="emit('update:usesFireEquipment', $event)"
         label="火を使用する設備又は器具がある（簡易なものを除く）"
@@ -191,7 +191,7 @@ const selectedDesignatedCombustibleLevel = computed({
         @update:model-value="emit('update:isSpecifiedOneStaircase', $event)"
         label="特定一階段等防火対象物に該当する"
         hide-details
-        data-testid="article21-item7-checkbox"
+        data-testid="article21-annex7-checkbox"
       ></v-checkbox>
 
       <v-divider class="my-4"></v-divider>

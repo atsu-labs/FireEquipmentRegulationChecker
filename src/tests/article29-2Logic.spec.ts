@@ -48,7 +48,7 @@ describe('useArticle29_2Logic', () => {
         { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
         { level: 11, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29_2Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条の二第一号');
@@ -67,7 +67,7 @@ describe('useArticle29_2Logic', () => {
         { level: 9, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
         { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
       ]);
-      const userInput = createMockUserInput({ buildingUse: ref('item01_i'), floors });
+      const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29_2Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -76,14 +76,14 @@ describe('useArticle29_2Logic', () => {
   // --- 第二号: 別表第一（十六の二）項に掲げる防火対象物で、延べ面積が1,000平方メートル以上のもの ---
   describe('令第二十九条の二第二号', () => {
     it('用途が(16の2)項で延べ面積が1000㎡の場合、設置義務ありと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(1000) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(1000) });
       const { regulationResult } = useArticle29_2Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第二十九条の二第二号');
     });
 
     it('用途が(16の2)項で延べ面積が999㎡の場合、第二号では設置義務なしと判定されること', () => {
-      const userInput = createMockUserInput({ buildingUse: ref('item16_2'), totalFloorAreaInput: ref(999) });
+      const userInput = createMockUserInput({ buildingUse: ref('annex16_2'), totalFloorAreaInput: ref(999) });
       const { regulationResult } = useArticle29_2Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
@@ -98,7 +98,7 @@ describe('useArticle29_2Logic', () => {
       { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
     ]);
     const userInput = createMockUserInput({
-      buildingUse: ref('item01_i'),
+      buildingUse: ref('annex01_i'),
       totalFloorAreaInput: ref(100),
       floors: floors,
     });

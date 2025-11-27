@@ -49,7 +49,7 @@ export function useArticle13Logic(userInput: Article13UserInput) {
     }
 
     // 1. (13)項ロに掲げる防火対象物
-    if (useCodeMatches(use, ["item13_ro"])) {
+    if (useCodeMatches(use, ["annex13_ro"])) {
       return {
         required: true,
         message:

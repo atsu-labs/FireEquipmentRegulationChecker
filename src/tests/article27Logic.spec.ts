@@ -6,7 +6,7 @@ import type { Floor, Article27UserInput } from '@/types';
 
 const createMockInput = (overrides: Partial<Article27UserInput> = {}): Article27UserInput => {
   const defaults: Article27UserInput = {
-    buildingUse: ref('item01_i_ro'),
+    buildingUse: ref('annex01_i_ro'),
     siteArea: ref(0),
     buildingHeight: ref(0),
     totalArea: ref(0),
@@ -82,7 +82,7 @@ describe('useArticle27Logic', () => {
 
   it('1号: 対象外用途（(16)項）の場合、設置義務なし', () => {
     const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 5000, capacity: null, isWindowless: false }];
-    const input = createMockInput({ buildingUse: ref('item16'), siteArea: ref(20000), floors: ref(floors) });
+    const input = createMockInput({ buildingUse: ref('annex16'), siteArea: ref(20000), floors: ref(floors) });
     const { regulationResult } = useArticle27Logic(input);
     expect(regulationResult.value.required).toBe(false);
     expect(regulationResult.value.message).toContain('対象外');

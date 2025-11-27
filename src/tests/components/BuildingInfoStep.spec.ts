@@ -96,20 +96,20 @@ describe("BuildingInfoStep.vue", () => {
   // 2. 動的表示のテスト
   // =================================================================
   it("（6）項関連の情報が正しく表示される", async () => {
-    await wrapper.setProps({ buildingUse: "item06_ro_2" });
+    await wrapper.setProps({ buildingUse: "annex06_ro_2" });
     expect(wrapper.text()).toContain("（6）項関連の追加情報");
     expect(wrapper.text()).toContain("介助がなければ避難できない者を主として入所させる施設");
     expect(wrapper.text()).toContain("診療所にベッドがある");
   });
 
   it("（1）項関連の情報が正しく表示される", async () => {
-    await wrapper.setProps({ buildingUse: "item01_i" });
+    await wrapper.setProps({ buildingUse: "annex01_i" });
     expect(wrapper.text()).toContain("（1）項関連の追加情報");
     expect(wrapper.text()).toContain("舞台部がある");
   });
 
   it("（14）項関連の情報が正しく表示される", async () => {
-    await wrapper.setProps({ buildingUse: "item14_ko" });
+    await wrapper.setProps({ buildingUse: "annex14_ko" });
     expect(wrapper.text()).toContain("（14）項関連の追加情報");
     expect(wrapper.text()).toContain("ラック式倉庫である");
   });
@@ -120,10 +120,10 @@ describe("BuildingInfoStep.vue", () => {
   it("建物用途の変更がemitされる", async () => {
     // BuildingUseSelectorが変更された時のイベントをシミュレート
     const buildingUseSelector = wrapper.findComponent({ name: "BuildingUseSelector" });
-    await buildingUseSelector.vm.$emit("update:modelValue", "item01_i");
+    await buildingUseSelector.vm.$emit("update:modelValue", "annex01_i");
     
     // イベントが発行されたか確認
     expect(wrapper.emitted("update:buildingUse")).toBeTruthy();
-    expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["item01_i"]);
+    expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["annex01_i"]);
   });
 });

@@ -173,11 +173,11 @@ describe("BuildingInputStepper.vue", () => {
   it("「建物の主な用途」を選択すると、update:buildingUse イベントが発行される", async () => {
     // v-select を見つけて値を設定（v-selectのテストは少し複雑になる場合があります）
     // この例では、v-selectの内部構造に依存しない方法を試みます
-    wrapper.vm.$emit("update:buildingUse", "item01_i");
+    wrapper.vm.$emit("update:buildingUse", "annex01_i");
     await wrapper.vm.$nextTick();
     // イベントが発行されたか確認
     expect(wrapper.emitted("update:buildingUse")).toBeTruthy();
-    expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["item01_i"]);
+    expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["annex01_i"]);
   });
 
   // =================================================================
@@ -188,7 +188,7 @@ describe("BuildingInputStepper.vue", () => {
     // --- 初期状態の確認 ---
     // 特定のチェックボックスが最初は表示されていないことを確認
     // 例: `showArticle21Item7Checkbox` に連動するチェックボックス
-    let specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
+    let specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
@@ -199,14 +199,14 @@ describe("BuildingInputStepper.vue", () => {
 
     // --- UIが更新されたことを確認 ---
     // チェックボックスが表示されたことを確認
-    specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
+    specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
     expect(wrapper.text()).toContain('特定の避難階段が1つ'); // ラベルのテキストなどで確認
 
     // --- 再度 props を更新して非表示になることを確認 ---
     await wrapper.setProps({
       showArticle21Item7Checkbox: false,
     });
-    specificCheckbox = wrapper.find('[data-testid="article21-item7-checkbox"]');
+    specificCheckbox = wrapper.find('[data-testid="article21-annex7-checkbox"]');
     expect(specificCheckbox.exists()).toBe(false);
   }); 
   */
@@ -219,7 +219,7 @@ describe("BuildingInputStepper.vue", () => {
     expect(wrapper.find('[data-testid="care-dependent-checkbox"]').exists()).toBe(false);
 
     // 2. 用途を「(6)項イ」に変更
-    await wrapper.findComponent({ name: 'v-select' }).setValue('item06_i_1');
+    await wrapper.findComponent({ name: 'v-select' }).setValue('annex06_i_1');
 
     // 3. 親コンポーネント側で用途に応じた表示フラグが更新されたと仮定し、propsを更新
     await wrapper.setProps({ showCareDependentCheckbox: true }); // このpropは仮のものです
@@ -240,7 +240,7 @@ describe("BuildingInputStepper.vue", () => {
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
-    await wrapper.setProps({ buildingUse: "item03_i", currentStep: 3 });
+    await wrapper.setProps({ buildingUse: "annex03_i", currentStep: 3 });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -252,7 +252,7 @@ describe("BuildingInputStepper.vue", () => {
     expect(fireEquipmentCheckbox.exists()).toBe(true);
 
     // --- 用途を3項以外に変更して非表示になることを確認 ---
-    await wrapper.setProps({ buildingUse: "item01_1" });
+    await wrapper.setProps({ buildingUse: "annex01_1" });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await new Promise((resolve) => setTimeout(resolve, 0));

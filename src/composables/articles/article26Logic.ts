@@ -22,8 +22,8 @@ export function useArticle26Logic(userInput: Article26UserInput) {
     }
 
     // --- 個別の判定ロジック ---
-    const fullApplicationUses = ['item01', 'item02', 'item03', 'item04', 'item05_i', 'item06', 'item09', 'item16_i', 'item16_2', 'item16_3'];
-    const partialApplicationUses = ['item05_ro', 'item07', 'item08', 'item10', 'item11', 'item12', 'item13', 'item14', 'item15', 'item16_ro'];
+    const fullApplicationUses = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05_i', 'annex06', 'annex09', 'annex16_i', 'annex16_2', 'annex16_3'];
+    const partialApplicationUses = ['annex05_ro', 'annex07', 'annex08', 'annex10', 'annex11', 'annex12', 'annex13', 'annex14', 'annex15', 'annex16_ro'];
     const hasFloorOver11 = groundFloors.value >= 11;
 
     let exitAndCorridorResult: IndividualResult;
@@ -56,9 +56,9 @@ export function useArticle26Logic(userInput: Article26UserInput) {
         exitAndCorridorResult = { required: false, message: '', basis: '' };
     }
 
-    const auditoriumUses = ['item16_i', 'item16_2'];
+    const auditoriumUses = ['annex16_i', 'annex16_2'];
     let auditoriumResult: IndividualResult;
-    if (useCodeMatches(use, ['item01'])) {
+    if (useCodeMatches(use, ['annex01'])) {
         auditoriumResult = { required: true, message: `劇場・公会堂など（(1)項）には設置が必要です。${EXEMPTION_MESSAGE}`, basis: '令第26条第1項第3号' };
     } else if (useCodeMatches(use, auditoriumUses)) {
         auditoriumResult = { required: 'warning', message: `【要確認】この建物に劇場、映画館、演芸場、公会堂等の用途に供する部分がある場合、その部分に客席誘導灯の設置が必要です。${EXEMPTION_MESSAGE}`, basis: '令第26条第1項第3号' };
@@ -66,7 +66,7 @@ export function useArticle26Logic(userInput: Article26UserInput) {
         auditoriumResult = { required: false, message: '', basis: '' };
     }
 
-    const signUses = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item10', 'item11', 'item12', 'item13', 'item14', 'item15', 'item16'];
+    const signUses = ['annex01', 'annex02', 'annex03', 'annex04', 'annex05', 'annex06', 'annex07', 'annex08', 'annex09', 'annex10', 'annex11', 'annex12', 'annex13', 'annex14', 'annex15', 'annex16'];
     let signResult: IndividualResult;
     if (useCodeMatches(use, signUses)) {
         signResult = { required: true, message: `この用途の建物には設置が必要です。${EXEMPTION_MESSAGE}`, basis: '令第26条第1項第4号' };

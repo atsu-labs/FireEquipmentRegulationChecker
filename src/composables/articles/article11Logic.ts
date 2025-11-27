@@ -44,21 +44,21 @@ export function useArticle11Logic(userInput: Article11UserInput) {
 
     // --- 令第11条第1項の各号をチェック ---
     const group2 = [
-      "item02",
-      "item03",
-      "item04",
-      "item05",
-      "item06",
-      "item07",
-      "item08",
-      "item09",
-      "item10",
-      "item12",
-      "item14",
+      "annex02",
+      "annex03",
+      "annex04",
+      "annex05",
+      "annex06",
+      "annex07",
+      "annex08",
+      "annex09",
+      "annex10",
+      "annex12",
+      "annex14",
     ];
 
     // 一号: (1)項 → 延べ面積 500㎡以上
-    if (useCodeMatches(buildingUse, ["item01"])) {
+    if (useCodeMatches(buildingUse, ["annex01"])) {
       const requiredArea = 500 * areaMultiplier;
       totalAreaRuleInfo = { requiredArea, basis: "令第11条第1項第1号" };
       if (currentTotalArea >= requiredArea) {
@@ -76,7 +76,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     // 第十二条第一項第一号に掲げる防火対象物{(6)イ(1),(2),(6)ロ}の２倍または３倍と1000㎡のいずれか小さい数値とする
     else if (useCodeMatches(buildingUse, group2)) {
       // 特殊な防火対象物コード
-      const specialCodes = ["item06_i_1", "item06_i_2", "item06_ro"];
+      const specialCodes = ["annex06_i_1", "annex06_i_2", "annex06_ro"];
       let requiredArea = 700 * areaMultiplier;
       let basis = "令第11条第1項第2号";
 
@@ -101,7 +101,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
       }
     }
     // 三号: (11)項, (15)項 → 延べ面積 1000㎡以上
-    else if (useCodeMatches(buildingUse, ["item11", "item15"])) {
+    else if (useCodeMatches(buildingUse, ["annex11", "annex15"])) {
       const requiredArea = 1000 * areaMultiplier;
       totalAreaRuleInfo = { requiredArea, basis: "令第11条第1項第3号" };
       if (currentTotalArea >= requiredArea) {
@@ -116,7 +116,7 @@ export function useArticle11Logic(userInput: Article11UserInput) {
       }
     }
     // 四号: (16の2)項 → 延べ面積 150㎡以上
-    else if (useCodeMatches(buildingUse, ["item16_2"])) {
+    else if (useCodeMatches(buildingUse, ["annex16_2"])) {
       const requiredArea = 150 * areaMultiplier;
       totalAreaRuleInfo = { requiredArea, basis: "令第11条第1項第4号" };
       if (currentTotalArea >= requiredArea) {
@@ -148,12 +148,12 @@ export function useArticle11Logic(userInput: Article11UserInput) {
     if (!isAlreadyApplicable) {
       let requiredFloorArea = 0;
 
-      if (useCodeMatches(buildingUse, ["item01"])) {
+      if (useCodeMatches(buildingUse, ["annex01"])) {
         requiredFloorArea = 100 * areaMultiplier;
       } else if (useCodeMatches(buildingUse, group2)) {
         // group2は二号と同じ
         requiredFloorArea = 150 * areaMultiplier;
-      } else if (useCodeMatches(buildingUse, ["item11", "item15"])) {
+      } else if (useCodeMatches(buildingUse, ["annex11", "annex15"])) {
         requiredFloorArea = 200 * areaMultiplier;
       }
 

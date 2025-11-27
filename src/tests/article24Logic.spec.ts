@@ -6,7 +6,7 @@ import type { Floor, Article24UserInput } from '@/types';
 
 const createMockInput = (overrides: Partial<Article24UserInput> = {}): Article24UserInput => {
   const defaults: Article24UserInput = {
-    buildingUse: ref('item01_i_ro'),
+    buildingUse: ref('annex01_i_ro'),
     totalCapacity: ref(0),
     groundFloors: ref(1),
     basementFloors: ref(0),
@@ -25,7 +25,7 @@ describe('useArticle24Logic', () => {
   // --- 第1項 --- 
   describe('第1項: 非常警報器具', () => {
     it('用途(4)項、収容人員25人で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item04'), totalCapacity: ref(25) });
+      const input = createMockInput({ buildingUse: ref('annex04'), totalCapacity: ref(25) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第1項');
@@ -34,13 +34,13 @@ describe('useArticle24Logic', () => {
     });
 
     it('用途(4)項、収容人員19人で設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('item04'), totalCapacity: ref(19) });
+      const input = createMockInput({ buildingUse: ref('annex04'), totalCapacity: ref(19) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
 
     it('用途(4)項、収容人員50人で設置義務なし（第2項の対象）', () => {
-      const input = createMockInput({ buildingUse: ref('item04'), totalCapacity: ref(50) });
+      const input = createMockInput({ buildingUse: ref('annex04'), totalCapacity: ref(50) });
       const { regulationResult } = useArticle24Logic(input);
       // This should fall through to paragraph 2
       expect(regulationResult.value.basis).toBe('令第24条第2項第2号');
@@ -50,7 +50,7 @@ describe('useArticle24Logic', () => {
   // --- 第2項 --- 
   describe('第2項: 非常ベル、自動式サイレン又は放送設備', () => {
     it('用途(5)項イ、収容人員25人で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item05_i'), totalCapacity: ref(25) });
+      const input = createMockInput({ buildingUse: ref('annex05_i'), totalCapacity: ref(25) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第2項第1号');
@@ -59,7 +59,7 @@ describe('useArticle24Logic', () => {
     });
 
     it('用途(1)項、収容人員55人で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item01_i_ro'), totalCapacity: ref(55) });
+      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), totalCapacity: ref(55) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第2項第2号');
@@ -67,7 +67,7 @@ describe('useArticle24Logic', () => {
 
     it('用途(1)項、収容人員40人、地階収容人員25人で設置義務あり', () => {
       const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 100, capacity: 25, isWindowless: false }];
-      const input = createMockInput({ buildingUse: ref('item01_i_ro'), totalCapacity: ref(40), floors: ref(floors) });
+      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), totalCapacity: ref(40), floors: ref(floors) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第2項第2号');
@@ -77,7 +77,7 @@ describe('useArticle24Logic', () => {
   // --- 第3項 --- 
   describe('第3項: ベル/サイレン + 放送設備', () => {
     it('用途(16の2)項で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item16_2') });
+      const input = createMockInput({ buildingUse: ref('annex16_2') });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第3項第1号');
@@ -99,21 +99,21 @@ describe('useArticle24Logic', () => {
     });
 
     it('用途(16)項イ、収容人員500人で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item16_i'), totalCapacity: ref(500) });
+      const input = createMockInput({ buildingUse: ref('annex16_i'), totalCapacity: ref(500) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第3項第3号');
     });
 
     it('用途(1)項、収容人員300人で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('item01_i_ro'), totalCapacity: ref(300) });
+      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), totalCapacity: ref(300) });
       const { regulationResult } = useArticle24Logic(input);
       expect(regulationResult.value.required).toBe(true);
       expect(regulationResult.value.basis).toBe('令第24条第3項第4号');
     });
 
     it('用途(8)項、収容人員800人で設置義務あり', () => {
-        const input = createMockInput({ buildingUse: ref('item08'), totalCapacity: ref(800) });
+        const input = createMockInput({ buildingUse: ref('annex08'), totalCapacity: ref(800) });
         const { regulationResult } = useArticle24Logic(input);
         expect(regulationResult.value.required).toBe(true);
         expect(regulationResult.value.basis).toBe('令第24条第3項第4号');
@@ -121,7 +121,7 @@ describe('useArticle24Logic', () => {
   });
 
   it('どの条件にも当てはまらない場合、設置義務なし', () => {
-    const input = createMockInput({ buildingUse: ref('item18'), totalCapacity: ref(10) });
+    const input = createMockInput({ buildingUse: ref('annex18'), totalCapacity: ref(10) });
     const { regulationResult } = useArticle24Logic(input);
     expect(regulationResult.value.required).toBe(false);
   });
