@@ -207,7 +207,6 @@ const emit = defineEmits([
   "update:hasMultipleBuildingsOnSite",
   "update:siteArea",
   "update:buildingHeight",
-  "update:buildingHeight",
   "update:componentUses",
 ]);
 
