@@ -242,14 +242,14 @@ watch(
         editable
       ></v-stepper-item>
       <v-divider></v-divider>
-      <!-- 16項以外: ステップ2（各階の情報） -->
+      <!-- ステップ2（各階の情報）: 全ての用途で表示 -->
       <v-stepper-item
-        v-if="!isAnnex16"
         title="各階の情報"
         :value="2"
         :complete="currentStep > 2"
         editable
       ></v-stepper-item>
+      <v-divider v-if="isAnnex16"></v-divider>
       <!-- 16項: ステップ3（構成用途情報） -->
       <v-stepper-item
         v-if="isAnnex16"
@@ -328,7 +328,7 @@ watch(
         />
       </v-stepper-window-item>
 
-      <!-- ステップ2: 各階の情報（16項以外） -->
+      <!-- ステップ2: 各階の情報（全ての用途） -->
       <v-stepper-window-item :value="2">
         <FloorInfoStep
           :hasNonFloorArea="hasNonFloorArea"

@@ -183,18 +183,18 @@ watch(currentStep, (newValue, oldValue) => {
   }
 });
 
-// ステップ遷移ロジック（16項: 1→3→4、その他: 1→2→4）
+// ステップ遷移ロジック（16項: 1→2→3→4、その他: 1→2→4）
 const nextStep = () => {
   if (currentStep.value === 1) {
-    // ステップ1から次へ
-    if (isAnnex16.value) {
-      currentStep.value = 3; // 16項: ステップ3へ
-    } else {
-      currentStep.value = 2; // その他: ステップ2へ
-    }
+    // ステップ1から次へ → ステップ2へ（全ての用途）
+    currentStep.value = 2;
   } else if (currentStep.value === 2) {
-    // ステップ2（各階の情報）から次へ → ステップ4
-    currentStep.value = 4;
+    // ステップ2（各階の情報）から次へ
+    if (isAnnex16.value) {
+      currentStep.value = 3; // 16項: ステップ3（構成用途情報）へ
+    } else {
+      currentStep.value = 4; // その他: ステップ4へ
+    }
   } else if (currentStep.value === 3) {
     // ステップ3（16項構成用途）から次へ → ステップ4
     currentStep.value = 4;
@@ -202,9 +202,12 @@ const nextStep = () => {
 };
 
 const prevStep = () => {
-  if (currentStep.value === 2 || currentStep.value === 3) {
-    // ステップ2またはステップ3からは常にステップ1へ
+  if (currentStep.value === 2) {
+    // ステップ2からはステップ1へ
     currentStep.value = 1;
+  } else if (currentStep.value === 3) {
+    // ステップ3からはステップ2へ
+    currentStep.value = 2;
   } else if (currentStep.value === 4) {
     // ステップ4から戻る
     if (isAnnex16.value) {
