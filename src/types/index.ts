@@ -222,3 +222,9 @@ export interface Article26Result {
   auditoriumGuideLight: JudgementResult;
   guideSign: JudgementResult;
 }
+
+// 16項 構成用途
+export interface ComponentUse {
+  useCode: string;
+  floorArea: number | null;
+}
