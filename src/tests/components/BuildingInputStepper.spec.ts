@@ -5,6 +5,7 @@ import { createVuetify } from "vuetify";
 import ResizeObserverPolyfill from "resize-observer-polyfill";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import type { ComponentUse } from "@/types";
 
 // (MountProps type removed; casting to any below for test mount compatibility)
 
@@ -74,6 +75,8 @@ describe("BuildingInputStepper.vue", () => {
     buildingHeight: number | null;
     floors: unknown[]; // Floor[]
     showArticle21Item7Checkbox: boolean;
+    isAnnex16: boolean;
+    componentUses: ComponentUse[];
     nextStep: () => void;
     prevStep: () => void;
   };
@@ -129,6 +132,8 @@ describe("BuildingInputStepper.vue", () => {
     buildingHeight: null,
     floors: [],
     showArticle21Item7Checkbox: false,
+    isAnnex16: false,
+    componentUses: [{ useCode: "", floorArea: null }],
     nextStep: () => {},
     prevStep: () => {},
   };
@@ -240,7 +245,7 @@ describe("BuildingInputStepper.vue", () => {
     expect(fireEquipmentCheckbox.exists()).toBe(false);
 
     // --- props を更新してUIの変更をトリガー ---
-    await wrapper.setProps({ buildingUse: "annex03_i", currentStep: 3 });
+    await wrapper.setProps({ buildingUse: "annex03_i", currentStep: 4 });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await new Promise((resolve) => setTimeout(resolve, 0));

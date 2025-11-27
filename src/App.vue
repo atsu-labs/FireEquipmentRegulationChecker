@@ -3,7 +3,7 @@ import { ref, computed, watch } from "vue";
 import BuildingInputStepper from "@/components/BuildingInputStepper.vue";
 import ResultsPanel from "@/components/ResultsPanel.vue";
 import { useArticle10Logic } from "@/composables/articles/article10Logic";
-import type { Floor } from "@/types";
+import type { Floor, ComponentUse } from "@/types";
 import { useArticle11Logic } from "@/composables/articles/article11Logic";
 import { useArticle12Logic } from "@/composables/articles/article12Logic";
 import { useArticle21Logic } from "@/composables/articles/article21Logic";
@@ -103,6 +103,14 @@ const hasMultipleBuildingsOnSite = ref(false);
 const siteArea = ref<number | null>(null);
 const buildingHeight = ref<number | null>(null);
 
+// 16項 構成用途
+const componentUses = ref<ComponentUse[]>([{ useCode: "", floorArea: null }]);
+
+// 16項かどうかを判定
+const isAnnex16 = computed(() => {
+  return buildingUse.value?.startsWith("annex16") ?? false;
+});
+
 const showArticle21Item7Checkbox = computed(() => {
   if (!buildingUse.value) return false;
   const targetUses = [
@@ -172,15 +180,35 @@ watch(currentStep, (newValue, oldValue) => {
   }
 });
 
+// ステップ遷移ロジック（16項: 1→3→4、その他: 1→2→4）
 const nextStep = () => {
-  if (currentStep.value < 3) {
-    currentStep.value++;
+  if (currentStep.value === 1) {
+    // ステップ1から次へ
+    if (isAnnex16.value) {
+      currentStep.value = 3; // 16項: ステップ3へ
+    } else {
+      currentStep.value = 2; // その他: ステップ2へ
+    }
+  } else if (currentStep.value === 2) {
+    // ステップ2（各階の情報）から次へ → ステップ4
+    currentStep.value = 4;
+  } else if (currentStep.value === 3) {
+    // ステップ3（16項構成用途）から次へ → ステップ4
+    currentStep.value = 4;
   }
 };
 
 const prevStep = () => {
-  if (currentStep.value > 1) {
-    currentStep.value--;
+  if (currentStep.value === 2 || currentStep.value === 3) {
+    // ステップ2またはステップ3からは常にステップ1へ
+    currentStep.value = 1;
+  } else if (currentStep.value === 4) {
+    // ステップ4から戻る
+    if (isAnnex16.value) {
+      currentStep.value = 3; // 16項: ステップ3へ
+    } else {
+      currentStep.value = 2; // その他: ステップ2へ
+    }
   }
 };
 
@@ -763,7 +791,9 @@ generateFloors();
               v-model:hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
               v-model:siteArea="siteArea"
               v-model:buildingHeight="buildingHeight"
+              v-model:componentUses="componentUses"
               :floors="floors"
+              :isAnnex16="isAnnex16"
               :showArticle21Item7Checkbox="showArticle21Item7Checkbox"
               :nextStep="nextStep"
               :prevStep="prevStep"

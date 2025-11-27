@@ -12,7 +12,7 @@ import { nextTick } from "vue";
 
 describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", () => {
   const baseProps = () => ({
-    currentStep: 3,
+    currentStep: 4, // ステップ4に変更（追加情報はステップ4に移動）
     buildingUse: null,
     totalFloorAreaInput: null,
     capacityInput: null,
@@ -61,6 +61,8 @@ describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", ()
     buildingHeight: null,
     floors: [],
     showArticle21Item7Checkbox: false,
+    isAnnex16: false,
+    componentUses: [{ useCode: "", floorArea: null }],
     prevStep: () => {},
     nextStep: () => {},
   });
