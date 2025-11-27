@@ -32,7 +32,7 @@ describe('useArticle26Logic', () => {
     it('(7)項で2階が無窓階の場合、メッセージに「2階（無窓階）」が含まれること', () => {
       const userInput = createMockUserInput({
         buildingUse: ref('annex07'),
-        floors: ref([{ level: 2, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true }])
+        floors: ref([{ level: 2, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true, componentUses: [] }])
       });
       const { regulationResult } = useArticle26Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
@@ -44,8 +44,8 @@ describe('useArticle26Logic', () => {
         buildingUse: ref('annex08'), // (8)項
         groundFloors: ref(12),
         floors: ref([
-          { level: 1, type: 'basement', floorArea: 100, capacity: 10, isWindowless: false },
-          { level: 3, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true },
+          { level: 1, type: 'basement', floorArea: 100, capacity: 10, isWindowless: false, componentUses: [] },
+          { level: 3, type: 'ground', floorArea: 100, capacity: 10, isWindowless: true, componentUses: [] },
         ])
       });
       const { regulationResult } = useArticle26Logic(userInput);

@@ -36,17 +36,17 @@ describe('useArticle29_2Logic', () => {
   describe('令第二十九条の二第一号', () => {
     it('地階を除く階数が11階の場合、設置義務ありと判定されること', () => {
       const floors = ref<Floor[]>([
-        { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 5, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 7, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 8, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 9, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 11, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
+        { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 5, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 7, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 8, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 9, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 11, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
       ]);
       const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29_2Logic(userInput);
@@ -56,16 +56,16 @@ describe('useArticle29_2Logic', () => {
 
     it('地階を除く階数が10階の場合、第一号では設置義務なしと判定されること', () => {
       const floors = ref<Floor[]>([
-        { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 5, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 7, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 8, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 9, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-        { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
+        { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 5, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 6, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 7, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 8, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 9, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 10, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
       ]);
       const userInput = createMockUserInput({ buildingUse: ref('annex01_i'), floors });
       const { regulationResult } = useArticle29_2Logic(userInput);
@@ -92,10 +92,10 @@ describe('useArticle29_2Logic', () => {
   // --- 設置義務なし ---
   it('どの条件にも該当しない場合、設置義務なしと判定されること', () => {
     const floors = ref<Floor[]>([
-      { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-      { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-      { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
-      { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false },
+      { level: 1, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 2, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 3, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
+      { level: 4, type: 'ground', floorArea: 100, capacity: null, isWindowless: false, componentUses: [] },
     ]);
     const userInput = createMockUserInput({
       buildingUse: ref('annex01_i'),

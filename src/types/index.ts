@@ -191,6 +191,7 @@ export interface Floor {
   floorArea: number | null;
   capacity: number | null;
   isWindowless: boolean;
+  componentUses: ComponentUse[]; // 16項用: 各階の構成用途
 }
 
 export interface JudgementResult {
@@ -227,4 +228,5 @@ export interface Article26Result {
 export interface ComponentUse {
   useCode: string;
   floorArea: number | null;
+  capacity: number | null; // 収容人員
 }

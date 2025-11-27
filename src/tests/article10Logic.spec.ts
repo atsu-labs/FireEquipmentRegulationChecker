@@ -113,7 +113,7 @@ describe('Article10Logic', () => {
   // --- 第五号 ---
   describe('令第十条第一項五号', () => {
     it('床面積50㎡以上の地下階がある場合、設置義務ありと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 50, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 50, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex16'), floors });
       const { regulationResult } = useArticle10Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
@@ -121,7 +121,7 @@ describe('Article10Logic', () => {
     });
 
     it('床面積50㎡以上の無窓階がある場合、設置義務ありと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'ground', floorArea: 50, capacity: null, isWindowless: true }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'ground', floorArea: 50, capacity: null, isWindowless: true, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex16'), floors });
       const { regulationResult } = useArticle10Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
@@ -129,7 +129,7 @@ describe('Article10Logic', () => {
     });
 
     it('床面積50㎡以上の地上3階以上の階がある場合、設置義務ありと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 3, type: 'ground', floorArea: 50, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 3, type: 'ground', floorArea: 50, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex16'), floors });
       const { regulationResult } = useArticle10Logic(userInput);
       expect(regulationResult.value.required).toBe(true);
@@ -137,7 +137,7 @@ describe('Article10Logic', () => {
     });
 
      it('床面積が50㎡未満の特定階があっても、設置義務なしと判定されること', () => {
-      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 49, capacity: null, isWindowless: false }]);
+      const floors = ref<Floor[]>([{ level: 1, type: 'basement', floorArea: 49, capacity: null, isWindowless: false, componentUses: [] }]);
       const userInput = createMockUserInput({ buildingUse: ref('annex16'), floors });
       const { regulationResult } = useArticle10Logic(userInput);
       expect(regulationResult.value.required).toBe(false);    });
@@ -149,8 +149,8 @@ describe('Article10Logic', () => {
       buildingUse: ref('annex16'), // (16)項は特定の面積要件がない
       totalFloorAreaInput: ref(100),
       floors: ref([
-        { level: 1, type: 'ground', floorArea: 50, capacity: null, isWindowless: false },
-        { level: 2, type: 'ground', floorArea: 50, capacity: null, isWindowless: false },
+        { level: 1, type: 'ground', floorArea: 50, capacity: null, isWindowless: false, componentUses: [] },
+        { level: 2, type: 'ground', floorArea: 50, capacity: null, isWindowless: false, componentUses: [] },
       ]),
       usesFireEquipment: ref(false),
       storesMinorHazardousMaterials: ref(false),

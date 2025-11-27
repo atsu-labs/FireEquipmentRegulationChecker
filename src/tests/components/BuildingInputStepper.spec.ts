@@ -133,7 +133,7 @@ describe("BuildingInputStepper.vue", () => {
     floors: [],
     showArticle21Item7Checkbox: false,
     isAnnex16: false,
-    componentUses: [{ useCode: "", floorArea: null }],
+    componentUses: [{ useCode: "", floorArea: null, capacity: null }],
     nextStep: () => {},
     prevStep: () => {},
   };

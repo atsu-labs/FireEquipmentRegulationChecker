@@ -104,7 +104,7 @@ const siteArea = ref<number | null>(null);
 const buildingHeight = ref<number | null>(null);
 
 // 16項 構成用途
-const componentUses = ref<ComponentUse[]>([{ useCode: "", floorArea: null }]);
+const componentUses = ref<ComponentUse[]>([{ useCode: "", floorArea: null, capacity: null }]);
 
 // 16項かどうかを判定
 const isAnnex16 = computed(() => {
@@ -152,6 +152,7 @@ const generateFloors = () => {
         floorArea: null,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       });
     }
   }
@@ -168,6 +169,7 @@ const generateFloors = () => {
         floorArea: null,
         capacity: null,
         isWindowless: false,
+        componentUses: [],
       });
     }
   }
