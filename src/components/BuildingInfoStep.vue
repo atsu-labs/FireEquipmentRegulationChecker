@@ -318,7 +318,8 @@ const emit = defineEmits([
         </v-col>
       </v-row>
       <v-row align="center">
-        <v-col cols="12" sm="3">
+        <!-- 敷地面積: 令第27条第1号で使用（敷地面積20,000㎡以上 かつ 構造基準面積以上） -->
+        <v-col cols="12" sm="3" v-if="(totalFloorAreaInput ?? 0) >= 5000">
           <v-text-field
             label="敷地面積"
             :model-value="siteArea"
@@ -332,7 +333,8 @@ const emit = defineEmits([
             hide-details
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="3">
+        <!-- 建物の高さ: 令第27条第2号で使用（高さ31m超 かつ 延べ面積25,000㎡以上） -->
+        <v-col cols="12" sm="3" v-if="(totalFloorAreaInput ?? 0) >= 25000">
           <v-text-field
             label="建物の高さ"
             :model-value="buildingHeight"
