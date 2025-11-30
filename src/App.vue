@@ -105,7 +105,9 @@ const siteArea = ref<number | null>(null);
 const buildingHeight = ref<number | null>(null);
 
 // 16項 構成用途
-const componentUses = ref<ComponentUse[]>([{ useCode: "", floorArea: null, capacity: null }]);
+const componentUses = ref<ComponentUse[]>([
+  { useCode: "", floorArea: null, capacity: null },
+]);
 
 // 16項かどうかを判定
 const isAnnex16 = computed(() => {
@@ -291,6 +293,7 @@ const upperFloorsArea = computed(() =>
 const { regulationResult: judgementResult11 } = useArticle11Logic({
   buildingUse,
   totalArea: article11TotalArea,
+  floors,
   hasBasement,
   basementArea,
   hasNoWindowFloor,
@@ -436,6 +439,7 @@ const article21ResultTitle = computed(() => {
 const { regulationResult: article22Result } = useArticle22Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
+  floors,
   hasSpecialCombustibleStructure,
   contractedCurrentCapacity,
 });
@@ -483,6 +487,7 @@ const article21_2ResultTitle = computed(() => {
 const { regulationResult: article23Result } = useArticle23Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
+  floors,
 });
 
 const article23ResultType = computed(

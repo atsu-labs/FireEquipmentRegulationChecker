@@ -249,23 +249,23 @@ describe("useArticle13Logic", () => {
     expect(regulationResult.value.basis).toBe("令第13条第1項第7号");
   });
 
-  it("8号: 通信機器室がある場合、警告を返す", () => {
+  it("8号: 通信機器室がある場合、設置義務あり", () => {
     const input = createMockInput({
       buildingUse: "annex01_i_ro",
       hasTelecomRoomOver500sqm: true,
     });
     const { regulationResult } = useArticle13Logic(input);
-    expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第13条第1項第8号");
   });
 
-  it("9号: 指定可燃物が1000倍以上ある場合、警告を返す", () => {
+  it("9号: 指定可燃物が1000倍以上ある場合、設置義務あり", () => {
     const input = createMockInput({
       buildingUse: "annex01_i_ro",
       storesDesignatedCombustiblesOver1000x: true,
     });
     const { regulationResult } = useArticle13Logic(input);
-    expect(regulationResult.value.required).toBe("warning");
+    expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toContain("令第13条第1項第9号");
   });
 });

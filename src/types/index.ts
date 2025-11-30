@@ -13,6 +13,7 @@ export interface Article10UserInput {
 export interface Article11UserInput {
   buildingUse: Ref<string | null>;
   totalArea: Ref<number | null>;
+  floors: Ref<Floor[]>;
   hasBasement: Ref<boolean>;
   basementArea: Ref<number>;
   hasNoWindowFloor: Ref<boolean>;
@@ -101,6 +102,7 @@ export interface Article21_2UserInput {
 export interface Article22UserInput {
   buildingUse: Ref<string | null>;
   totalArea: Ref<number | null>;
+  floors: Ref<Floor[]>;
   hasSpecialCombustibleStructure: Ref<boolean>;
   contractedCurrentCapacity: Ref<number | null>;
 }
@@ -109,6 +111,7 @@ export interface Article22UserInput {
 export interface Article23UserInput {
   buildingUse: Ref<string | null>;
   totalArea: Ref<number | null>;
+  floors: Ref<Floor[]>;
 }
 
 // Article24UserInput

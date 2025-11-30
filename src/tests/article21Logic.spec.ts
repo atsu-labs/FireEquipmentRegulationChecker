@@ -154,6 +154,7 @@ describe("useArticle21Logic", () => {
 
   it("8号: 指定可燃物を基準数量の500倍以上貯蔵・取り扱いしている場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       storesDesignatedCombustiblesOver500x: ref(true),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -163,6 +164,7 @@ describe("useArticle21Logic", () => {
 
   it("8号: 指定可燃物を基準数量の500倍以上貯蔵・取り扱いしていない場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       storesDesignatedCombustiblesOver500x: ref(false),
     });
     const { regulationResult } = useArticle21Logic(userInput);
@@ -245,7 +247,10 @@ describe("useArticle21Logic", () => {
         componentUses: [],
       },
     ]);
-    const userInput = createMockUserInput({ floors });
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
+      floors,
+    });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第21条第1項第11号");
@@ -262,7 +267,10 @@ describe("useArticle21Logic", () => {
         componentUses: [],
       },
     ]);
-    const userInput = createMockUserInput({ floors });
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
+      floors,
+    });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第21条第1項第11号");
@@ -279,7 +287,10 @@ describe("useArticle21Logic", () => {
         componentUses: [],
       },
     ]);
-    const userInput = createMockUserInput({ floors });
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
+      floors,
+    });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第21条第1項第11号");
@@ -296,7 +307,10 @@ describe("useArticle21Logic", () => {
         componentUses: [],
       },
     ]);
-    const userInput = createMockUserInput({ floors });
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
+      floors,
+    });
     const { regulationResult } = useArticle21Logic(userInput);
     expect(regulationResult.value.required).toBe(true);
     expect(regulationResult.value.basis).toBe("令第21条第1項第14号");
@@ -304,6 +318,7 @@ describe("useArticle21Logic", () => {
 
   it("12号: 道路の用に供される部分（屋上）が600㎡以上の場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       hasRoadPart: ref(true),
       roadPartRooftopArea: ref(600),
     });
@@ -314,6 +329,7 @@ describe("useArticle21Logic", () => {
 
   it("12号: 道路の用に供される部分（屋上以外）が400㎡以上の場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       hasRoadPart: ref(true),
       roadPartOtherArea: ref(400),
     });
@@ -324,6 +340,7 @@ describe("useArticle21Logic", () => {
 
   it("13号: 駐車の用に供する部分が200㎡以上で、同時に屋外に出られない場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       parking: ref({
         exists: true,
         basementOrUpperArea: 200,
@@ -338,6 +355,7 @@ describe("useArticle21Logic", () => {
 
   it("15号: 通信機器室が500㎡以上の場合", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       hasTelecomRoomOver500sqm: ref(true),
     });
     const { regulationResult } = useArticle21Logic(userInput);

@@ -31,6 +31,7 @@ const createMockUserInput = (overrides: any = {}) => {
 describe("useArticle21Logic - parking split fields", () => {
   it("basementOrUpper >=200 and not exit-all -> required (13号)", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       parking: ref({
         exists: true,
         basementOrUpperArea: 200,
@@ -45,6 +46,7 @@ describe("useArticle21Logic - parking split fields", () => {
 
   it("rooftop >=200 should NOT trigger 21#13", () => {
     const userInput = createMockUserInput({
+      buildingUse: ref("annex15"),
       parking: ref({
         exists: true,
         rooftopArea: 200,

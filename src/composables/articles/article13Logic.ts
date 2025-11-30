@@ -231,9 +231,9 @@ export function useArticle13Logic(userInput: Article13UserInput) {
     // 8. 通信機器室（500㎡以上）
     if (hasTelecomRoomOver500sqm.value) {
       return {
-        required: "warning",
+        required: true,
         message:
-          "【要確認】通信機器室で、面積が500㎡以上の場合は、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
+          "通信機器室で、面積が500㎡以上の場合は、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。",
         basis: "令第13条第1項第8号",
       };
     }
@@ -241,9 +241,9 @@ export function useArticle13Logic(userInput: Article13UserInput) {
     // 9. 指定可燃物
     if (storesDesignatedCombustiblesOver1000x.value) {
       return {
-        required: "warning",
+        required: true,
         message:
-          "【要確認】指定可燃物を1000倍以上貯蔵・取り扱っている場合、可燃物の種類に応じて、水噴霧、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。スプリンクラー設備が設置されている場合は免除されることがあります。",
+          "指定可燃物を1000倍以上貯蔵・取り扱っている場合、可燃物の種類に応じて、水噴霧、泡、不活性ガス、ハロゲン化物、粉末のいずれかの消火設備の設置が必要です。スプリンクラー設備が設置されている場合は免除されることがあります。",
         basis: "令第13条第1項第9号、同条第2項",
       };
     }
