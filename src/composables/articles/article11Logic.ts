@@ -1,5 +1,5 @@
 import { computed } from "vue";
-import type { Article11UserInput, JudgementResult, Floor } from "@/types";
+import type { Article11UserInput, JudgementResult } from "@/types";
 import { getUseDisplayName, useCodeMatches } from "@/composables/utils";
 
 /**
@@ -294,8 +294,8 @@ export function useArticle11Logic(userInput: Article11UserInput) {
       useCode: buildingUse,
       useDisplay: getUseDisplayName(buildingUse),
       totalArea: userInput.totalArea.value || 0,
-      structureType: userInput.structureType.value,
-      finishType: userInput.finishType.value,
+      structureType: userInput.structureType.value || "",
+      finishType: userInput.finishType.value || "",
       areaMultiplier,
       multiplierDescription,
       hasBasement: userInput.hasBasement.value,
@@ -368,8 +368,8 @@ export function useArticle11Logic(userInput: Article11UserInput) {
           useCode: subUseCode,
           useDisplay: getUseDisplayName(subUseCode),
           totalArea: data.totalArea,
-          structureType: userInput.structureType.value, // 建物全体の構造を流用
-          finishType: userInput.finishType.value, // 建物全体の仕上げを流用
+          structureType: userInput.structureType.value || "", // 建物全体の構造を流用
+          finishType: userInput.finishType.value || "", // 建物全体の仕上げを流用
           areaMultiplier,
           multiplierDescription,
           hasBasement: data.basementArea > 0,

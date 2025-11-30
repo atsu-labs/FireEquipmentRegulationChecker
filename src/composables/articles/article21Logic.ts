@@ -528,7 +528,6 @@ export function useArticle21Logic(userInput: Article21UserInput) {
       ).join("、\n");
 
       // warningが含まれているかチェック
-      const hasWarning = positiveResults.some((r) => r.required === "warning");
       const isAllWarning = positiveResults.every(
         (r) => r.required === "warning"
       );

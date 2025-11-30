@@ -487,6 +487,7 @@ const article21_2ResultTitle = computed(() => {
 const { regulationResult: article23Result } = useArticle23Logic({
   buildingUse,
   totalArea: totalFloorAreaInput,
+  floors,
 });
 
 const article23ResultType = computed(

@@ -1,148 +1,122 @@
-# 開発ルール・TODO
+# 開発ガイドライン
 
-## 回答・UI
-- 回答・UI・メッセージはすべて日本語
-- 法令条文・根拠も日本語で明記
+このドキュメントはAIエージェントおよび開発者向けの開発ガイドラインです。
 
-## 要件
-- 建物情報入力フォーム
-- 消防用設備の設置判定
-- 判定理由・根拠の表示
-- 入力バリデーション・エラーメッセージ
+## プロジェクト構成
+
+```
+src/
+├── components/          # Vueコンポーネント
+├── composables/
+│   ├── articles/        # 条文ロジック（条文ごとに1ファイル）
+│   └── utils.ts         # 共通ユーティリティ
+├── data/                # マスターデータ（用途コード等）
+├── tests/               # テストファイル
+└── types/               # 型定義
+```
 
 ## 実装状況
-- [x] UI基本構成
-- [x] 10条・11条・12条ロジック
-- [x] 消火器・屋内消火栓・スプリンクラー判定
-- [x] テストケース拡充
-- [x] App.vueのコンポーネント分割（入力フォーム・結果表示）
-- [x] ESLint導入によるコード品質向上
-- [x] 令第21条（自動火災報知設備）ロジック・テスト作成
-- [x] 令第21条の2（ガス漏れ火災警報設備）ロジック・テスト作成
-- [x] 令第22条（漏電火災警報器）ロジック・テスト作成
-- [x] 令第23条（消防機関へ通報する火災報知設備）ロジック・テスト作成
-- [x] 令第13条（水噴霧消火設備等）ロジック・テスト作成
-- [x] 令第19条（屋外消火栓設備）ロジック・テスト作成
-- [x] 令第24条（非常警報器具・設備）ロジック・テスト作成
-- [x] 令第25条（避難器具）ロジック・テスト作成
-- [x] 令第26条（誘導灯・誘導標識）ロジック・テスト作成
-- [x] 令第27条（消防用水）ロジック・テスト作成
-- [x] 令第28条（排煙設備）ロジック・テスト作成
-- [x] 令第28条の2（連結散水設備）ロジック・テスト作成
-- [x] 令第29条（連結送水管）ロジック・テスト作成
-- [x] 令第29条の2（非常コンセント設備）ロジック・テスト作成
-- [x] 令第29条の3（無線通信補助設備）ロジック・テスト作成
-- [x] ファイル構成のリファクタリング（composables, tests）
-- [x] コンポーザブルの入力型を定義し、依存関係を明確化
-- [ ] 重複フォームの改善
-- [ ] UI/UX改善
-- [ ] 法改正・例外対応
 
-## 今後の手順
-1. 追加条文のロジックとテストを実装（令第13条, 19条, 24条...）
-2. UI/UX改善（エラー表示・判定結果の強調）
-3. README.md・AGENTS.mdの充実
-4. 法改正・特殊ケース対応
-5. ドキュメント・開発ルール整備
+### 実装済み条文
 
-## ファイル構成と役割
+#### 消火設備（5条文）
+- [x] 令第10条 - 消火器
+- [x] 令第11条 - 屋内消火栓設備
+- [x] 令第12条 - スプリンクラー設備
+- [x] 令第13条 - 水噴霧消火設備等
+- [x] 令第19条 - 屋外消火栓設備
 
-- `eslint.config.ts`:
-    - ESLintの設定ファイル。コードの静的解析ルールを定義します。
+#### 警報設備（5条文）
+- [x] 令第21条 - 自動火災報知設備
+- [x] 令第21条の2 - ガス漏れ火災警報設備
+- [x] 令第22条 - 漏電火災警報器
+- [x] 令第23条 - 消防機関へ通報する火災報知設備
+- [x] 令第24条 - 非常警報器具・設備
 
-- `src/App.vue`:
-    - アプリケーションのルートコンポーネント。
-    - 全体のレイアウトを定義し、すべての入力データと計算結果の状態を一元管理します。
-    - `BuildingInputStepper` と `ResultsPanel` を呼び出し、データを連携させます。
+#### 避難設備（2条文）
+- [x] 令第25条 - 避難器具
+- [x] 令第26条 - 誘導灯・誘導標識
 
-- `src/components/BuildingInputStepper.vue`:
-    - 建物情報を入力するためのステップフォームです。
-    - ユーザーからの入力を受け取り、`App.vue` へ通知することに専念します。
+#### 消防用水（1条文）
+- [x] 令第27条 - 消防用水
 
-- `src/components/ResultsPanel.vue`:
-    - 判定結果を表示するためのパネルです。
-    - `App.vue` から渡されたデータを表示することに専念します。
+#### 消火活動上必要な施設（5条文）
+- [x] 令第28条 - 排煙設備
+- [x] 令第28条の2 - 連結散水設備
+- [x] 令第29条 - 連結送水管
+- [x] 令第29条の2 - 非常コンセント設備
+- [x] 令第29条の3 - 無線通信補助設備
 
-- `src/composables/articles/article*Logic.ts`:
-    - 各消防法（令第10条、11条など）の判定ロジックをカプセル化したファイル群です。
-    - 純粋な計算処理を担当し、UIから分離されています。
+## アーキテクチャパターン
 
-- `src/tests/article*Logic.spec.ts`:
-    - 各判定ロジックに対応するテストファイル群です。
-    - `vitest` を使用して、ロジックの正当性を検証します。
+### JudgementContext パターン
 
-- `src/composables/utils.ts`:
-    - 判定ロジックで共通して使用されるヘルパー関数（用途コードのマッチングなど）をまとめたファイルです。
+各条文ロジックは `JudgementContext` 型を引数として受け取ります。
 
-- `src/data/buildingUses.ts`:
-    - 防火対象物の用途（例：「(1)項イ 劇場」）のデータです。
+```typescript
+interface JudgementContext {
+  baseUseCode: string;          // 判定対象の用途コード
+  floors: FloorInfo[];          // 階情報（該当用途のみ）
+  buildingTotalArea: number;    // 建物全体の延べ面積
+  buildingTotalFloors: number;  // 建物全体の階数
+  // その他のプロパティ...
+}
+```
 
-- `.Agents/json/article*.json`:
-    - 構造化された条文のJSONファイル
+### 令第九条対応
 
-## 変更履歴（簡易）
+複合用途防火対象物（16項イ/ロ）では、令第九条に基づき各構成用途を単独の防火対象物とみなして判定します。
 
-- 2025-09-29: 複数の UI と判定ロジックについて修正・整理を行いました。
-    - `src/components/BuildingInputStepper.vue`
-        - 第1ステップへ以下の入力を移動・統合しました：令第1条・第6条・第14条に関する追加入力（舞台部、介護関連、ラック式倉庫）および令第22条（特殊可燃構造に関する入力）。
-        - `hasLodging` チェックボックスを step3 から step1 の（6）項ハ関連ブロックへ移動し、表示条件を `buildingUse.startsWith('item06_ha')` に限定しました。
-        - `isCareDependentOccupancy` の表示を `useCodeMatches(buildingUse, ['item06_ro_2','item06_ro_4','item06_ro_5'])` の場合のみ表示するように変更しました。
+```typescript
+// 複合用途の場合
+if (use.parentCode === '16イ' || use.parentCode === '16ロ') {
+  // 各用途ごとにJudgementContextを生成
+  const context = createJudgementContext(use, floors, building);
+  const result = articleLogic(context);
+}
+```
 
-    - `src/composables/articles/article12Logic.ts`
-        - 令第12条の判定ブロックの評価順を見直し、実務的な推奨順（除外関係を優先）に並べ替えました。
-            - 初期は条文順（1→2→3→4…）での評価でしたが、除外ルールに従い実務的には第3号／第4号等を早期に評価する方が正確になるため、ユーザー指定の推奨順に並べ替えを行いました（具体的並びはコミット参照）。
-        - ロジックの内部条件は変更せず、評価順のみ移動しています。
+### useCodeMatches ユーティリティ
 
-    - テスト
-        - `npm test`（Vitest）を実行し、既存のユニットテスト 213 件がすべてパスしました。
+用途コードのマッチング判定には `useCodeMatches` 関数を使用します。
 
-    - 注意点 / 次の作業候補
-        - 令第12条の第9号に関する規定は実装が不明瞭な箇所があるため、条文に基づく追加実装およびテスト追加を推奨します。
-        - ブラウザ上での UI 動作確認（dev サーバー起動）も推奨します。
+```typescript
+import { useCodeMatches } from '../utils';
 
+// 用途コードが指定パターンにマッチするか判定
+if (useCodeMatches(code, ['1イ', '1ロ', '2イ', '2ロ', '2ハ', '2ニ'])) {
+  // 特定用途として処理
+}
+```
 
+## テストガイドライン
 
-# AI-DLC and Spec-Driven Development
+### テストファイルの配置
 
-Kiro-style Spec Driven Development implementation on AI-DLC (AI Development Life Cycle)
+```
+src/tests/
+├── article10Logic.spec.ts
+├── article11Logic.spec.ts
+└── ...
+```
 
-## Project Context
+### テスト実行
 
-### Paths
-- Steering: `.kiro/steering/`
-- Specs: `.kiro/specs/`
+```bash
+# 全テスト実行
+npm test
 
-### Steering vs Specification
+# 特定ファイルのテスト
+npm test -- article10Logic
 
-**Steering** (`.kiro/steering/`) - Guide AI with project-wide rules and context
-**Specs** (`.kiro/specs/`) - Formalize development process for individual features
+# ウォッチモード
+npm test -- --watch
+```
 
-### Active Specifications
-- Check `.kiro/specs/` for active specifications
-- Use `/kiro-spec-status [feature-name]` to check progress
+## 変更履歴
 
-## Development Guidelines
-- Think in English, but generate responses in Japanese (思考は英語、回答の生成は日本語で行うように)
+### 2024年 - JudgementContext リファクタリング
 
-## Minimal Workflow
-- Phase 0 (optional): `/kiro-steering`, `/kiro-steering-custom`
-- Phase 1 (Specification):
-  - `/kiro-spec-init "description"`
-  - `/kiro-spec-requirements {feature}`
-  - `/kiro-validate-gap {feature}` (optional: for existing codebase)
-  - `/kiro-spec-design {feature} [-y]`
-  - `/kiro-validate-design {feature}` (optional: design review)
-  - `/kiro-spec-tasks {feature} [-y]`
-- Phase 2 (Implementation): `/kiro-spec-impl {feature} [tasks]`
-  - `/kiro-validate-impl {feature}` (optional: after implementation)
-- Progress check: `/kiro-spec-status {feature}` (use anytime)
-
-## Development Rules
-- 3-phase approval workflow: Requirements → Design → Tasks → Implementation
-- Human review required each phase; use `-y` only for intentional fast-track
-- Keep steering current and verify alignment with `/kiro-spec-status`
-
-## Steering Configuration
-- Load entire `.kiro/steering/` as project memory
-- Default files: `product.md`, `tech.md`, `structure.md`
-- Custom files are supported (managed via `/kiro-steering-custom`)
+- すべての条文ロジックを JudgementContext パターンに統一
+- 令第九条（複合用途のみなし判定）対応を追加
+- article11Logic, article22Logic に floors パラメータを追加

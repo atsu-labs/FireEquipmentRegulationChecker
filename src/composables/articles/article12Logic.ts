@@ -364,7 +364,7 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       floors: userInput.floors.value,
       isCareDependentOccupancy: userInput.isCareDependentOccupancy.value,
       hasStageArea: userInput.hasStageArea.value,
-      stageFloorLevel: userInput.stageFloorLevel.value,
+      stageFloorLevel: userInput.stageFloorLevel.value || "",
       stageArea: userInput.stageArea.value || 0,
       isRackWarehouse: userInput.isRackWarehouse.value,
       ceilingHeight: userInput.ceilingHeight.value || 0,

@@ -125,7 +125,7 @@ export function useArticle19Logic(userInput: Article19UserInput) {
       useDisplay: getUseDisplayName(use),
       groundFloors: groundFloors.value,
       floors: floors.value,
-      buildingStructure: buildingStructure.value,
+      buildingStructure: buildingStructure.value || "",
       hasMultipleBuildingsOnSite: hasMultipleBuildingsOnSite.value,
       isSection: false,
       basisSuffix: "",
@@ -172,7 +172,7 @@ export function useArticle19Logic(userInput: Article19UserInput) {
           useDisplay: getUseDisplayName(subUseCode),
           groundFloors: groundFloors.value,
           floors: data.floors,
-          buildingStructure: buildingStructure.value,
+          buildingStructure: buildingStructure.value || "",
           hasMultipleBuildingsOnSite: false, // テナント単位では考慮不要
           isSection: true,
           basisSuffix: "（令第九条適用）",
