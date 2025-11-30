@@ -29,7 +29,11 @@ describe("BuildingInfoStep.vue", () => {
     finishType: "flammable" | "other" | null;
     siteArea: number | null;
     buildingHeight: number | null;
-    buildingStructure: "fire-resistant" | "quasi-fire-resistant" | "other" | null;
+    buildingStructure:
+      | "fire-resistant"
+      | "quasi-fire-resistant"
+      | "other"
+      | null;
     hasMultipleBuildingsOnSite: boolean;
     isCareDependentOccupancy: boolean;
     hasBeds: boolean;
@@ -95,10 +99,19 @@ describe("BuildingInfoStep.vue", () => {
   // =================================================================
   // 2. 動的表示のテスト
   // =================================================================
-  it("（6）項関連の情報が正しく表示される", async () => {
+  it("（6）項ロ(2)関連の情報が正しく表示される（ベッドは表示されない）", async () => {
     await wrapper.setProps({ buildingUse: "annex06_ro_2" });
     expect(wrapper.text()).toContain("（6）項関連の追加情報");
-    expect(wrapper.text()).toContain("介助がなければ避難できない者を主として入所させる施設");
+    expect(wrapper.text()).toContain(
+      "介助がなければ避難できない者を主として入所させる施設"
+    );
+    // annex06_ro_2では「診療所にベッドがある」は表示されない（annex06_i_2のみ）
+    expect(wrapper.text()).not.toContain("診療所にベッドがある");
+  });
+
+  it("（6）項イ(2)で「診療所にベッドがある」が表示される", async () => {
+    await wrapper.setProps({ buildingUse: "annex06_i_2" });
+    expect(wrapper.text()).toContain("（6）項関連の追加情報");
     expect(wrapper.text()).toContain("診療所にベッドがある");
   });
 
@@ -119,9 +132,11 @@ describe("BuildingInfoStep.vue", () => {
   // =================================================================
   it("建物用途の変更がemitされる", async () => {
     // BuildingUseSelectorが変更された時のイベントをシミュレート
-    const buildingUseSelector = wrapper.findComponent({ name: "BuildingUseSelector" });
+    const buildingUseSelector = wrapper.findComponent({
+      name: "BuildingUseSelector",
+    });
     await buildingUseSelector.vm.$emit("update:modelValue", "annex01_i");
-    
+
     // イベントが発行されたか確認
     expect(wrapper.emitted("update:buildingUse")).toBeTruthy();
     expect(wrapper.emitted("update:buildingUse")![0]).toEqual(["annex01_i"]);

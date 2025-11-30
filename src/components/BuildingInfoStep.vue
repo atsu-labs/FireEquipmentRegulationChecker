@@ -162,6 +162,7 @@ const emit = defineEmits([
               hide-details
             ></v-checkbox>
             <v-checkbox
+              v-if="useCodeMatches(buildingUse, ['annex06_i_2'])"
               :model-value="hasBeds"
               @update:model-value="emit('update:hasBeds', $event)"
               label="診療所にベッドがある"
@@ -192,9 +193,7 @@ const emit = defineEmits([
               <div v-if="hasStageArea" class="ml-8">
                 <v-radio-group
                   :model-value="stageFloorLevel"
-                  @update:model-value="
-                    emit('update:stageFloorLevel', $event)
-                  "
+                  @update:model-value="emit('update:stageFloorLevel', $event)"
                   label="舞台部のある階"
                 >
                   <v-radio
@@ -302,10 +301,7 @@ const emit = defineEmits([
             hide-details
           >
             <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
-            <v-radio
-              label="その他の耐火構造 or 準耐火構造"
-              value="B"
-            ></v-radio>
+            <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
             <v-radio label="その他" value="C"></v-radio>
           </v-radio-group>
         </v-col>
@@ -327,10 +323,7 @@ const emit = defineEmits([
             label="敷地面積"
             :model-value="siteArea"
             @update:model-value="
-              emit(
-                'update:siteArea',
-                $event === '' ? null : Number($event)
-              )
+              emit('update:siteArea', $event === '' ? null : Number($event))
             "
             type="number"
             min="0"
@@ -384,9 +377,7 @@ const emit = defineEmits([
       </v-row>
       <v-row class="mt-4" align="center">
         <v-col cols="12" sm="6">
-          <p class="font-weight-bold mb-2">
-            令第22条（漏電火災警報器）関連
-          </p>
+          <p class="font-weight-bold mb-2">令第22条（漏電火災警報器）関連</p>
           <v-checkbox
             :model-value="hasSpecialCombustibleStructure"
             @update:model-value="
@@ -396,7 +387,7 @@ const emit = defineEmits([
             hide-details
           ></v-checkbox>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col v-if="hasSpecialCombustibleStructure" cols="12" sm="6">
           <v-text-field
             class="mt-4"
             label="契約電流容量"

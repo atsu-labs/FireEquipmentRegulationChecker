@@ -177,6 +177,7 @@ const selectedDesignatedCombustibleLevel = computed({
       <v-divider class="my-4"></v-divider>
       <p class="font-weight-bold mb-2">令第12条（スプリンクラー設備）関連</p>
       <v-checkbox
+        v-if="useCodeMatches(buildingUse, ['annex06'])"
         :model-value="hasFireSuppressingStructure"
         @update:model-value="emit('update:hasFireSuppressingStructure', $event)"
         label="延焼抑制構造である（主要構造部が耐火構造＋開口部が防火設備など）"
@@ -305,6 +306,42 @@ const selectedDesignatedCombustibleLevel = computed({
             label="駐車するすべての車両が同時に屋外に出られる構造の階である"
             hide-details
           ></v-checkbox>
+          <v-divider class="my-4"></v-divider>
+          <v-checkbox
+            :model-value="parking.mechanical.present"
+            @update:model-value="
+              (val) =>
+                emit('update:parking', {
+                  ...parking,
+                  mechanical: { ...parking.mechanical, present: val },
+                })
+            "
+            label="機械式駐車場がある"
+            hide-details
+          ></v-checkbox>
+          <v-expand-transition>
+            <div v-if="parking.mechanical.present" class="ml-8">
+              <v-text-field
+                label="収容台数"
+                :model-value="parking.mechanical.capacity"
+                @update:model-value="
+                  (val) =>
+                    emit('update:parking', {
+                      ...parking,
+                      mechanical: {
+                        ...parking.mechanical,
+                        capacity: val === '' ? null : Number(val),
+                      },
+                    })
+                "
+                type="number"
+                min="0"
+                suffix="台"
+                dense
+                style="max-width: 200px"
+              ></v-text-field>
+            </div>
+          </v-expand-transition>
         </div>
       </v-expand-transition>
 
@@ -340,41 +377,6 @@ const selectedDesignatedCombustibleLevel = computed({
 
       <v-divider class="my-4"></v-divider>
       <p class="font-weight-bold mb-2">令第13条（水噴霧消火設備等）関連</p>
-      <v-checkbox
-        :model-value="parking.mechanical.present"
-        @update:model-value="
-          (val) =>
-            emit('update:parking', {
-              ...parking,
-              mechanical: { ...parking.mechanical, present: val },
-            })
-        "
-        label="機械式駐車場がある"
-        hide-details
-      ></v-checkbox>
-      <v-expand-transition>
-        <div v-if="parking.mechanical.present" class="ml-8">
-          <v-text-field
-            label="収容台数"
-            :model-value="parking.mechanical.capacity"
-            @update:model-value="
-              (val) =>
-                emit('update:parking', {
-                  ...parking,
-                  mechanical: {
-                    ...parking.mechanical,
-                    capacity: val === '' ? null : Number(val),
-                  },
-                })
-            "
-            type="number"
-            min="0"
-            suffix="台"
-            dense
-            style="max-width: 200px"
-          ></v-text-field>
-        </div>
-      </v-expand-transition>
       <v-checkbox
         :model-value="article13_hasCarRepairArea"
         @update:model-value="emit('update:article13_hasCarRepairArea', $event)"
