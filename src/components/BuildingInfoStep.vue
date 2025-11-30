@@ -44,8 +44,6 @@ defineProps({
   hasMultipleBuildingsOnSite: { type: Boolean, required: true },
   // 介護等で避難困難な人がいるか
   isCareDependentOccupancy: { type: Boolean, required: true },
-  // 診療所にベッドがあるか
-  hasBeds: { type: Boolean, required: true },
   // 宿泊の有無
   hasLodging: { type: Boolean, required: true },
   // 舞台部の有無
@@ -81,7 +79,6 @@ const emit = defineEmits([
   "update:buildingStructure",
   "update:hasMultipleBuildingsOnSite",
   "update:isCareDependentOccupancy",
-  "update:hasBeds",
   "update:hasLodging",
   "update:hasStageArea",
   "update:stageFloorLevel",
@@ -159,13 +156,6 @@ const emit = defineEmits([
                 emit('update:isCareDependentOccupancy', $event)
               "
               label="介助がなければ避難できない者を主として入所させる施設"
-              hide-details
-            ></v-checkbox>
-            <v-checkbox
-              v-if="useCodeMatches(buildingUse, ['annex06_i_2'])"
-              :model-value="hasBeds"
-              @update:model-value="emit('update:hasBeds', $event)"
-              label="診療所にベッドがある"
               hide-details
             ></v-checkbox>
             <!-- hasLodging は 6項ハ の用途コードのときのみ表示 -->

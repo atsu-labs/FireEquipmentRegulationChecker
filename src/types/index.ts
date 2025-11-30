@@ -40,7 +40,6 @@ export interface Article12UserInput {
   ceilingHeight: Ref<number | null>;
   storesDesignatedCombustiblesOver1000x: Ref<boolean>;
   hasFireSuppressingStructure: Ref<boolean>;
-  hasBeds: Ref<boolean>;
 }
 
 // Article13UserInput

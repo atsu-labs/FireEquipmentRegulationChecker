@@ -55,8 +55,6 @@ const props = defineProps({
   storesDesignatedCombustiblesOver1000x: { type: Boolean, required: true },
   // isCareDependentOccupancy: 介護等で避難困難な人がいるか。article12 で使用
   isCareDependentOccupancy: { type: Boolean, required: true },
-  // hasBeds: 診療所にベッドがあるか。article12 で使用
-  hasBeds: { type: Boolean, required: true },
   // hasStageArea: 舞台部の有無。article12 / article28 等で使用
   hasStageArea: { type: Boolean, required: true },
   // stageFloorLevel: 舞台の階種別。article12 / article28 の判定で使用
@@ -183,7 +181,6 @@ const emit = defineEmits([
   "update:hasFireSuppressingStructure",
   "update:storesDesignatedCombustiblesOver1000x",
   "update:isCareDependentOccupancy",
-  "update:hasBeds",
   "update:hasStageArea",
   "update:stageFloorLevel",
   "update:stageArea",
@@ -259,11 +256,7 @@ watch(
         editable
       ></v-stepper-item>
       <v-divider></v-divider>
-      <v-stepper-item
-        title="追加情報"
-        :value="4"
-        editable
-      ></v-stepper-item>
+      <v-stepper-item title="追加情報" :value="4" editable></v-stepper-item>
     </v-stepper-header>
 
     <v-stepper-window>
@@ -282,7 +275,6 @@ watch(
           :buildingStructure="buildingStructure"
           :hasMultipleBuildingsOnSite="hasMultipleBuildingsOnSite"
           :isCareDependentOccupancy="isCareDependentOccupancy"
-          :hasBeds="hasBeds"
           :hasLodging="hasLodging"
           :hasStageArea="hasStageArea"
           :stageFloorLevel="stageFloorLevel"
@@ -312,7 +304,6 @@ watch(
           @update:isCareDependentOccupancy="
             emit('update:isCareDependentOccupancy', $event)
           "
-          @update:hasBeds="emit('update:hasBeds', $event)"
           @update:hasLodging="emit('update:hasLodging', $event)"
           @update:hasStageArea="emit('update:hasStageArea', $event)"
           @update:stageFloorLevel="emit('update:stageFloorLevel', $event)"
@@ -346,7 +337,9 @@ watch(
           :nonFloorAreaValue="nonFloorAreaValue"
           :nonFloorAreaComponentUses="nonFloorAreaComponentUses"
           @update:floors="emit('update:floors', $event)"
-          @update:nonFloorAreaComponentUses="emit('update:nonFloorAreaComponentUses', $event)"
+          @update:nonFloorAreaComponentUses="
+            emit('update:nonFloorAreaComponentUses', $event)
+          "
         />
       </v-stepper-window-item>
 

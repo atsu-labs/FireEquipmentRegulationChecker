@@ -29,7 +29,6 @@ describe("BuildingInputStepper - 指定可燃物ラジオのマッピング", ()
     hasFireSuppressingStructure: false,
     storesDesignatedCombustiblesOver1000x: false,
     isCareDependentOccupancy: false,
-    hasBeds: false,
     hasStageArea: false,
     stageFloorLevel: null,
     stageArea: null,
