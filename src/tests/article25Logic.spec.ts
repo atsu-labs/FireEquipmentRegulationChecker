@@ -1,10 +1,12 @@
-import { describe, it, expect } from 'vitest';
-import { ref } from 'vue';
-import { useArticle25Logic} from '../composables/articles/article25Logic';
-import type { Floor, Article25UserInput } from '@/types';
+import { describe, it, expect } from "vitest";
+import { ref } from "vue";
+import { useArticle25Logic } from "../composables/articles/article25Logic";
+import type { Floor, Article25UserInput } from "@/types";
 
-describe('useArticle25Logic', () => {
-  const createMockUserInput = (overrides: Partial<Article25UserInput>): Article25UserInput => {
+describe("useArticle25Logic", () => {
+  const createMockUserInput = (
+    overrides: Partial<Article25UserInput>
+  ): Article25UserInput => {
     const defaults: Article25UserInput = {
       buildingUse: ref(null),
       floors: ref([]),
@@ -13,102 +15,335 @@ describe('useArticle25Logic', () => {
   };
 
   // 1号: (6)項
-  describe('第1項第1号: (6)項', () => {
-    it('(6)項の2階で収容人員20人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 2, type: 'ground', capacity: 20, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex06'), floors });
+  describe("第1項第1号: (6)項", () => {
+    it("(6)項の2階で収容人員20人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 20,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex06"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第1号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第1号");
     });
 
-    it('(6)項の地階で収容人員10人以上20人未満の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 1, type: 'basement', capacity: 10, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex06'), floors });
+    it("(6)項の地階で収容人員10人以上20人未満の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 1,
+          type: "basement",
+          capacity: 10,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex06"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第1号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第1号");
     });
 
-    it('(6)項の2階で収容人員9人の場合、設置不要', () => {
-      const floors = ref<Floor[]>([{level: 2, type: 'ground', capacity: 9, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex06'), floors });
+    it("(6)項の2階で収容人員9人の場合、設置不要", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 9,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex06"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
       expect(regulationResult.value.required).toBe(false);
     });
   });
 
   // 2号: (5)項
-  describe('第1項第2号: (5)項', () => {
-    it('(5)項の3階で収容人員30人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 3, type: 'ground', capacity: 30, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex05'), floors });
+  describe("第1項第2号: (5)項", () => {
+    it("(5)項の3階で収容人員30人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 3,
+          type: "ground",
+          capacity: 30,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex05"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第2号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第2号");
     });
   });
 
   // 3号: (1)~(4), (7)~(11)項
-  describe('第1項第3号: (1)~(4), (7)~(11)項', () => {
-    it('(1)項の2階で収容人員50人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 2, type: 'ground', capacity: 50, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex01'), floors });
+  describe("第1項第3号: (1)~(4), (7)~(11)項", () => {
+    it("(1)項の2階で収容人員50人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 50,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex01"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第3号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第3号");
     });
   });
 
   // 4号: (12), (15)項
-  describe('第1項第4号: (12), (15)項', () => {
-    it('(12)項の3階で収容人員150人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 3, type: 'ground', capacity: 150, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex12'), floors });
+  describe("第1項第4号: (12), (15)項", () => {
+    it("(12)項の3階で収容人員150人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 3,
+          type: "ground",
+          capacity: 150,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex12"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第4号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第4号");
     });
 
-    it('(15)項の地階で収容人員100人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 1, type: 'basement', capacity: 100, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex15'), floors });
+    it("(15)項の地階で収容人員100人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 1,
+          type: "basement",
+          capacity: 100,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex15"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第4号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第4号");
     });
   });
 
   // 5号: その他
-  describe('第1項第5号: その他', () => {
-    it('(16)項イの3階で収容人員10人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 3, type: 'ground', capacity: 10, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex16_i'), floors });
+  describe("第1項第5号: その他", () => {
+    it("(16)項イの3階で収容人員10人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 3,
+          type: "ground",
+          capacity: 10,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex16_i"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第5号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第5号");
     });
 
-    it('(2)項の2階で収容人員10人以上の場合、warningを返す', () => {
-      const floors = ref<Floor[]>([{level: 2, type: 'ground', capacity: 10, floorArea: 0, isWindowless: false, componentUses: [] }]);
-      const userInput = createMockUserInput({ buildingUse: ref('annex02'), floors });
+    it("(2)項の2階で収容人員10人以上の場合、warningを返す", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 10,
+          floorArea: 0,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex02"),
+        floors,
+      });
       const { regulationResult } = useArticle25Logic(userInput);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.basis).toBe('令第25条第1項第5号');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toBe("令第25条第1項第5号");
     });
   });
 
-  it('11階以上の階は判定対象外', () => {
-    const floors = ref<Floor[]>([{level: 11, type: 'ground', capacity: 1000, floorArea: 0, isWindowless: false, componentUses: [] }]);
-    const userInput = createMockUserInput({ buildingUse: ref('annex06'), floors });
+  it("11階以上の階は判定対象外", () => {
+    const floors = ref<Floor[]>([
+      {
+        level: 11,
+        type: "ground",
+        capacity: 1000,
+        floorArea: 0,
+        isWindowless: false,
+        componentUses: [],
+      },
+    ]);
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex06"),
+      floors,
+    });
     const { regulationResult } = useArticle25Logic(userInput);
     expect(regulationResult.value.required).toBe(false);
   });
 
-  it('どの条件にも該当しない場合', () => {
-    const floors = ref<Floor[]>([{level: 1, type: 'ground', capacity: 10, floorArea: 0, isWindowless: false, componentUses: [] }]);
-    const userInput = createMockUserInput({ buildingUse: ref('annex18'), floors });
+  it("どの条件にも該当しない場合", () => {
+    const floors = ref<Floor[]>([
+      {
+        level: 1,
+        type: "ground",
+        capacity: 10,
+        floorArea: 0,
+        isWindowless: false,
+        componentUses: [],
+      },
+    ]);
+    const userInput = createMockUserInput({
+      buildingUse: ref("annex18"),
+      floors,
+    });
     const { regulationResult } = useArticle25Logic(userInput);
     expect(regulationResult.value.required).toBe(false);
+  });
+
+  // --- 令第九条適用のテスト ---
+  describe("令第九条適用: 複合用途内の特定用途部分", () => {
+    it("(16)項イで複合用途内の(6)項部分（2階・収容人員20人以上）がある場合、warning", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 50,
+          floorArea: 300,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex06_i", floorArea: 150, capacity: 25 },
+            { useCode: "annex15", floorArea: 150, capacity: 25 },
+          ],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex16_i"),
+        floors,
+      });
+      const { regulationResult } = useArticle25Logic(userInput);
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toContain(
+        "令第25条第1項第1号（令第九条適用）"
+      );
+      expect(regulationResult.value.message).toContain("複合用途内");
+    });
+
+    it("(16)項イで複合用途内の(5)項部分（3階・収容人員30人以上）がある場合、warning", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 3,
+          type: "ground",
+          capacity: 80,
+          floorArea: 500,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex05_i", floorArea: 300, capacity: 35 },
+            { useCode: "annex15", floorArea: 200, capacity: 45 },
+          ],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex16_i"),
+        floors,
+      });
+      const { regulationResult } = useArticle25Logic(userInput);
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toContain(
+        "令第25条第1項第2号（令第九条適用）"
+      );
+    });
+
+    it("(16)項イで複合用途内の(1)項部分（2階・収容人員50人以上）がある場合、warning", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 2,
+          type: "ground",
+          capacity: 100,
+          floorArea: 600,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex01_i_ro", floorArea: 400, capacity: 60 },
+            { useCode: "annex15", floorArea: 200, capacity: 40 },
+          ],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex16_i"),
+        floors,
+      });
+      const { regulationResult } = useArticle25Logic(userInput);
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.basis).toContain(
+        "令第25条第1項第3号（令第九条適用）"
+      );
+    });
+
+    it("(16)項イで複合用途内の特定用途部分が条件を満たさない場合、設置義務なし", () => {
+      const floors = ref<Floor[]>([
+        {
+          level: 1,
+          type: "ground",
+          capacity: 30,
+          floorArea: 300,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex04", floorArea: 150, capacity: 15 },
+            { useCode: "annex15", floorArea: 150, capacity: 15 },
+          ],
+        },
+      ]);
+      const userInput = createMockUserInput({
+        buildingUse: ref("annex16_i"),
+        floors,
+      });
+      const { regulationResult } = useArticle25Logic(userInput);
+      expect(regulationResult.value.required).toBe(false);
+    });
   });
 });

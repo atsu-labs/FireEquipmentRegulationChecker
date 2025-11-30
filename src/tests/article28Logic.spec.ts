@@ -1,12 +1,13 @@
+import { describe, it, expect } from "vitest";
+import { ref } from "vue";
+import { useArticle28Logic } from "../composables/articles/article28Logic";
+import type { Floor, Article28UserInput } from "@/types";
 
-import { describe, it, expect } from 'vitest';
-import { ref } from 'vue';
-import { useArticle28Logic } from '../composables/articles/article28Logic';
-import type { Floor, Article28UserInput } from '@/types';
-
-const createMockInput = (overrides: Partial<Article28UserInput> = {}): Article28UserInput => {
+const createMockInput = (
+  overrides: Partial<Article28UserInput> = {}
+): Article28UserInput => {
   const defaults: Article28UserInput = {
-    buildingUse: ref('annex18'), // Default to a non-applicable use
+    buildingUse: ref("annex18"), // Default to a non-applicable use
     totalArea: ref(0),
     hasStageArea: ref(false),
     stageArea: ref(0),
@@ -15,107 +16,275 @@ const createMockInput = (overrides: Partial<Article28UserInput> = {}): Article28
   return { ...defaults, ...overrides };
 };
 
-describe('useArticle28Logic', () => {
-  it('用途が選択されていない場合、判定をスキップする', () => {
+describe("useArticle28Logic", () => {
+  it("用途が選択されていない場合、判定をスキップする", () => {
     const input = createMockInput({ buildingUse: ref(null) });
     const { regulationResult } = useArticle28Logic(input);
     expect(regulationResult.value.required).toBe(false);
   });
 
   // --- 第1号のテスト ---
-  describe('第1号: (16の2)項で延べ面積1000㎡以上', () => {
-    it('用途(16の2)項、延べ面積1000㎡で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('annex16_2'), totalArea: ref(1000) });
+  describe("第1号: (16の2)項で延べ面積1000㎡以上", () => {
+    it("用途(16の2)項、延べ面積1000㎡で設置義務あり", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex16_2"),
+        totalArea: ref(1000),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(true);
-      expect(regulationResult.value.basis).toBe('令第28条第1号');
+      expect(regulationResult.value.basis).toBe("令第28条第1号");
     });
 
-    it('用途(16の2)項、延べ面積999㎡で設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('annex16_2'), totalArea: ref(999) });
+    it("用途(16の2)項、延べ面積999㎡で設置義務なし", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex16_2"),
+        totalArea: ref(999),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
 
-    it('用途(16の2)項以外、延べ面積1000㎡で設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), totalArea: ref(1000) });
+    it("用途(16の2)項以外、延べ面積1000㎡で設置義務なし", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex01_i_ro"),
+        totalArea: ref(1000),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
   });
 
   // --- 第2号のテスト ---
-  describe('第2号: (1)項の舞台部で床面積500㎡以上', () => {
-    it('用途(1)項、舞台部あり、面積500㎡で設置義務あり', () => {
-      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), hasStageArea: ref(true), stageArea: ref(500) });
+  describe("第2号: (1)項の舞台部で床面積500㎡以上", () => {
+    it("用途(1)項、舞台部あり、面積500㎡で設置義務あり", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex01_i_ro"),
+        hasStageArea: ref(true),
+        stageArea: ref(500),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(true);
-      expect(regulationResult.value.basis).toBe('令第28条第2号');
+      expect(regulationResult.value.basis).toBe("令第28条第2号");
     });
 
-    it('用途(1)項、舞台部あり、面積499㎡で設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), hasStageArea: ref(true), stageArea: ref(499) });
+    it("用途(1)項、舞台部あり、面積499㎡で設置義務なし", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex01_i_ro"),
+        hasStageArea: ref(true),
+        stageArea: ref(499),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
 
-    it('用途(1)項、舞台部あり、面積未入力で警告', () => {
-      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), hasStageArea: ref(true), stageArea: ref(0) });
+    it("用途(1)項、舞台部あり、面積未入力で警告", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex01_i_ro"),
+        hasStageArea: ref(true),
+        stageArea: ref(0),
+      });
       const { regulationResult } = useArticle28Logic(input);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.message).toContain('舞台部の面積が入力されていません');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.message).toContain(
+        "舞台部の面積が入力されていません"
+      );
     });
 
-    it('用途(1)項以外、舞台部あり、面積500㎡で設置義務なし', () => {
-      const input = createMockInput({ buildingUse: ref('annex02_i'), hasStageArea: ref(true), stageArea: ref(500) });
+    it("用途(1)項以外、舞台部あり、面積500㎡で設置義務なし", () => {
+      const input = createMockInput({
+        buildingUse: ref("annex02_i"),
+        hasStageArea: ref(true),
+        stageArea: ref(500),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
   });
 
   // --- 第3号のテスト ---
-  describe('第3号: 特定用途の地階又は無窓階で床面積1000㎡以上', () => {
-    it('用途(2)項、地階あり、面積1000㎡で設置義務あり', () => {
-      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] }];
-      const input = createMockInput({ buildingUse: ref('annex02_i'), floors: ref(floors) });
+  describe("第3号: 特定用途の地階又は無窓階で床面積1000㎡以上", () => {
+    it("用途(2)項、地階あり、面積1000㎡で設置義務あり", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 1000,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex02_i"),
+        floors: ref(floors),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(true);
-      expect(regulationResult.value.basis).toBe('令第28条第3号');
+      expect(regulationResult.value.basis).toBe("令第28条第3号");
     });
 
-    it('用途(4)項、無窓階あり、面積1000㎡で設置義務あり', () => {
-      const floors: Floor[] = [{ level: 1, type: 'ground', floorArea: 1000, capacity: null, isWindowless: true, componentUses: [] }];
-      const input = createMockInput({ buildingUse: ref('annex04'), floors: ref(floors) });
+    it("用途(4)項、無窓階あり、面積1000㎡で設置義務あり", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "ground",
+          floorArea: 1000,
+          capacity: null,
+          isWindowless: true,
+          componentUses: [],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex04"),
+        floors: ref(floors),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(true);
-      expect(regulationResult.value.basis).toBe('令第28条第3号');
+      expect(regulationResult.value.basis).toBe("令第28条第3号");
     });
 
-    it('用途(10)項、地階あり、面積999㎡で設置義務なし', () => {
-      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 999, capacity: null, isWindowless: false, componentUses: [] }];
-      const input = createMockInput({ buildingUse: ref('annex10'), floors: ref(floors) });
+    it("用途(10)項、地階あり、面積999㎡で設置義務なし", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 999,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex10"),
+        floors: ref(floors),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
 
-    it('用途(13)項、地階あり、面積未入力で警告', () => {
-      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 0, capacity: null, isWindowless: false, componentUses: [] }];
-      const input = createMockInput({ buildingUse: ref('annex13'), floors: ref(floors) });
+    it("用途(13)項、地階あり、面積未入力で警告", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 0,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex13"),
+        floors: ref(floors),
+      });
       const { regulationResult } = useArticle28Logic(input);
-      expect(regulationResult.value.required).toBe('warning');
-      expect(regulationResult.value.message).toContain('床面積が入力されていません');
+      expect(regulationResult.value.required).toBe("warning");
+      expect(regulationResult.value.message).toContain(
+        "床面積が入力されていません"
+      );
     });
 
-    it('用途(2)項以外、地階あり、面積1000㎡で設置義務なし', () => {
-      const floors: Floor[] = [{ level: 1, type: 'basement', floorArea: 1000, capacity: null, isWindowless: false, componentUses: [] }];
-      const input = createMockInput({ buildingUse: ref('annex01_i_ro'), floors: ref(floors) });
+    it("用途(2)項以外、地階あり、面積1000㎡で設置義務なし", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 1000,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex01_i_ro"),
+        floors: ref(floors),
+      });
       const { regulationResult } = useArticle28Logic(input);
       expect(regulationResult.value.required).toBe(false);
     });
   });
 
-  it('どの条件にも当てはまらない場合、設置義務なし', () => {
-    const input = createMockInput({ buildingUse: ref('annex18'), totalArea: ref(100) });
+  // --- 令第九条適用のテスト ---
+  describe("令第九条適用: 複合用途内の特定用途部分", () => {
+    it("(16)項イで複合用途内の(2)項部分が地階1000㎡以上の場合、設置義務あり", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 1500,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex02_i", floorArea: 1200, capacity: 100 },
+            { useCode: "annex15", floorArea: 300, capacity: 30 },
+          ],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex16_i"),
+        floors: ref(floors),
+      });
+      const { regulationResult } = useArticle28Logic(input);
+      expect(regulationResult.value.required).toBe(true);
+      expect(regulationResult.value.basis).toContain(
+        "令第28条第3号（令第九条適用）"
+      );
+      expect(regulationResult.value.message).toContain("複合用途内");
+    });
+
+    it("(16)項イで複合用途内の(4)項部分が無窓階1000㎡以上の場合、設置義務あり", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "ground",
+          floorArea: 1500,
+          capacity: null,
+          isWindowless: true,
+          componentUses: [
+            { useCode: "annex04", floorArea: 1100, capacity: 100 },
+            { useCode: "annex15", floorArea: 400, capacity: 30 },
+          ],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex16_i"),
+        floors: ref(floors),
+      });
+      const { regulationResult } = useArticle28Logic(input);
+      expect(regulationResult.value.required).toBe(true);
+      expect(regulationResult.value.basis).toContain(
+        "令第28条第3号（令第九条適用）"
+      );
+    });
+
+    it("(16)項イで複合用途内の特定用途部分が地階1000㎡未満の場合、設置義務なし", () => {
+      const floors: Floor[] = [
+        {
+          level: 1,
+          type: "basement",
+          floorArea: 1500,
+          capacity: null,
+          isWindowless: false,
+          componentUses: [
+            { useCode: "annex02_i", floorArea: 500, capacity: 50 },
+            { useCode: "annex15", floorArea: 1000, capacity: 100 },
+          ],
+        },
+      ];
+      const input = createMockInput({
+        buildingUse: ref("annex16_i"),
+        floors: ref(floors),
+      });
+      const { regulationResult } = useArticle28Logic(input);
+      expect(regulationResult.value.required).toBe(false);
+    });
+  });
+
+  it("どの条件にも当てはまらない場合、設置義務なし", () => {
+    const input = createMockInput({
+      buildingUse: ref("annex18"),
+      totalArea: ref(100),
+    });
     const { regulationResult } = useArticle28Logic(input);
     expect(regulationResult.value.required).toBe(false);
   });

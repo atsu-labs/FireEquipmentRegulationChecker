@@ -10,6 +10,7 @@ const createMockInput = (
   const defaults: Article11UserInput = {
     buildingUse: ref(null),
     totalArea: ref(0),
+    floors: ref([]),
     hasBasement: ref(false),
     basementArea: ref(0),
     hasNoWindowFloor: ref(false),
