@@ -53,7 +53,6 @@ const isRackWarehouse = ref(false);
 const ceilingHeight = ref<number | null>(null);
 const storesDesignatedCombustiblesOver1000x = ref(false);
 const hasFireSuppressingStructure = ref(false);
-const hasBeds = ref(false);
 const storesDesignatedCombustiblesOver500x = ref(false); // 令21条8号用
 const hasRoadPart = ref(false); // 令21条12号用
 const roadPartRooftopArea = ref<number | null>(null);
@@ -335,7 +334,6 @@ const { regulationResult: judgementResult12 } = useArticle12Logic({
   ceilingHeight,
   storesDesignatedCombustiblesOver1000x: storesDesignatedCombustiblesOver1000x,
   hasFireSuppressingStructure,
-  hasBeds,
 });
 
 const { regulationResult: judgementResult13 } = useArticle13Logic({
@@ -758,7 +756,6 @@ generateFloors();
                 storesDesignatedCombustiblesOver1000x
               "
               v-model:isCareDependentOccupancy="isCareDependentOccupancy"
-              v-model:hasBeds="hasBeds"
               v-model:hasStageArea="hasStageArea"
               v-model:stageFloorLevel="stageFloorLevel"
               v-model:stageArea="stageArea"

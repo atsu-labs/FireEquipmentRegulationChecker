@@ -44,8 +44,6 @@ defineProps({
   hasMultipleBuildingsOnSite: { type: Boolean, required: true },
   // 介護等で避難困難な人がいるか
   isCareDependentOccupancy: { type: Boolean, required: true },
-  // 診療所にベッドがあるか
-  hasBeds: { type: Boolean, required: true },
   // 宿泊の有無
   hasLodging: { type: Boolean, required: true },
   // 舞台部の有無
@@ -81,7 +79,6 @@ const emit = defineEmits([
   "update:buildingStructure",
   "update:hasMultipleBuildingsOnSite",
   "update:isCareDependentOccupancy",
-  "update:hasBeds",
   "update:hasLodging",
   "update:hasStageArea",
   "update:stageFloorLevel",
@@ -161,12 +158,6 @@ const emit = defineEmits([
               label="介助がなければ避難できない者を主として入所させる施設"
               hide-details
             ></v-checkbox>
-            <v-checkbox
-              :model-value="hasBeds"
-              @update:model-value="emit('update:hasBeds', $event)"
-              label="診療所にベッドがある"
-              hide-details
-            ></v-checkbox>
             <!-- hasLodging は 6項ハ の用途コードのときのみ表示 -->
             <v-checkbox
               v-if="buildingUse && buildingUse.startsWith('annex06_ha')"
@@ -192,9 +183,7 @@ const emit = defineEmits([
               <div v-if="hasStageArea" class="ml-8">
                 <v-radio-group
                   :model-value="stageFloorLevel"
-                  @update:model-value="
-                    emit('update:stageFloorLevel', $event)
-                  "
+                  @update:model-value="emit('update:stageFloorLevel', $event)"
                   label="舞台部のある階"
                 >
                   <v-radio
@@ -302,10 +291,7 @@ const emit = defineEmits([
             hide-details
           >
             <v-radio label="特定主要構造部が耐火構造" value="A"></v-radio>
-            <v-radio
-              label="その他の耐火構造 or 準耐火構造"
-              value="B"
-            ></v-radio>
+            <v-radio label="その他の耐火構造 or 準耐火構造" value="B"></v-radio>
             <v-radio label="その他" value="C"></v-radio>
           </v-radio-group>
         </v-col>
@@ -322,15 +308,13 @@ const emit = defineEmits([
         </v-col>
       </v-row>
       <v-row align="center">
-        <v-col cols="12" sm="3">
+        <!-- 敷地面積: 令第27条第1号で使用（敷地面積20,000㎡以上 かつ 構造基準面積以上） -->
+        <v-col cols="12" sm="3" v-if="(totalFloorAreaInput ?? 0) >= 5000">
           <v-text-field
             label="敷地面積"
             :model-value="siteArea"
             @update:model-value="
-              emit(
-                'update:siteArea',
-                $event === '' ? null : Number($event)
-              )
+              emit('update:siteArea', $event === '' ? null : Number($event))
             "
             type="number"
             min="0"
@@ -339,7 +323,8 @@ const emit = defineEmits([
             hide-details
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="3">
+        <!-- 建物の高さ: 令第27条第2号で使用（高さ31m超 かつ 延べ面積25,000㎡以上） -->
+        <v-col cols="12" sm="3" v-if="(totalFloorAreaInput ?? 0) >= 25000">
           <v-text-field
             label="建物の高さ"
             :model-value="buildingHeight"
@@ -384,9 +369,7 @@ const emit = defineEmits([
       </v-row>
       <v-row class="mt-4" align="center">
         <v-col cols="12" sm="6">
-          <p class="font-weight-bold mb-2">
-            令第22条（漏電火災警報器）関連
-          </p>
+          <p class="font-weight-bold mb-2">令第22条（漏電火災警報器）関連</p>
           <v-checkbox
             :model-value="hasSpecialCombustibleStructure"
             @update:model-value="
@@ -396,7 +379,7 @@ const emit = defineEmits([
             hide-details
           ></v-checkbox>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col v-if="hasSpecialCombustibleStructure" cols="12" sm="6">
           <v-text-field
             class="mt-4"
             label="契約電流容量"

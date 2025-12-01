@@ -39,7 +39,6 @@ describe("BuildingInputStepper.vue", () => {
     hasFireSuppressingStructure: boolean;
     storesDesignatedCombustiblesOver1000x: boolean;
     isCareDependentOccupancy: boolean;
-    hasBeds: boolean;
     hasStageArea: boolean;
     stageFloorLevel: string | null;
     stageArea: number | null;
@@ -101,7 +100,6 @@ describe("BuildingInputStepper.vue", () => {
     hasFireSuppressingStructure: false,
     storesDesignatedCombustiblesOver1000x: false,
     isCareDependentOccupancy: false,
-    hasBeds: false,
     hasStageArea: false,
     stageFloorLevel: null,
     stageArea: null,

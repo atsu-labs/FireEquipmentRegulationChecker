@@ -20,7 +20,6 @@ const createMockInput = (
     ceilingHeight: ref(0),
     storesDesignatedCombustiblesOver1000x: ref(false),
     hasFireSuppressingStructure: ref(false),
-    hasBeds: ref(false),
   };
 
   // Create a new object for the merged regulationResult to avoid modifying defaults

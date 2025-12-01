@@ -21,7 +21,6 @@ type JudgementContext = {
   ceilingHeight: number;
   storesDesignatedCombustiblesOver1000x: boolean;
   hasFireSuppressingStructure: boolean;
-  hasBeds: boolean;
 
   isSection: boolean; // 第九条適用（みなし判定）かどうか
   basisSuffix: string; // 根拠条文に付記する文字列
@@ -32,15 +31,13 @@ type JudgementContext = {
  */
 function checkItem1(ctx: JudgementContext): JudgementResult | null {
   if (!ctx.hasFireSuppressingStructure) {
-    // イ: (6)項イ(1)及び(2)
+    // イ: (6)項イ(1)及び(2) - 用途コードで有床診療所かどうかを判定
     if (useCodeMatches(ctx.useCode, ["annex06_i_1", "annex06_i_2"])) {
-      if (!(ctx.useCode.startsWith("annex06_i_2") && !ctx.hasBeds)) {
-        return {
-          required: true,
-          message: `用途（${ctx.useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
-          basis: `令第12条第1項第1号イ${ctx.basisSuffix}`,
-        };
-      }
+      return {
+        required: true,
+        message: `用途（${ctx.useDisplay}）で、延焼抑制構造でないため、設置が必要です。`,
+        basis: `令第12条第1項第1号イ${ctx.basisSuffix}`,
+      };
     }
     // ロ: (6)項ロ(1)及び(3)
     if (useCodeMatches(ctx.useCode, ["annex06_ro_1", "annex06_ro_3"])) {
@@ -371,7 +368,6 @@ export function useArticle12Logic(userInput: Article12UserInput) {
       storesDesignatedCombustiblesOver1000x:
         userInput.storesDesignatedCombustiblesOver1000x.value,
       hasFireSuppressingStructure: userInput.hasFireSuppressingStructure.value,
-      hasBeds: userInput.hasBeds.value,
       isSection: false,
       basisSuffix: "",
     };
@@ -429,7 +425,6 @@ export function useArticle12Logic(userInput: Article12UserInput) {
           storesDesignatedCombustiblesOver1000x: false,
           hasFireSuppressingStructure:
             userInput.hasFireSuppressingStructure.value, // 建物全体の構造を使用
-          hasBeds: false,
           isSection: true,
           basisSuffix: "（令第九条適用）",
         };
